@@ -28,3 +28,7 @@ tmp/
 .env
 frontend/node_modules/
 frontend/dist/
+
+# Frontend QA output
+frontend/.qa*
+frontend/*.tsbuildinfo

@@ -1,0 +1,871 @@
+{
+  "id": "92bbcc5e085f4723a39a1794f174f26f",
+  "case_id": "IN-D687B92A2F",
+  "partition": "train",
+  "title": "Please correct my details",
+  "input": "{\"event_id\": \"EVT-C90979AB\", \"kind\": \"intake\", \"message_reference\": null, \"sender\": \"Joanna Iqbal <joanna.iqbal@mail.example>\", \"seq\": 1, \"subject\": \"Please correct my details\", \"ts\": \"2026-09-12T04:27:00Z\"}\n{\"kind\": \"narrative\", \"seq\": 2, \"text\": \"I have moved house. Could you change the address you hold for me to 41 Priory Close, Kingsmere ZZ5 6QS?\"}\n{\"kind\": \"narrative\", \"seq\": 3, \"text\": \"Sorry for the formatting, sent from my phone.\"}\n{\"kind\": \"attribute\", \"name\": \"Name\", \"seq\": 4, \"value\": \"Joanna Iqbal\"}\n{\"kind\": \"attribute\", \"name\": \"Email\", \"seq\": 5, \"value\": \"joanna.iqbal@mail.example\"}\n{\"kind\": \"attribute\", \"name\": \"New address\", \"seq\": 6, \"value\": \"41 Priory Close, Kingsmere ZZ5 6QS\"}\n{\"kind\": \"attribute\", \"name\": \"Customer reference\", \"seq\": 7, \"value\": \"C77224788\"}\n",
+  "mode": "live",
+  "status": "completed",
+  "created_at": "2026-11-09T16:21:07.641430+00:00",
+  "updated_at": "2026-11-09T16:23:52.926211+00:00",
+  "duration_ms": 165285.86,
+  "classification": {
+    "categories": [
+      "gdpr_data"
+    ],
+    "primary": "gdpr_data",
+    "confidence": 0.95,
+    "uncertainty": 0.05,
+    "risk": "low",
+    "urgency": "routine",
+    "escalate": false,
+    "escalation_reason": null,
+    "provider": "agy",
+    "model": "gemini-3.8-flash-low",
+    "mode": "live",
+    "rationale": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] Customer request to update/rectify their personal address details (GDPR data rectification / customer privacy rights).",
+    "usage": {
+      "input_tokens": 5650,
+      "output_tokens": 93,
+      "thinking_tokens": 0,
+      "cache_read_tokens": 0,
+      "total_tokens": 5743,
+      "latency_ms": 5425.0
+    }
+  },
+  "outcome": {
+    "actions": [],
+    "by_workflow": {
+      "gdpr_data": "refer_to_security_review"
+    },
+    "conclusion": "The address change request cannot be fulfilled due to a failed identity verification and indicators of account compromise. The matter has been escalated to Fraud and Security operations via review case RVW-B92A2F-01.",
+    "departments": [
+      "Information Security",
+      "Fraud Operations"
+    ],
+    "evidence": [
+      {
+        "note": "CRM customer record for Joanna Iqbal",
+        "record_id": "CUS-B9609E8D"
+      },
+      {
+        "note": "Failed identity verification check via knowledge questions",
+        "record_id": "IDV-F54272E7"
+      },
+      {
+        "note": "Audit log entry indicating email change from a new device",
+        "record_id": "LOG-4A0469CE"
+      },
+      {
+        "note": "Audit log entry indicating mobile number change from a new device",
+        "record_id": "LOG-BB08C7BC"
+      },
+      {
+        "note": "Simulated fraud review case created for suspicious profile changes and failed verification",
+        "record_id": "RVW-B92A2F-01"
+      }
+    ],
+    "outcome_code": "refer_to_security_review",
+    "recommendations": [
+      "Withhold profile modifications and address changes pending security investigation.",
+      "Attempt out-of-band contact with the customer using established legacy details to confirm account security.",
+      "Review potential account takeover activity originating from the unrecognized device."
+    ],
+    "requires_approval": false,
+    "risk": "high",
+    "summary": "Customer Joanna Iqbal requested an address update, but recent audit logs show unauthorized or suspicious profile modifications (email and phone changed from a new device) and identity verification failed. A fraud review case was created.",
+    "unresolved": [
+      "Confirmation of genuine account holder identity",
+      "Resolution of suspected account takeover on customer profile"
+    ]
+  },
+  "events": [
+    {
+      "id": "f774ef46efc1432d95a4c546c3ec3022",
+      "sequence": 1,
+      "kind": "orchestration",
+      "title": "Normalise incoming information",
+      "detail": "Loaded document and attachments. Enterprise tools are synthetic; consequential actions require human approval.",
+      "timestamp": "2026-11-09T16:21:07.642632+00:00",
+      "status": "completed",
+      "mode": "live"
+    },
+    {
+      "id": "0127fc158f9f40538e863a46fd2f7802",
+      "sequence": 2,
+      "kind": "orchestration",
+      "title": "Classifying the incoming request",
+      "detail": "Determine applicable workflows, business risk and uncertainty.",
+      "timestamp": "2026-11-09T16:21:07.642851+00:00",
+      "status": "completed"
+    },
+    {
+      "id": "650b806cdd2640b988af3eeb11522f37",
+      "sequence": 3,
+      "kind": "classification",
+      "title": "Initial routing decision",
+      "detail": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] Customer request to update/rectify their personal address details (GDPR data rectification / customer privacy rights).",
+      "timestamp": "2026-11-09T16:21:14.306989+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-low",
+      "result": {
+        "categories": [
+          "gdpr_data"
+        ],
+        "primary": "gdpr_data",
+        "confidence": 0.95,
+        "uncertainty": 0.05,
+        "risk": "low",
+        "urgency": "routine",
+        "escalate": false,
+        "escalation_reason": null,
+        "provider": "agy",
+        "model": "gemini-3.8-flash-low",
+        "mode": "live",
+        "rationale": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] Customer request to update/rectify their personal address details (GDPR data rectification / customer privacy rights).",
+        "usage": {
+          "input_tokens": 5650,
+          "output_tokens": 93,
+          "thinking_tokens": 0,
+          "cache_read_tokens": 0,
+          "total_tokens": 5743,
+          "latency_ms": 5425.0
+        }
+      }
+    },
+    {
+      "id": "944696a65d6f4c1881c74ff441207928",
+      "sequence": 4,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 1 · investigation route",
+      "timestamp": "2026-11-09T16:21:14.345212+00:00",
+      "status": "completed",
+      "duration_ms": 49688.93
+    },
+    {
+      "id": "6759c415f8eb431c90be8cf28543bce8",
+      "sequence": 5,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:22:04.034045+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 49688.93
+    },
+    {
+      "id": "4b38a98adbc1430fbeaa1b80e5a44f2f",
+      "sequence": 6,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Resolve the customer record using the provided reference to obtain the customer_id for subsequent identity and record checks.",
+      "timestamp": "2026-11-09T16:22:04.039006+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "find_customer"
+        ]
+      }
+    },
+    {
+      "id": "9c110e67ff4f4e96991ff4bd7ccab409",
+      "sequence": 7,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "1 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:22:04.039261+00:00",
+      "status": "completed",
+      "batch_id": "7b70e1af"
+    },
+    {
+      "id": "3bebf39f5ac14b1abbef1fcf87fe11f8",
+      "sequence": 8,
+      "kind": "tool_call",
+      "title": "find_customer",
+      "detail": "Locate customer CRM record by customer reference from intake document.",
+      "timestamp": "2026-11-09T16:22:04.039532+00:00",
+      "status": "completed",
+      "tool": "find_customer",
+      "arguments": {
+        "customer_reference": "C77224788"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "7b70e1af",
+      "duration_ms": 0.459
+    },
+    {
+      "id": "373bd9fc07144502a356c54b9c1fc0a0",
+      "sequence": 9,
+      "kind": "tool_result",
+      "title": "find_customer returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:04.040014+00:00",
+      "status": "completed",
+      "tool": "find_customer",
+      "arguments": {
+        "customer_reference": "C77224788"
+      },
+      "result": {
+        "ok": true,
+        "tool": "find_customer",
+        "data": {
+          "customer": {
+            "address": "94 Station Road, Ravenscar",
+            "created_on": "2024-05-09",
+            "customer_reference": "C77224788",
+            "date_of_birth": "1974-03-27",
+            "email": "joanna.iqbal@mail.example",
+            "flags": [],
+            "full_name": "Joanna Iqbal",
+            "id": "CUS-B9609E8D",
+            "ni_number": "QQ 36 46 57 C",
+            "phone": "07700 900575",
+            "postcode": "ZZ2 4SY",
+            "previous_names": [],
+            "status": "active"
+          }
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.459,
+      "batch_id": "7b70e1af"
+    },
+    {
+      "id": "d93601e2cd08498e82818cd96d62b90a",
+      "sequence": 10,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 2 · investigation route",
+      "timestamp": "2026-11-09T16:22:04.040502+00:00",
+      "status": "completed",
+      "duration_ms": 16903.45
+    },
+    {
+      "id": "b3dfc487103d47e6a7494869cc2c9aa3",
+      "sequence": 11,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:22:20.943985+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 16903.45
+    },
+    {
+      "id": "723f04cbaf534f2b9ab33cd1cbf152b3",
+      "sequence": 12,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Verify identity, check account details and legal holds before proposing any data correction.",
+      "timestamp": "2026-11-09T16:22:20.949432+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "verify_identity_status",
+          "get_customer_record",
+          "check_legal_holds"
+        ]
+      }
+    },
+    {
+      "id": "502f211b8c5842c88ded5677b3b76b70",
+      "sequence": 13,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "3 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:22:20.949702+00:00",
+      "status": "completed",
+      "batch_id": "4cdcbfe3"
+    },
+    {
+      "id": "60820700ac6748be988eece9f1b14343",
+      "sequence": 14,
+      "kind": "tool_call",
+      "title": "verify_identity_status",
+      "detail": "Verify identity status for the customer requesting address change.",
+      "timestamp": "2026-11-09T16:22:20.949956+00:00",
+      "status": "completed",
+      "tool": "verify_identity_status",
+      "arguments": {
+        "customer_id": "CUS-B9609E8D"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "4cdcbfe3",
+      "duration_ms": 0.851
+    },
+    {
+      "id": "2df97394e27c4e11a88c388c33b95fae",
+      "sequence": 15,
+      "kind": "tool_call",
+      "title": "get_customer_record",
+      "detail": "Retrieve the full customer record to inspect current details and flags.",
+      "timestamp": "2026-11-09T16:22:20.950159+00:00",
+      "status": "completed",
+      "tool": "get_customer_record",
+      "arguments": {
+        "customer_id": "CUS-B9609E8D"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "4cdcbfe3",
+      "duration_ms": 0.934
+    },
+    {
+      "id": "2a046f2775d5458c91d9102fa34a98f3",
+      "sequence": 16,
+      "kind": "tool_call",
+      "title": "check_legal_holds",
+      "detail": "Check if there are any active legal holds on the customer account.",
+      "timestamp": "2026-11-09T16:22:20.950387+00:00",
+      "status": "completed",
+      "tool": "check_legal_holds",
+      "arguments": {
+        "customer_id": "CUS-B9609E8D"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "4cdcbfe3",
+      "duration_ms": 0.991
+    },
+    {
+      "id": "9be7fb506d9941f780f336f3eaaeafd8",
+      "sequence": 17,
+      "kind": "tool_result",
+      "title": "verify_identity_status returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:20.950821+00:00",
+      "status": "completed",
+      "tool": "verify_identity_status",
+      "arguments": {
+        "customer_id": "CUS-B9609E8D"
+      },
+      "result": {
+        "ok": true,
+        "tool": "verify_identity_status",
+        "data": {
+          "customer_id": "CUS-B9609E8D",
+          "verifications": [
+            {
+              "checked_on": "2026-09-13",
+              "customer_id": "CUS-B9609E8D",
+              "expires_on": "2026-09-19",
+              "id": "IDV-F54272E7",
+              "method": "knowledge_questions",
+              "outcome": "failed",
+              "request_reference": null,
+              "expired": false
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.851,
+      "batch_id": "4cdcbfe3"
+    },
+    {
+      "id": "c2848dcec92f4a4abc1191126dddcc3a",
+      "sequence": 18,
+      "kind": "tool_result",
+      "title": "get_customer_record returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:20.951110+00:00",
+      "status": "completed",
+      "tool": "get_customer_record",
+      "arguments": {
+        "customer_id": "CUS-B9609E8D"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_customer_record",
+        "data": {
+          "customer": {
+            "address": "94 Station Road, Ravenscar",
+            "created_on": "2024-05-09",
+            "customer_reference": "C77224788",
+            "date_of_birth": "1974-03-27",
+            "email": "joanna.iqbal@mail.example",
+            "flags": [],
+            "full_name": "Joanna Iqbal",
+            "id": "CUS-B9609E8D",
+            "ni_number": "QQ 36 46 57 C",
+            "phone": "07700 900575",
+            "postcode": "ZZ2 4SY",
+            "previous_names": [],
+            "status": "active"
+          },
+          "products": [
+            {
+              "account_reference": "ACC35273893",
+              "customer_id": "CUS-B9609E8D",
+              "id": "PRD-938E2C5F",
+              "opened_on": "2021-05-10",
+              "product_name": "Instant Access ISA",
+              "status": "open"
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.934,
+      "batch_id": "4cdcbfe3"
+    },
+    {
+      "id": "cf43210b31f34f719c51a9cb76c953ed",
+      "sequence": 19,
+      "kind": "tool_result",
+      "title": "check_legal_holds returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:20.951388+00:00",
+      "status": "completed",
+      "tool": "check_legal_holds",
+      "arguments": {
+        "customer_id": "CUS-B9609E8D"
+      },
+      "result": {
+        "ok": true,
+        "tool": "check_legal_holds",
+        "data": {
+          "customer_id": "CUS-B9609E8D",
+          "holds": [
+            {
+              "customer_id": "CUS-B9609E8D",
+              "dataset_ids": [],
+              "id": "LGH-A2ED09D2",
+              "matter_reference": "MAT-20099",
+              "placed_on": "2024-12-01",
+              "reason": "Closed dispute (synthetic)",
+              "released_on": "2025-07-25",
+              "status": "released"
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.991,
+      "batch_id": "4cdcbfe3"
+    },
+    {
+      "id": "b0e15c110ec44719a4f27afc8f4b904b",
+      "sequence": 20,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 3 · investigation route",
+      "timestamp": "2026-11-09T16:22:20.952044+00:00",
+      "status": "completed",
+      "duration_ms": 50014.58
+    },
+    {
+      "id": "5591a2300a034cf8b028885fad0b18f8",
+      "sequence": 21,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:23:10.966367+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 50014.58
+    },
+    {
+      "id": "1c69055d81dc4660bde8a08908928b3b",
+      "sequence": 22,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Investigate audit trail and request history given the failed identity verification status.",
+      "timestamp": "2026-11-09T16:23:10.971561+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "get_audit_trail",
+          "get_data_request_history"
+        ]
+      }
+    },
+    {
+      "id": "88e0d504a431482f9e0bc492cfdc08b8",
+      "sequence": 23,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "2 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:23:10.971923+00:00",
+      "status": "completed",
+      "batch_id": "c1ab01ef"
+    },
+    {
+      "id": "a78acabb259d4589b73d19646e747026",
+      "sequence": 24,
+      "kind": "tool_call",
+      "title": "get_audit_trail",
+      "detail": "Check audit trail for customer record following failed identity verification",
+      "timestamp": "2026-11-09T16:23:10.972309+00:00",
+      "status": "completed",
+      "tool": "get_audit_trail",
+      "arguments": {
+        "record_id": "CUS-B9609E8D"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "c1ab01ef",
+      "duration_ms": 0.776
+    },
+    {
+      "id": "00d5991fff9e49a68ffd440cb389300e",
+      "sequence": 25,
+      "kind": "tool_call",
+      "title": "get_data_request_history",
+      "detail": "Check previous data requests and complaints history",
+      "timestamp": "2026-11-09T16:23:10.972600+00:00",
+      "status": "completed",
+      "tool": "get_data_request_history",
+      "arguments": {
+        "customer_id": "CUS-B9609E8D"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "c1ab01ef",
+      "duration_ms": 0.858
+    },
+    {
+      "id": "999449fa44dc4d649d246804fb6b8fc7",
+      "sequence": 26,
+      "kind": "tool_result",
+      "title": "get_audit_trail returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:23:10.973104+00:00",
+      "status": "completed",
+      "tool": "get_audit_trail",
+      "arguments": {
+        "record_id": "CUS-B9609E8D"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_audit_trail",
+        "data": {
+          "record_id": "CUS-B9609E8D",
+          "entries": [
+            {
+              "action": "update",
+              "actor": "online-banking",
+              "device": "new_device",
+              "id": "LOG-BB08C7BC",
+              "subject_id": "CUS-B9609E8D",
+              "summary": "Mobile number changed on customer profile",
+              "timestamp": "2026-09-12T05:34:00Z"
+            },
+            {
+              "action": "update",
+              "actor": "online-banking",
+              "device": "new_device",
+              "id": "LOG-4A0469CE",
+              "subject_id": "CUS-B9609E8D",
+              "summary": "Email address changed on customer profile",
+              "timestamp": "2026-09-12T03:10:00Z"
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.776,
+      "batch_id": "c1ab01ef"
+    },
+    {
+      "id": "333ee7717c8f4ba8acb6f797e257debc",
+      "sequence": 27,
+      "kind": "tool_result",
+      "title": "get_data_request_history returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:23:10.973469+00:00",
+      "status": "completed",
+      "tool": "get_data_request_history",
+      "arguments": {
+        "customer_id": "CUS-B9609E8D"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_data_request_history",
+        "data": {
+          "customer_id": "CUS-B9609E8D",
+          "requests": [
+            {
+              "customer_id": "CUS-B9609E8D",
+              "id": "DSR-49D8464F",
+              "outcome": "completed",
+              "received_on": "2025-11-08",
+              "request_reference": "DSR-37596",
+              "request_type": "preference",
+              "status": "closed",
+              "summary": "Marketing preference change"
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.858,
+      "batch_id": "c1ab01ef"
+    },
+    {
+      "id": "3e38b47da3d04251946e30cbc44f8ae6",
+      "sequence": 28,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 4 · investigation route",
+      "timestamp": "2026-11-09T16:23:10.974162+00:00",
+      "status": "completed",
+      "duration_ms": 18650.09
+    },
+    {
+      "id": "9d63d4ff6c734c9cbe3691106da1d415",
+      "sequence": 29,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:23:29.624393+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 18650.09
+    },
+    {
+      "id": "edc51f9eed97429193a9b14aaabbb8be",
+      "sequence": 30,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Escalate suspicious activity to fraud review following failed identity verification and unrecognised profile updates.",
+      "timestamp": "2026-11-09T16:23:29.635715+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "create_review_case"
+        ]
+      }
+    },
+    {
+      "id": "bc23739ea1814368b2982db808001cb8",
+      "sequence": 31,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "1 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:23:29.636213+00:00",
+      "status": "completed",
+      "batch_id": "d99d389a"
+    },
+    {
+      "id": "79bb308a13a149b287a7effd91ec7df4",
+      "sequence": 32,
+      "kind": "tool_call",
+      "title": "create_review_case",
+      "detail": "Open a fraud review case due to failed identity verification and suspicious profile update activity from a new device.",
+      "timestamp": "2026-11-09T16:23:29.636547+00:00",
+      "status": "completed",
+      "tool": "create_review_case",
+      "arguments": {
+        "case_type": "fraud",
+        "evidence": [
+          "CUS-B9609E8D",
+          "IDV-F54272E7",
+          "LOG-4A0469CE",
+          "LOG-BB08C7BC"
+        ],
+        "priority": "high",
+        "summary": "Failed identity verification and suspicious device/profile changes (email and phone changed on new device) alongside address correction request."
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "d99d389a",
+      "duration_ms": 0.528
+    },
+    {
+      "id": "3970009e0a594be482042488406eccd9",
+      "sequence": 33,
+      "kind": "tool_result",
+      "title": "create_review_case returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:23:29.637088+00:00",
+      "status": "completed",
+      "tool": "create_review_case",
+      "arguments": {
+        "case_type": "fraud",
+        "evidence": [
+          "CUS-B9609E8D",
+          "IDV-F54272E7",
+          "LOG-4A0469CE",
+          "LOG-BB08C7BC"
+        ],
+        "priority": "high",
+        "summary": "Failed identity verification and suspicious device/profile changes (email and phone changed on new device) alongside address correction request."
+      },
+      "result": {
+        "ok": true,
+        "tool": "create_review_case",
+        "data": {
+          "review_case_id": "RVW-B92A2F-01",
+          "case_type": "fraud",
+          "evidence_ids": [
+            "CUS-B9609E8D",
+            "IDV-F54272E7",
+            "LOG-4A0469CE",
+            "LOG-BB08C7BC"
+          ],
+          "summary": "Failed identity verification and suspicious device/profile changes (email and phone changed on new device) alongside address correction request.",
+          "priority": "high",
+          "simulated": true
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.528,
+      "batch_id": "d99d389a"
+    },
+    {
+      "id": "e7b970f3e5f44fa7918ccf81c2fad6ad",
+      "sequence": 34,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 5 · investigation route",
+      "timestamp": "2026-11-09T16:23:29.637830+00:00",
+      "status": "completed",
+      "duration_ms": 23274.95
+    },
+    {
+      "id": "ed186e1d10824104b8e673ce66a73741",
+      "sequence": 35,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:23:52.912857+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 23274.95
+    },
+    {
+      "id": "89236ba8411d4404a35736b5b6e9aa80",
+      "sequence": 36,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Identity verification failed and audit logs reveal suspicious device activity and contact detail updates around the time of the request. Review case RVW-B92A2F-01 was opened, warranting referral to security review.",
+      "timestamp": "2026-11-09T16:23:52.919259+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "finish",
+        "tools": []
+      }
+    },
+    {
+      "id": "3a5684c1fbd04bc9b5a171f340485cce",
+      "sequence": 37,
+      "kind": "validation",
+      "title": "Evidence references validated",
+      "detail": "5 cited record(s) were observed in successful tool responses. This validates provenance, not correctness of interpretation.",
+      "timestamp": "2026-11-09T16:23:52.923930+00:00",
+      "status": "completed",
+      "evidence_ids": [
+        "CUS-B9609E8D",
+        "IDV-F54272E7",
+        "LOG-4A0469CE",
+        "LOG-BB08C7BC",
+        "RVW-B92A2F-01"
+      ]
+    },
+    {
+      "id": "e6d52dc47f9d45f28f096b4c38318fea",
+      "sequence": 38,
+      "kind": "outcome",
+      "title": "Investigation concluded",
+      "detail": "Customer Joanna Iqbal requested an address update, but recent audit logs show unauthorized or suspicious profile modifications (email and phone changed from a new device) and identity verification failed. A fraud review case was created.",
+      "timestamp": "2026-11-09T16:23:52.925305+00:00",
+      "status": "completed",
+      "result": {
+        "actions": [],
+        "by_workflow": {
+          "gdpr_data": "refer_to_security_review"
+        },
+        "conclusion": "The address change request cannot be fulfilled due to a failed identity verification and indicators of account compromise. The matter has been escalated to Fraud and Security operations via review case RVW-B92A2F-01.",
+        "departments": [
+          "Information Security",
+          "Fraud Operations"
+        ],
+        "evidence": [
+          {
+            "note": "CRM customer record for Joanna Iqbal",
+            "record_id": "CUS-B9609E8D"
+          },
+          {
+            "note": "Failed identity verification check via knowledge questions",
+            "record_id": "IDV-F54272E7"
+          },
+          {
+            "note": "Audit log entry indicating email change from a new device",
+            "record_id": "LOG-4A0469CE"
+          },
+          {
+            "note": "Audit log entry indicating mobile number change from a new device",
+            "record_id": "LOG-BB08C7BC"
+          },
+          {
+            "note": "Simulated fraud review case created for suspicious profile changes and failed verification",
+            "record_id": "RVW-B92A2F-01"
+          }
+        ],
+        "outcome_code": "refer_to_security_review",
+        "recommendations": [
+          "Withhold profile modifications and address changes pending security investigation.",
+          "Attempt out-of-band contact with the customer using established legacy details to confirm account security.",
+          "Review potential account takeover activity originating from the unrecognized device."
+        ],
+        "requires_approval": false,
+        "risk": "high",
+        "summary": "Customer Joanna Iqbal requested an address update, but recent audit logs show unauthorized or suspicious profile modifications (email and phone changed from a new device) and identity verification failed. A fraud review case was created.",
+        "unresolved": [
+          "Confirmation of genuine account holder identity",
+          "Resolution of suspected account takeover on customer profile"
+        ]
+      }
+    }
+  ],
+  "approvals": [],
+  "metrics": {
+    "tool_calls": 7,
+    "iterations": 5,
+    "model_calls": 6,
+    "unsafe_actions_blocked": 0,
+    "usage": {
+      "input_tokens": 51424,
+      "output_tokens": 12642,
+      "thinking_tokens": 11500,
+      "cache_read_tokens": 0,
+      "total_tokens": 64066,
+      "latency_ms": 163935.2
+    },
+    "providers": [
+      "agy/gemini-3.8-flash-low",
+      "agy/gemini-3.8-flash-medium"
+    ]
+  }
+}

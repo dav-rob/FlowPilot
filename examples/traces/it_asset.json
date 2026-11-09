@@ -1,0 +1,1069 @@
+{
+  "id": "d65795cf20424c4fb6dc467e38595304",
+  "case_id": "IN-F8352D982B",
+  "partition": "train",
+  "title": "Discovery mismatch for hlbat209",
+  "input": "Discovery mismatch for hlbat209\nReceived 2026-09-13T05:50:00Z from Tessa Bellamy <tessa.bellamy@harbourline.example>\n\nFYI - pllease see below.\n\nInventory reconciliation threw up an oddity - see the fields below.\n\nHostname: hlbat209\nIP address: 10.86.149.22\nDiscovery source: network scan\n\nThanks,\nTessa Bellamy\nHead of Function, Information Security\nHaarbourline Mutual Finance Ltd",
+  "mode": "live",
+  "status": "awaiting_approval",
+  "created_at": "2026-11-09T16:21:07.681784+00:00",
+  "updated_at": "2026-11-09T16:24:33.398770+00:00",
+  "duration_ms": 205718.56,
+  "classification": {
+    "categories": [
+      "it_asset"
+    ],
+    "primary": "it_asset",
+    "confidence": 0.95,
+    "uncertainty": 0.05,
+    "risk": "medium",
+    "urgency": "routine",
+    "escalate": false,
+    "escalation_reason": null,
+    "provider": "agy",
+    "model": "gemini-3.8-flash-low",
+    "mode": "live",
+    "rationale": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] The email describes an inventory reconciliation mismatch for hostname hlbat209 discovered via network scan, clearly mapping to IT asset and CMDB/inventory management.",
+    "usage": {
+      "input_tokens": 5479,
+      "output_tokens": 101,
+      "thinking_tokens": 0,
+      "cache_read_tokens": 0,
+      "total_tokens": 5580,
+      "latency_ms": 4765.2
+    }
+  },
+  "outcome": {
+    "actions": [
+      {
+        "action": "create_ticket",
+        "record_id": "SIM-TKT-001",
+        "status": "created"
+      },
+      {
+        "action": "request_approval",
+        "record_id": "APR-6F8C269AA0",
+        "status": "pending"
+      }
+    ],
+    "by_workflow": {
+      "it_asset": "isolate_and_open_incident"
+    },
+    "conclusion": "The host hlbat209 at IP 10.86.149.22 was detected responding with an unrecognised MAC address (E6:1E:8E:92:8A:4C) differing from the registered CMDB record (20:95:44:85:4A:9A). A security alert ALT-3733ABEF confirms this hardware mismatch, indicating potential ARP spoofing or a rogue device. A security incident ticket has been opened and approval for network isolation has been requested.",
+    "departments": [
+      "Cloud Platform",
+      "Information Security"
+    ],
+    "evidence": [
+      {
+        "note": "CMDB item for hlbat209 indicating registered MAC 20:95:44:85:4A:9A and owner Nia Ashworth",
+        "record_id": "CI-B33F4001"
+      },
+      {
+        "note": "High severity network monitoring alert for hardware address mismatch on hlbat209 showing MAC E6:1E:8E:92:8A:4C",
+        "record_id": "ALT-3733ABEF"
+      },
+      {
+        "note": "Simulated security incident ticket opened for investigation of rogue host / ARP mismatch",
+        "record_id": "SIM-TKT-001"
+      },
+      {
+        "note": "Pending approval request submitted to authorise network isolation of CI-B33F4001",
+        "record_id": "APR-6F8C269AA0"
+      }
+    ],
+    "outcome_code": "isolate_and_open_incident",
+    "recommendations": [
+      "Authorise pending approval APR-6F8C269AA0 to isolate the asset on the network.",
+      "Investigate physical switch port at Office-Eastbridge corresponding to IP 10.86.149.22.",
+      "Verify with manager Leila Radcliffe whether any hardware swap took place while Nia Ashworth is on leave."
+    ],
+    "requires_approval": true,
+    "risk": "high",
+    "summary": "Investigation into hlbat209 revealed a high-severity MAC address discrepancy indicative of a rogue device or ARP mismatch. Incident ticket SIM-TKT-001 opened and isolation approval requested under APR-6F8C269AA0.",
+    "unresolved": [
+      "Identity and physical origin of device presenting MAC E6:1E:8E:92:8A:4C.",
+      "Whether this is an unrecorded hardware replacement or an unauthorised device on the corporate network."
+    ]
+  },
+  "events": [
+    {
+      "id": "fc507c2037f24a51b88fb247253b439f",
+      "sequence": 1,
+      "kind": "orchestration",
+      "title": "Normalise incoming information",
+      "detail": "Loaded document and attachments. Enterprise tools are synthetic; consequential actions require human approval.",
+      "timestamp": "2026-11-09T16:21:07.682886+00:00",
+      "status": "completed",
+      "mode": "live"
+    },
+    {
+      "id": "f1b236fa257349e1ade9b94b9d53a959",
+      "sequence": 2,
+      "kind": "orchestration",
+      "title": "Classifying the incoming request",
+      "detail": "Determine applicable workflows, business risk and uncertainty.",
+      "timestamp": "2026-11-09T16:21:07.683030+00:00",
+      "status": "completed"
+    },
+    {
+      "id": "42d123bf2854403784381eb5900f53a9",
+      "sequence": 3,
+      "kind": "classification",
+      "title": "Initial routing decision",
+      "detail": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] The email describes an inventory reconciliation mismatch for hostname hlbat209 discovered via network scan, clearly mapping to IT asset and CMDB/inventory management.",
+      "timestamp": "2026-11-09T16:21:13.674201+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-low",
+      "result": {
+        "categories": [
+          "it_asset"
+        ],
+        "primary": "it_asset",
+        "confidence": 0.95,
+        "uncertainty": 0.05,
+        "risk": "medium",
+        "urgency": "routine",
+        "escalate": false,
+        "escalation_reason": null,
+        "provider": "agy",
+        "model": "gemini-3.8-flash-low",
+        "mode": "live",
+        "rationale": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] The email describes an inventory reconciliation mismatch for hostname hlbat209 discovered via network scan, clearly mapping to IT asset and CMDB/inventory management.",
+        "usage": {
+          "input_tokens": 5479,
+          "output_tokens": 101,
+          "thinking_tokens": 0,
+          "cache_read_tokens": 0,
+          "total_tokens": 5580,
+          "latency_ms": 4765.2
+        }
+      }
+    },
+    {
+      "id": "ce3ced384abe48f6ae3fca839050f6ba",
+      "sequence": 4,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 1 · investigation route",
+      "timestamp": "2026-11-09T16:21:13.725781+00:00",
+      "status": "completed",
+      "duration_ms": 50215.34
+    },
+    {
+      "id": "984728d73efd4208b33054564181ec3d",
+      "sequence": 5,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:22:03.940920+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 50215.34
+    },
+    {
+      "id": "853f2db1d6d84aa2825cf6b4d7bc4d6a",
+      "sequence": 6,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Search inventory and enterprise records for hostname hlbat209 and IP 10.86.149.22 to establish asset identity and reconcile discrepancies.",
+      "timestamp": "2026-11-09T16:22:03.945826+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "search_assets",
+          "search_assets",
+          "query_cloud_inventory",
+          "search_records"
+        ]
+      }
+    },
+    {
+      "id": "9a30bedf2a3448018a8560b07498ac5c",
+      "sequence": 7,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "4 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:22:03.946018+00:00",
+      "status": "completed",
+      "batch_id": "54813e8d"
+    },
+    {
+      "id": "9f4e339601a647ae88fcfd8d023d7abc",
+      "sequence": 8,
+      "kind": "tool_call",
+      "title": "search_assets",
+      "detail": "Search CMDB and cloud inventory for hostname hlbat209 to verify asset record.",
+      "timestamp": "2026-11-09T16:22:03.946307+00:00",
+      "status": "completed",
+      "tool": "search_assets",
+      "arguments": {
+        "hostname": "hlbat209"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "54813e8d",
+      "duration_ms": 0.902
+    },
+    {
+      "id": "bc36118d929444e6b03c219ccee4636b",
+      "sequence": 9,
+      "kind": "tool_call",
+      "title": "search_assets",
+      "detail": "Search CMDB and cloud inventory for IP 10.86.149.22 to identify any existing asset.",
+      "timestamp": "2026-11-09T16:22:03.946535+00:00",
+      "status": "completed",
+      "tool": "search_assets",
+      "arguments": {
+        "ip_address": "10.86.149.22"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "54813e8d",
+      "duration_ms": 0.91
+    },
+    {
+      "id": "2e1bbec0f8c34f5f965440fc25bfc80c",
+      "sequence": 10,
+      "kind": "tool_call",
+      "title": "query_cloud_inventory",
+      "detail": "Check cloud inventory directly for resource hlbat209.",
+      "timestamp": "2026-11-09T16:22:03.946733+00:00",
+      "status": "failed",
+      "tool": "query_cloud_inventory",
+      "arguments": {
+        "resource_name": "hlbat209"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "54813e8d",
+      "duration_ms": 0.932
+    },
+    {
+      "id": "c7a0aaeb969042f3bf090e5820fdcb13",
+      "sequence": 11,
+      "kind": "tool_call",
+      "title": "search_records",
+      "detail": "Search all enterprise records for references to hlbat209.",
+      "timestamp": "2026-11-09T16:22:03.946893+00:00",
+      "status": "completed",
+      "tool": "search_records",
+      "arguments": {
+        "query": "hlbat209"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "54813e8d",
+      "duration_ms": 4.038
+    },
+    {
+      "id": "f8df09a50298434388c9d8e8cee96b63",
+      "sequence": 12,
+      "kind": "tool_result",
+      "title": "search_assets returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:03.947232+00:00",
+      "status": "completed",
+      "tool": "search_assets",
+      "arguments": {
+        "hostname": "hlbat209"
+      },
+      "result": {
+        "ok": true,
+        "tool": "search_assets",
+        "data": {
+          "asset": {
+            "asset_tag": "AT909168",
+            "asset_type": "server",
+            "description": "Retired batch server",
+            "environment": "prod",
+            "hostname": "hlbat209",
+            "id": "CI-B33F4001",
+            "ip_address": "10.86.149.22",
+            "last_seen": "2026-09-13T23:12:00Z",
+            "location": "Office-Eastbridge",
+            "mac_address": "20:95:44:85:4A:9A",
+            "owner_id": "EMP-6B1891B2",
+            "serial_number": "SN6C9B2FD8",
+            "status": "in_service",
+            "system_id": null
+          },
+          "record_type": "cmdb_item"
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.91,
+      "batch_id": "54813e8d"
+    },
+    {
+      "id": "e4fc1509061146738cdbd19c40ecbed1",
+      "sequence": 13,
+      "kind": "tool_result",
+      "title": "search_assets returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:03.947449+00:00",
+      "status": "completed",
+      "tool": "search_assets",
+      "arguments": {
+        "ip_address": "10.86.149.22"
+      },
+      "result": {
+        "ok": true,
+        "tool": "search_assets",
+        "data": {
+          "asset": {
+            "asset_tag": "AT909168",
+            "asset_type": "server",
+            "description": "Retired batch server",
+            "environment": "prod",
+            "hostname": "hlbat209",
+            "id": "CI-B33F4001",
+            "ip_address": "10.86.149.22",
+            "last_seen": "2026-09-13T23:12:00Z",
+            "location": "Office-Eastbridge",
+            "mac_address": "20:95:44:85:4A:9A",
+            "owner_id": "EMP-6B1891B2",
+            "serial_number": "SN6C9B2FD8",
+            "status": "in_service",
+            "system_id": null
+          },
+          "record_type": "cmdb_item"
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.902,
+      "batch_id": "54813e8d"
+    },
+    {
+      "id": "b8f1a53bcecd47f4a8959522ee485aa2",
+      "sequence": 14,
+      "kind": "tool_result",
+      "title": "query_cloud_inventory reported an error",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:03.947672+00:00",
+      "status": "failed",
+      "tool": "query_cloud_inventory",
+      "arguments": {
+        "resource_name": "hlbat209"
+      },
+      "result": {
+        "ok": false,
+        "tool": "query_cloud_inventory",
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "No cloud resource matches"
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.932,
+      "batch_id": "54813e8d"
+    },
+    {
+      "id": "94b2607f50994e978d0259a01d28a303",
+      "sequence": 15,
+      "kind": "tool_result",
+      "title": "search_records returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:03.950951+00:00",
+      "status": "completed",
+      "tool": "search_records",
+      "arguments": {
+        "query": "hlbat209"
+      },
+      "result": {
+        "ok": true,
+        "tool": "search_records",
+        "data": {
+          "query": "hlbat209",
+          "total_matches": 2,
+          "truncated": false,
+          "results": [
+            {
+              "id": "ALT-3733ABEF",
+              "record_type": "security_alert",
+              "title": "Hardware address mismatch for known hostname",
+              "summary": "Host answering as hlbat209 presents MAC E6:1E:8E:92:8A:4C, CMDB records 20:95:44:85:4A:9A",
+              "status": "open",
+              "matched_fields": [
+                "summary"
+              ]
+            },
+            {
+              "id": "CI-B33F4001",
+              "record_type": "cmdb_item",
+              "hostname": "hlbat209",
+              "status": "in_service",
+              "matched_fields": [
+                "hostname"
+              ]
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 4.038,
+      "batch_id": "54813e8d"
+    },
+    {
+      "id": "08e9721191c94449a1a8229054d6d40f",
+      "sequence": 16,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 2 · investigation route",
+      "timestamp": "2026-11-09T16:22:03.951636+00:00",
+      "status": "completed",
+      "duration_ms": 51924.58
+    },
+    {
+      "id": "33b3eadb3255432b8b88bd45dbc09d9b",
+      "sequence": 17,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:22:55.875892+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 51924.58
+    },
+    {
+      "id": "5f3c940dee764e39bc7900b417b26195",
+      "sequence": 18,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Inspect security alerts, deployment history, ownership, and search for the mismatching MAC address.",
+      "timestamp": "2026-11-09T16:22:55.880820+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "get_security_alerts",
+          "search_assets",
+          "get_deployment_history",
+          "lookup_asset_owner"
+        ]
+      }
+    },
+    {
+      "id": "881996cfd1d647ba9350eaeb90f22f0c",
+      "sequence": 19,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "4 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:22:55.881035+00:00",
+      "status": "completed",
+      "batch_id": "5d735888"
+    },
+    {
+      "id": "1f2f4b25657c41268dde17c5e4fd76c7",
+      "sequence": 20,
+      "kind": "tool_call",
+      "title": "get_security_alerts",
+      "detail": "Retrieve detailed security alerts associated with CI-B33F4001.",
+      "timestamp": "2026-11-09T16:22:55.881311+00:00",
+      "status": "completed",
+      "tool": "get_security_alerts",
+      "arguments": {
+        "asset_id": "CI-B33F4001"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "5d735888",
+      "duration_ms": 1.306
+    },
+    {
+      "id": "f52f23d2ae2b4f06bf932ce1c56d5da6",
+      "sequence": 21,
+      "kind": "tool_call",
+      "title": "search_assets",
+      "detail": "Check if the mismatching MAC address belongs to another registered asset.",
+      "timestamp": "2026-11-09T16:22:55.881622+00:00",
+      "status": "failed",
+      "tool": "search_assets",
+      "arguments": {
+        "mac_address": "E6:1E:8E:92:8A:4C"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "5d735888",
+      "duration_ms": 1.303
+    },
+    {
+      "id": "d96d6c01a45d4fdf9c36148318ae7ba2",
+      "sequence": 22,
+      "kind": "tool_call",
+      "title": "get_deployment_history",
+      "detail": "Check recent deployment and change records for CI-B33F4001.",
+      "timestamp": "2026-11-09T16:22:55.881930+00:00",
+      "status": "completed",
+      "tool": "get_deployment_history",
+      "arguments": {
+        "asset_id": "CI-B33F4001"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "5d735888",
+      "duration_ms": 1.254
+    },
+    {
+      "id": "7a5699d3898e4d87ab846a30db611641",
+      "sequence": 23,
+      "kind": "tool_call",
+      "title": "lookup_asset_owner",
+      "detail": "Identify asset owner and employment status for CI-B33F4001.",
+      "timestamp": "2026-11-09T16:22:55.882204+00:00",
+      "status": "completed",
+      "tool": "lookup_asset_owner",
+      "arguments": {
+        "asset_id": "CI-B33F4001"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "5d735888",
+      "duration_ms": 1.204
+    },
+    {
+      "id": "682245af4db44686af2e13e86f8d5d44",
+      "sequence": 24,
+      "kind": "tool_result",
+      "title": "get_security_alerts returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:55.882629+00:00",
+      "status": "completed",
+      "tool": "get_security_alerts",
+      "arguments": {
+        "asset_id": "CI-B33F4001"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_security_alerts",
+        "data": {
+          "asset_id": "CI-B33F4001",
+          "alerts": [
+            {
+              "asset_id": "CI-B33F4001",
+              "id": "ALT-3733ABEF",
+              "process_name": "arp_monitor",
+              "raised_at": "2026-09-13T23:13:00Z",
+              "severity": "high",
+              "source": "network_monitoring",
+              "status": "open",
+              "summary": "Host answering as hlbat209 presents MAC E6:1E:8E:92:8A:4C, CMDB records 20:95:44:85:4A:9A",
+              "title": "Hardware address mismatch for known hostname"
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 1.306,
+      "batch_id": "5d735888"
+    },
+    {
+      "id": "c38f39a4af594c9c8c262c7600be80fa",
+      "sequence": 25,
+      "kind": "tool_result",
+      "title": "search_assets reported an error",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:55.882930+00:00",
+      "status": "failed",
+      "tool": "search_assets",
+      "arguments": {
+        "mac_address": "E6:1E:8E:92:8A:4C"
+      },
+      "result": {
+        "ok": false,
+        "tool": "search_assets",
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "No asset matches the identifiers"
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 1.303,
+      "batch_id": "5d735888"
+    },
+    {
+      "id": "e2d3dab0bf044a7d9717e01c5e9f45cd",
+      "sequence": 26,
+      "kind": "tool_result",
+      "title": "get_deployment_history returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:55.883184+00:00",
+      "status": "completed",
+      "tool": "get_deployment_history",
+      "arguments": {
+        "asset_id": "CI-B33F4001"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_deployment_history",
+        "data": {
+          "asset_id": "CI-B33F4001",
+          "deployments": []
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 1.254,
+      "batch_id": "5d735888"
+    },
+    {
+      "id": "f6036b1fd0904b51a347e563da5ea36b",
+      "sequence": 27,
+      "kind": "tool_result",
+      "title": "lookup_asset_owner returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:22:55.883429+00:00",
+      "status": "completed",
+      "tool": "lookup_asset_owner",
+      "arguments": {
+        "asset_id": "CI-B33F4001"
+      },
+      "result": {
+        "ok": true,
+        "tool": "lookup_asset_owner",
+        "data": {
+          "asset_id": "CI-B33F4001",
+          "owner": {
+            "department": "Cloud Platform",
+            "email": "nia.ashworth@harbourline.example",
+            "id": "EMP-6B1891B2",
+            "job_title": "Engineer",
+            "manager_id": "EMP-1D6E455D",
+            "name": "Nia Ashworth",
+            "start_date": "2020-08-12",
+            "status": "on_leave",
+            "username": "nashworth"
+          },
+          "manager": {
+            "department": "Cloud Platform",
+            "email": "leila.radcliffe@harbourline.example",
+            "id": "EMP-1D6E455D",
+            "job_title": "Engineer",
+            "manager_id": null,
+            "name": "Leila Radcliffe",
+            "start_date": "2023-12-28",
+            "status": "active",
+            "username": "lradcliffe"
+          }
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 1.204,
+      "batch_id": "5d735888"
+    },
+    {
+      "id": "4f60d76791d74b90be9dab8db4fd75c1",
+      "sequence": 28,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 3 · investigation route",
+      "timestamp": "2026-11-09T16:22:55.884066+00:00",
+      "status": "completed",
+      "duration_ms": 51095.64
+    },
+    {
+      "id": "c2e645922a034b0280d974bb301ee253",
+      "sequence": 29,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:23:46.979431+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 51095.64
+    },
+    {
+      "id": "05a967a746fb4b31960952d06c082527",
+      "sequence": 30,
+      "kind": "validation",
+      "title": "Action request rejected",
+      "detail": "A finish response cannot also request tool execution. The proposed actions have NOT run. Return kind=calls to perform the explicit tool requests before concluding, or return a final outcome with no actions.",
+      "timestamp": "2026-11-09T16:23:46.988000+00:00",
+      "status": "blocked",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium"
+    },
+    {
+      "id": "61f9dbdd1dca4a7dbc29c7bf894ad95e",
+      "sequence": 31,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 4 · investigation route",
+      "timestamp": "2026-11-09T16:23:46.989199+00:00",
+      "status": "completed",
+      "duration_ms": 26740.09
+    },
+    {
+      "id": "6238d93345164abd905d6f1661872b83",
+      "sequence": 32,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:24:13.729858+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 26740.09
+    },
+    {
+      "id": "01b8a79b28b941a1bde44d41b55ae53d",
+      "sequence": 33,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Execute required incident ticketing, containment approval request, and check audit trail.",
+      "timestamp": "2026-11-09T16:24:13.736027+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "get_audit_trail",
+          "create_ticket",
+          "request_approval"
+        ]
+      }
+    },
+    {
+      "id": "04ca70ff7a02426085b6072e24077185",
+      "sequence": 34,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "3 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:24:13.736829+00:00",
+      "status": "completed",
+      "batch_id": "ced28aad"
+    },
+    {
+      "id": "eb7f44a95ae64fcd80ede6ee8319a557",
+      "sequence": 35,
+      "kind": "tool_call",
+      "title": "get_audit_trail",
+      "detail": "Check audit trail for any authorized changes or NIC replacement on the asset.",
+      "timestamp": "2026-11-09T16:24:13.737594+00:00",
+      "status": "completed",
+      "tool": "get_audit_trail",
+      "arguments": {
+        "record_id": "CI-B33F4001"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "ced28aad",
+      "duration_ms": 0.796
+    },
+    {
+      "id": "3b153a2bbbb4452ba79753370d49a794",
+      "sequence": 36,
+      "kind": "tool_result",
+      "title": "get_audit_trail returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:24:13.738407+00:00",
+      "status": "completed",
+      "tool": "get_audit_trail",
+      "arguments": {
+        "record_id": "CI-B33F4001"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_audit_trail",
+        "data": {
+          "record_id": "CI-B33F4001",
+          "entries": []
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.796,
+      "batch_id": "ced28aad"
+    },
+    {
+      "id": "a70cb47a865b48f98a1dadf691ff8a93",
+      "sequence": 37,
+      "kind": "tool_call",
+      "title": "create_ticket",
+      "detail": "Create incident ticket for investigation of the MAC mismatch and potential rogue host.",
+      "timestamp": "2026-11-09T16:24:13.742784+00:00",
+      "status": "completed",
+      "tool": "create_ticket",
+      "arguments": {
+        "category": "security_incident",
+        "related_records": [
+          "CI-B33F4001",
+          "ALT-3733ABEF"
+        ],
+        "summary": "Investigate hardware address mismatch and potential rogue host claiming hlbat209"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "ced28aad",
+      "duration_ms": 1.026
+    },
+    {
+      "id": "deccbbedceb647c78975fab961c5874b",
+      "sequence": 38,
+      "kind": "tool_result",
+      "title": "create_ticket returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:24:13.743825+00:00",
+      "status": "completed",
+      "tool": "create_ticket",
+      "arguments": {
+        "category": "security_incident",
+        "related_records": [
+          "CI-B33F4001",
+          "ALT-3733ABEF"
+        ],
+        "summary": "Investigate hardware address mismatch and potential rogue host claiming hlbat209"
+      },
+      "result": {
+        "ok": true,
+        "tool": "create_ticket",
+        "data": {
+          "ticket_id": "SIM-TKT-001",
+          "summary": "Investigate hardware address mismatch and potential rogue host claiming hlbat209",
+          "category": "security_incident",
+          "related_records": [
+            "CI-B33F4001",
+            "ALT-3733ABEF"
+          ],
+          "simulated": true
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 1.026,
+      "batch_id": "ced28aad"
+    },
+    {
+      "id": "c9ccb953b304467caf64f052a58f8e84",
+      "sequence": 39,
+      "kind": "tool_call",
+      "title": "request_approval",
+      "detail": "Propose containment through approval request rather than direct execution.",
+      "timestamp": "2026-11-09T16:24:13.744726+00:00",
+      "status": "completed",
+      "tool": "request_approval",
+      "arguments": {
+        "action": "isolate_asset",
+        "arguments": {
+          "asset_id": "CI-B33F4001"
+        },
+        "justification": "High severity ARP mismatch alert ALT-3733ABEF with unrecognised MAC E6:1E:8E:92:8A:4C requires network isolation pending investigation."
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "ced28aad",
+      "duration_ms": 1.505
+    },
+    {
+      "id": "7223ceb00ea14940bac2dabb4920a6a6",
+      "sequence": 40,
+      "kind": "approval",
+      "title": "Human approval requested",
+      "detail": "High severity ARP mismatch alert ALT-3733ABEF with unrecognised MAC E6:1E:8E:92:8A:4C requires network isolation pending investigation.",
+      "timestamp": "2026-11-09T16:24:13.745527+00:00",
+      "status": "completed",
+      "tool": "isolate_asset",
+      "arguments": {
+        "asset_id": "CI-B33F4001"
+      },
+      "result": {
+        "request_id": "APR-6F8C269AA0",
+        "status": "pending"
+      }
+    },
+    {
+      "id": "cfeb32c0cdfb41698acb1c5677f7fbf7",
+      "sequence": 41,
+      "kind": "tool_result",
+      "title": "request_approval returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:24:13.746242+00:00",
+      "status": "completed",
+      "tool": "request_approval",
+      "arguments": {
+        "action": "isolate_asset",
+        "arguments": {
+          "asset_id": "CI-B33F4001"
+        },
+        "justification": "High severity ARP mismatch alert ALT-3733ABEF with unrecognised MAC E6:1E:8E:92:8A:4C requires network isolation pending investigation."
+      },
+      "result": {
+        "ok": true,
+        "tool": "request_approval",
+        "data": {
+          "request_id": "APR-6F8C269AA0",
+          "status": "pending",
+          "action": "isolate_asset",
+          "arguments": {
+            "asset_id": "CI-B33F4001"
+          },
+          "simulated": true
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 1.505,
+      "batch_id": "ced28aad"
+    },
+    {
+      "id": "dafa1a199a7948bb95c2ae7cc2a83c45",
+      "sequence": 42,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 5 · investigation route",
+      "timestamp": "2026-11-09T16:24:13.747867+00:00",
+      "status": "completed",
+      "duration_ms": 19632.39
+    },
+    {
+      "id": "dc79149543ce426e9d819c2ca50c698c",
+      "sequence": 43,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:24:33.380639+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 19632.39
+    },
+    {
+      "id": "776a1230a32f44c888d2868ee3aabba5",
+      "sequence": 44,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Evidence confirms an active security alert for an unregistered MAC address answering as hlbat209. An incident ticket has been created and isolation proposed via approval request.",
+      "timestamp": "2026-11-09T16:24:33.389278+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "finish",
+        "tools": []
+      }
+    },
+    {
+      "id": "6846e379fae943bfbba60379ff960196",
+      "sequence": 45,
+      "kind": "validation",
+      "title": "Evidence references validated",
+      "detail": "4 cited record(s) were observed in successful tool responses. This validates provenance, not correctness of interpretation.",
+      "timestamp": "2026-11-09T16:24:33.396506+00:00",
+      "status": "completed",
+      "evidence_ids": [
+        "CI-B33F4001",
+        "ALT-3733ABEF",
+        "SIM-TKT-001",
+        "APR-6F8C269AA0"
+      ]
+    },
+    {
+      "id": "917e8e9bd5f94ecc9812b7e6dad10930",
+      "sequence": 46,
+      "kind": "outcome",
+      "title": "Investigation concluded",
+      "detail": "Investigation into hlbat209 revealed a high-severity MAC address discrepancy indicative of a rogue device or ARP mismatch. Incident ticket SIM-TKT-001 opened and isolation approval requested under APR-6F8C269AA0.",
+      "timestamp": "2026-11-09T16:24:33.397715+00:00",
+      "status": "completed",
+      "result": {
+        "actions": [
+          {
+            "action": "create_ticket",
+            "record_id": "SIM-TKT-001",
+            "status": "created"
+          },
+          {
+            "action": "request_approval",
+            "record_id": "APR-6F8C269AA0",
+            "status": "pending"
+          }
+        ],
+        "by_workflow": {
+          "it_asset": "isolate_and_open_incident"
+        },
+        "conclusion": "The host hlbat209 at IP 10.86.149.22 was detected responding with an unrecognised MAC address (E6:1E:8E:92:8A:4C) differing from the registered CMDB record (20:95:44:85:4A:9A). A security alert ALT-3733ABEF confirms this hardware mismatch, indicating potential ARP spoofing or a rogue device. A security incident ticket has been opened and approval for network isolation has been requested.",
+        "departments": [
+          "Cloud Platform",
+          "Information Security"
+        ],
+        "evidence": [
+          {
+            "note": "CMDB item for hlbat209 indicating registered MAC 20:95:44:85:4A:9A and owner Nia Ashworth",
+            "record_id": "CI-B33F4001"
+          },
+          {
+            "note": "High severity network monitoring alert for hardware address mismatch on hlbat209 showing MAC E6:1E:8E:92:8A:4C",
+            "record_id": "ALT-3733ABEF"
+          },
+          {
+            "note": "Simulated security incident ticket opened for investigation of rogue host / ARP mismatch",
+            "record_id": "SIM-TKT-001"
+          },
+          {
+            "note": "Pending approval request submitted to authorise network isolation of CI-B33F4001",
+            "record_id": "APR-6F8C269AA0"
+          }
+        ],
+        "outcome_code": "isolate_and_open_incident",
+        "recommendations": [
+          "Authorise pending approval APR-6F8C269AA0 to isolate the asset on the network.",
+          "Investigate physical switch port at Office-Eastbridge corresponding to IP 10.86.149.22.",
+          "Verify with manager Leila Radcliffe whether any hardware swap took place while Nia Ashworth is on leave."
+        ],
+        "requires_approval": true,
+        "risk": "high",
+        "summary": "Investigation into hlbat209 revealed a high-severity MAC address discrepancy indicative of a rogue device or ARP mismatch. Incident ticket SIM-TKT-001 opened and isolation approval requested under APR-6F8C269AA0.",
+        "unresolved": [
+          "Identity and physical origin of device presenting MAC E6:1E:8E:92:8A:4C.",
+          "Whether this is an unrecorded hardware replacement or an unauthorised device on the corporate network."
+        ]
+      }
+    }
+  ],
+  "approvals": [
+    {
+      "request_id": "APR-6F8C269AA0",
+      "tool": "isolate_asset",
+      "args": {
+        "asset_id": "CI-B33F4001"
+      },
+      "justification": "High severity ARP mismatch alert ALT-3733ABEF with unrecognised MAC E6:1E:8E:92:8A:4C requires network isolation pending investigation.",
+      "status": "pending"
+    }
+  ],
+  "metrics": {
+    "tool_calls": 11,
+    "iterations": 5,
+    "model_calls": 6,
+    "unsafe_actions_blocked": 0,
+    "usage": {
+      "input_tokens": 62054,
+      "output_tokens": 26007,
+      "thinking_tokens": 22957,
+      "cache_read_tokens": 0,
+      "total_tokens": 88061,
+      "latency_ms": 204352.09999999998
+    },
+    "providers": [
+      "agy/gemini-3.8-flash-low",
+      "agy/gemini-3.8-flash-medium"
+    ]
+  }
+}

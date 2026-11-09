@@ -1,0 +1,1345 @@
+{
+  "id": "aca693ba105546589462302975f93bcf",
+  "case_id": "IN-4988DE6162",
+  "partition": "train",
+  "title": "New MFA requirement - please check",
+  "input": "# New MFA requirement - please check\n\n*From:* Vera Vaughan <vera.vaughan@harbourline.example>  \n*Received:* 2026-09-13T07:18:00Z\n\nHi,\n\nHeads-up on a new sign-in security expectation for elevated users; please advise on our position.\n\nI'm out of office from Thursday so please copy in the shared mailbox.\n\nWe are mid-way through quarter-end so response times may be slower than usual.\n\n| Field | Value |\n| --- | --- |\n| Notice reference | FFSB-SN-2026-530 |\n\nRegards,\nVera Vaughan\nEngineer, Compliance\nHarbourline Mutual Finance Ltd\n\n--- Attachment: DOC-0AC9FAA86E.md ---\n# Notice summary\n\n| Field | Value |\n| --- | --- |\n| Reference | FFSB-SN-2026-530 |\n| Issuer | Fictional Financial Standards Board (FFSB) |\n| Title | Multi-factor authentication for privileged accounts |\n| Status | published (synthetic fixture) |\n\nHuman privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.\n",
+  "mode": "live",
+  "status": "completed",
+  "created_at": "2026-11-09T16:24:32.537537+00:00",
+  "updated_at": "2026-11-09T16:26:49.094336+00:00",
+  "duration_ms": 136557.53,
+  "classification": {
+    "categories": [
+      "regulatory_compliance"
+    ],
+    "primary": "regulatory_compliance",
+    "confidence": 0.95,
+    "uncertainty": 0.05,
+    "risk": "medium",
+    "urgency": "priority",
+    "escalate": false,
+    "escalation_reason": null,
+    "provider": "agy",
+    "model": "gemini-3.8-flash-low",
+    "mode": "live",
+    "rationale": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] The document is an internal compliance heads-up referencing an FFSB supervisory notice (FFSB-SN-2026-530) regarding multi-factor authentication requirements for privileged accounts. This represents a regulatory compliance notice and control applicability assessment, fitting squarely into the regulatory_compliance workflow.",
+    "usage": {
+      "input_tokens": 5650,
+      "output_tokens": 132,
+      "thinking_tokens": 0,
+      "cache_read_tokens": 0,
+      "total_tokens": 5782,
+      "latency_ms": 5679.4
+    }
+  },
+  "outcome": {
+    "actions": [
+      {
+        "action": "create_review_case",
+        "record_id": "RVW-DE6162-01",
+        "summary": "Created audit review case for privileged account adm-4912 lacking MFA on ArchiveWorkbench (SYS-B443E6D3)"
+      }
+    ],
+    "by_workflow": {
+      "regulatory_compliance": "open_audit_item_gap_found"
+    },
+    "conclusion": "Policy POL-EACCD525 applies to systems ArchiveWorkbench (SYS-B443E6D3) and FraudStore (SYS-C040B386). An audit gap was detected on SYS-B443E6D3 where human privileged account adm-4912 (ACG-5257D030) lacks MFA without an approved exception. Review case RVW-DE6162-01 has been created for remediation.",
+    "departments": [
+      "Compliance",
+      "IT Security"
+    ],
+    "evidence": [
+      {
+        "note": "Regulatory notice policy record for FFSB-SN-2026-530",
+        "record_id": "POL-EACCD525"
+      },
+      {
+        "note": "In-scope live system ArchiveWorkbench containing customer PII",
+        "record_id": "SYS-B443E6D3"
+      },
+      {
+        "note": "In-scope live system FraudStore containing customer PII (fully compliant)",
+        "record_id": "SYS-C040B386"
+      },
+      {
+        "note": "Privileged human account adm-4912 lacking MFA",
+        "record_id": "ACG-5257D030"
+      },
+      {
+        "note": "Logged audit review case for non-compliant access grant",
+        "record_id": "RVW-DE6162-01"
+      }
+    ],
+    "outcome_code": "open_audit_item_gap_found",
+    "recommendations": [
+      "Enable multi-factor authentication on grant ACG-5257D030 for principal adm-4912 on ArchiveWorkbench (SYS-B443E6D3).",
+      "Track review case RVW-DE6162-01 to ensure full compliance ahead of policy effective date 2026-10-08."
+    ],
+    "requires_approval": false,
+    "risk": "high",
+    "summary": "Evaluation of regulatory notice FFSB-SN-2026-530 identified two in-scope systems. Privileged access grant ACG-5257D030 on SYS-B443E6D3 lacks required MFA and has no approved control exception, creating a compliance gap.",
+    "unresolved": []
+  },
+  "events": [
+    {
+      "id": "1146b6dc9ae04d0ab78fd20e6e33bde5",
+      "sequence": 1,
+      "kind": "orchestration",
+      "title": "Normalise incoming information",
+      "detail": "Loaded document and attachments. Enterprise tools are synthetic; consequential actions require human approval.",
+      "timestamp": "2026-11-09T16:24:32.538658+00:00",
+      "status": "completed",
+      "mode": "live"
+    },
+    {
+      "id": "9bf28bc04af74148a994cfafcbdc63ce",
+      "sequence": 2,
+      "kind": "orchestration",
+      "title": "Classifying the incoming request",
+      "detail": "Determine applicable workflows, business risk and uncertainty.",
+      "timestamp": "2026-11-09T16:24:32.539134+00:00",
+      "status": "completed"
+    },
+    {
+      "id": "742f503e8d8648fda31ff6b24f2f6c2d",
+      "sequence": 3,
+      "kind": "classification",
+      "title": "Initial routing decision",
+      "detail": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] The document is an internal compliance heads-up referencing an FFSB supervisory notice (FFSB-SN-2026-530) regarding multi-factor authentication requirements for privileged accounts. This represents a regulatory compliance notice and control applicability assessment, fitting squarely into the regulatory_compliance workflow.",
+      "timestamp": "2026-11-09T16:24:38.222534+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-low",
+      "result": {
+        "categories": [
+          "regulatory_compliance"
+        ],
+        "primary": "regulatory_compliance",
+        "confidence": 0.95,
+        "uncertainty": 0.05,
+        "risk": "medium",
+        "urgency": "priority",
+        "escalate": false,
+        "escalation_reason": null,
+        "provider": "agy",
+        "model": "gemini-3.8-flash-low",
+        "mode": "live",
+        "rationale": "[CLI classifier (agy/gemini-3.8-flash-low) — not JEV; default threshold 0.35 is uncalibrated] The document is an internal compliance heads-up referencing an FFSB supervisory notice (FFSB-SN-2026-530) regarding multi-factor authentication requirements for privileged accounts. This represents a regulatory compliance notice and control applicability assessment, fitting squarely into the regulatory_compliance workflow.",
+        "usage": {
+          "input_tokens": 5650,
+          "output_tokens": 132,
+          "thinking_tokens": 0,
+          "cache_read_tokens": 0,
+          "total_tokens": 5782,
+          "latency_ms": 5679.4
+        }
+      }
+    },
+    {
+      "id": "10a3ee1122fe4724b0dfb35c8cd6871c",
+      "sequence": 4,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 1 · investigation route",
+      "timestamp": "2026-11-09T16:24:38.306071+00:00",
+      "status": "completed",
+      "duration_ms": 31396.23
+    },
+    {
+      "id": "952b3ea51fa542df9a782d334c23c6a3",
+      "sequence": 5,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:25:09.702635+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 31396.23
+    },
+    {
+      "id": "d65cd7fd80284edb931e3968df465273",
+      "sequence": 6,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Search for policy reference and attachment document identifier in enterprise records.",
+      "timestamp": "2026-11-09T16:25:09.709872+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "search_records",
+          "search_records"
+        ]
+      }
+    },
+    {
+      "id": "bd92ae17105d495296cc97ae8a80c0d5",
+      "sequence": 7,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "2 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:25:09.710354+00:00",
+      "status": "completed",
+      "batch_id": "5ac18635"
+    },
+    {
+      "id": "e487c9f3627c46e5a62793251712e63c",
+      "sequence": 8,
+      "kind": "tool_call",
+      "title": "search_records",
+      "detail": "Search for the regulatory notice reference FFSB-SN-2026-530 to identify the policy record.",
+      "timestamp": "2026-11-09T16:25:09.710799+00:00",
+      "status": "failed",
+      "tool": "search_records",
+      "arguments": {
+        "query": "FFSB-SN-2026-530"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "5ac18635",
+      "duration_ms": 10.444
+    },
+    {
+      "id": "5dc143cd124a4a4ea0c8837c6e197452",
+      "sequence": 9,
+      "kind": "tool_call",
+      "title": "search_records",
+      "detail": "Search for attachment document reference DOC-0AC9FAA86E.",
+      "timestamp": "2026-11-09T16:25:09.711338+00:00",
+      "status": "completed",
+      "tool": "search_records",
+      "arguments": {
+        "query": "DOC-0AC9FAA86E"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "5ac18635",
+      "duration_ms": 6.177
+    },
+    {
+      "id": "501c2f7270c34d72a0899b65276a6906",
+      "sequence": 10,
+      "kind": "tool_result",
+      "title": "search_records returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:25:09.717041+00:00",
+      "status": "completed",
+      "tool": "search_records",
+      "arguments": {
+        "query": "FFSB-SN-2026-530"
+      },
+      "result": {
+        "ok": true,
+        "tool": "search_records",
+        "data": {
+          "query": "FFSB-SN-2026-530",
+          "total_matches": 39,
+          "truncated": true,
+          "results": [
+            {
+              "id": "POL-EACCD525",
+              "record_type": "policy",
+              "title": "Multi-factor authentication for privileged accounts",
+              "summary": "Human privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+              "status": "published",
+              "matched_fields": [
+                "reference"
+              ]
+            },
+            {
+              "id": "POL-064399AA",
+              "record_type": "policy",
+              "title": "Multi-factor authentication for privileged accounts",
+              "summary": "Human privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+              "status": "published",
+              "matched_fields": [
+                "reference"
+              ]
+            },
+            {
+              "id": "POL-0F189721",
+              "record_type": "policy",
+              "title": "Resilience terms in critical supplier contracts",
+              "summary": "Critical supplier contracts must provide audit rights and incident notification within 24 hours. SYNTHETIC FIXTURE - not a real regulatory instrument.",
+              "status": "published",
+              "matched_fields": [
+                "reference"
+              ]
+            },
+            {
+              "id": "POL-114C249C",
+              "record_type": "policy",
+              "title": "Multi-factor authentication for privileged accounts",
+              "summary": "Human privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+              "status": "published",
+              "matched_fields": [
+                "reference"
+              ]
+            },
+            {
+              "id": "POL-12060029",
+              "record_type": "policy",
+              "title": "Encryption of customer data at rest",
+              "summary": "Customer-data databases must be encrypted at rest with keys rotated within 365 days. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+              "status": "published",
+              "matched_fields": [
+                "reference"
+              ]
+            },
+            {
+              "id": "POL-160B0E03",
+              "record_type": "policy",
+              "title": "Multi-factor authentication for privileged accounts",
+              "summary": "Human privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+              "status": "published",
+              "matched_fields": [
+                "reference"
+              ]
+            },
+            {
+              "id": "POL-22A30DCE",
+              "record_type": "policy",
+              "title": "Resilience terms in critical supplier contracts",
+              "summary": "Critical supplier contracts must provide audit rights and incident notification within 24 hours. SYNTHETIC FIXTURE - not a real regulatory instrument.",
+              "status": "published",
+              "matched_fields": [
+                "reference"
+              ]
+            },
+            {
+              "id": "POL-2EC89547",
+              "record_type": "policy",
+              "title": "Resilience terms in critical supplier contracts",
+              "summary": "Critical supplier contracts must provide audit rights and incident notification within 24 hours. SYNTHETIC FIXTURE - not a real regulatory instrument.",
+              "status": "published",
+              "matched_fields": [
+                "reference"
+              ]
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 6.177,
+      "batch_id": "5ac18635"
+    },
+    {
+      "id": "1b04040adac34cff9f6dd0ac1949a084",
+      "sequence": 11,
+      "kind": "tool_result",
+      "title": "search_records reported an error",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:25:09.721832+00:00",
+      "status": "failed",
+      "tool": "search_records",
+      "arguments": {
+        "query": "DOC-0AC9FAA86E"
+      },
+      "result": {
+        "ok": false,
+        "tool": "search_records",
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "No records match 'DOC-0AC9FAA86E'"
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 10.444,
+      "batch_id": "5ac18635"
+    },
+    {
+      "id": "7ece9b56ea574024b0bac6bb834a3f92",
+      "sequence": 12,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 2 · investigation route",
+      "timestamp": "2026-11-09T16:25:09.723587+00:00",
+      "status": "completed",
+      "duration_ms": 26493.1
+    },
+    {
+      "id": "4ee6eddc709e429e85d36ae5df8a8f6d",
+      "sequence": 13,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:25:36.217117+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 26493.1
+    },
+    {
+      "id": "aad2502bc254418a86cb1e8ff4bb186d",
+      "sequence": 14,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Retrieve candidate policy records to identify the exact policy matching notice reference FFSB-SN-2026-530.",
+      "timestamp": "2026-11-09T16:25:36.222799+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "get_policy",
+          "get_policy",
+          "get_policy",
+          "get_policy"
+        ]
+      }
+    },
+    {
+      "id": "fa59278304824d0ab032c21d4d514d31",
+      "sequence": 15,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "4 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:25:36.223329+00:00",
+      "status": "completed",
+      "batch_id": "27b61d31"
+    },
+    {
+      "id": "bb0343bf735f44eb8fe91856f800f264",
+      "sequence": 16,
+      "kind": "tool_call",
+      "title": "get_policy",
+      "detail": "Inspect policy details and reference",
+      "timestamp": "2026-11-09T16:25:36.223752+00:00",
+      "status": "completed",
+      "tool": "get_policy",
+      "arguments": {
+        "policy_id": "POL-EACCD525"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "27b61d31",
+      "duration_ms": 2.289
+    },
+    {
+      "id": "317ff2e4de68476c814bf6be4d676807",
+      "sequence": 17,
+      "kind": "tool_call",
+      "title": "get_policy",
+      "detail": "Inspect policy details and reference",
+      "timestamp": "2026-11-09T16:25:36.224225+00:00",
+      "status": "completed",
+      "tool": "get_policy",
+      "arguments": {
+        "policy_id": "POL-064399AA"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "27b61d31",
+      "duration_ms": 2.113
+    },
+    {
+      "id": "8fac25ef14fe4f1cadd1105004e8ad32",
+      "sequence": 18,
+      "kind": "tool_call",
+      "title": "get_policy",
+      "detail": "Inspect policy details and reference",
+      "timestamp": "2026-11-09T16:25:36.224803+00:00",
+      "status": "completed",
+      "tool": "get_policy",
+      "arguments": {
+        "policy_id": "POL-114C249C"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "27b61d31",
+      "duration_ms": 2.068
+    },
+    {
+      "id": "9c827496797742a7af11196b4db4a640",
+      "sequence": 19,
+      "kind": "tool_call",
+      "title": "get_policy",
+      "detail": "Inspect policy details and reference",
+      "timestamp": "2026-11-09T16:25:36.225124+00:00",
+      "status": "completed",
+      "tool": "get_policy",
+      "arguments": {
+        "policy_id": "POL-160B0E03"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "27b61d31",
+      "duration_ms": 1.949
+    },
+    {
+      "id": "4aeb9dd31b974a6aac9ff4077f0d20cb",
+      "sequence": 20,
+      "kind": "tool_result",
+      "title": "get_policy returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:25:36.225728+00:00",
+      "status": "completed",
+      "tool": "get_policy",
+      "arguments": {
+        "policy_id": "POL-EACCD525"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_policy",
+        "data": {
+          "policy": {
+            "applicability": {
+              "data_classification": [
+                "customer_pii",
+                "confidential"
+              ],
+              "estates": [
+                "Millhaven Estate 06"
+              ]
+            },
+            "clauses": [
+              {
+                "clause": "2.4",
+                "text": "All privileged human accounts must enforce MFA."
+              },
+              {
+                "clause": "2.5",
+                "text": "Service accounts without MFA need a compensating control exception."
+              }
+            ],
+            "effective_date": "2026-10-08",
+            "id": "POL-EACCD525",
+            "issuer": "Fictional Financial Standards Board (FFSB)",
+            "kind": "regulatory_notice",
+            "note": "SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+            "reference": "FFSB-SN-2026-530",
+            "status": "published",
+            "summary": "Human privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+            "title": "Multi-factor authentication for privileged accounts",
+            "version": "1.0"
+          }
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 1.949,
+      "batch_id": "27b61d31"
+    },
+    {
+      "id": "533ca7ade8b64896b2e6574dbc15f3c8",
+      "sequence": 21,
+      "kind": "tool_result",
+      "title": "get_policy returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:25:36.226303+00:00",
+      "status": "completed",
+      "tool": "get_policy",
+      "arguments": {
+        "policy_id": "POL-064399AA"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_policy",
+        "data": {
+          "policy": {
+            "applicability": {
+              "data_classification": [
+                "customer_pii",
+                "confidential"
+              ],
+              "estates": [
+                "Westfold Estate 91"
+              ]
+            },
+            "clauses": [
+              {
+                "clause": "2.4",
+                "text": "All privileged human accounts must enforce MFA."
+              },
+              {
+                "clause": "2.5",
+                "text": "Service accounts without MFA need a compensating control exception."
+              }
+            ],
+            "effective_date": "2026-10-16",
+            "id": "POL-064399AA",
+            "issuer": "Fictional Financial Standards Board (FFSB)",
+            "kind": "regulatory_notice",
+            "note": "SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+            "reference": "FFSB-SN-2026-365",
+            "status": "published",
+            "summary": "Human privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+            "title": "Multi-factor authentication for privileged accounts",
+            "version": "1.0"
+          }
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 2.068,
+      "batch_id": "27b61d31"
+    },
+    {
+      "id": "7bf5ad15ba61433d8f50b822a9008102",
+      "sequence": 22,
+      "kind": "tool_result",
+      "title": "get_policy returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:25:36.226926+00:00",
+      "status": "completed",
+      "tool": "get_policy",
+      "arguments": {
+        "policy_id": "POL-114C249C"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_policy",
+        "data": {
+          "policy": {
+            "applicability": {
+              "data_classification": [
+                "customer_pii",
+                "confidential"
+              ],
+              "estates": [
+                "Ravenscar Estate 79"
+              ]
+            },
+            "clauses": [
+              {
+                "clause": "2.4",
+                "text": "All privileged human accounts must enforce MFA."
+              },
+              {
+                "clause": "2.5",
+                "text": "Service accounts without MFA need a compensating control exception."
+              }
+            ],
+            "effective_date": "2026-10-25",
+            "id": "POL-114C249C",
+            "issuer": "Fictional Financial Standards Board (FFSB)",
+            "kind": "regulatory_notice",
+            "note": "SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+            "reference": "FFSB-SN-2026-287",
+            "status": "published",
+            "summary": "Human privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+            "title": "Multi-factor authentication for privileged accounts",
+            "version": "1.0"
+          }
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 2.113,
+      "batch_id": "27b61d31"
+    },
+    {
+      "id": "6c764bb5627942e5b107ad811c3bdc0e",
+      "sequence": 23,
+      "kind": "tool_result",
+      "title": "get_policy returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:25:36.227424+00:00",
+      "status": "completed",
+      "tool": "get_policy",
+      "arguments": {
+        "policy_id": "POL-160B0E03"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_policy",
+        "data": {
+          "policy": {
+            "applicability": {
+              "data_classification": [
+                "customer_pii",
+                "confidential"
+              ],
+              "estates": [
+                "Westfold Estate 93"
+              ]
+            },
+            "clauses": [
+              {
+                "clause": "2.4",
+                "text": "All privileged human accounts must enforce MFA."
+              },
+              {
+                "clause": "2.5",
+                "text": "Service accounts without MFA need a compensating control exception."
+              }
+            ],
+            "effective_date": "2026-10-09",
+            "id": "POL-160B0E03",
+            "issuer": "Fictional Financial Standards Board (FFSB)",
+            "kind": "regulatory_notice",
+            "note": "SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+            "reference": "FFSB-SN-2026-469",
+            "status": "published",
+            "summary": "Human privileged accounts must use multi-factor authentication; service accounts need documented compensating controls. SYNTHETIC FIXTURE - not a real regulatory instrument or legal guidance.",
+            "title": "Multi-factor authentication for privileged accounts",
+            "version": "1.0"
+          }
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 2.289,
+      "batch_id": "27b61d31"
+    },
+    {
+      "id": "123cb55a084b4bc89bbf4cb06e6154d4",
+      "sequence": 24,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 3 · investigation route",
+      "timestamp": "2026-11-09T16:25:36.228993+00:00",
+      "status": "completed",
+      "duration_ms": 28539.24
+    },
+    {
+      "id": "0ffcf2be553e4acab7af7dd01cc5e188",
+      "sequence": 25,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:26:04.769999+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 28539.24
+    },
+    {
+      "id": "b5bebd424840499e97bb3604decda638",
+      "sequence": 26,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Discover systems affected by policy POL-EACCD525 corresponding to notice reference FFSB-SN-2026-530.",
+      "timestamp": "2026-11-09T16:26:04.775863+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "discover_affected_systems"
+        ]
+      }
+    },
+    {
+      "id": "6f5638eb48fc467996d5f51156fe68b0",
+      "sequence": 27,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "1 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:26:04.776484+00:00",
+      "status": "completed",
+      "batch_id": "93866404"
+    },
+    {
+      "id": "82528ae192e142778e5ab30a5a92a97b",
+      "sequence": 28,
+      "kind": "tool_call",
+      "title": "discover_affected_systems",
+      "detail": "Evaluate applicability of POL-EACCD525 across the system inventory to identify in-scope systems.",
+      "timestamp": "2026-11-09T16:26:04.777189+00:00",
+      "status": "completed",
+      "tool": "discover_affected_systems",
+      "arguments": {
+        "policy_id": "POL-EACCD525"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "93866404",
+      "duration_ms": 0.899
+    },
+    {
+      "id": "127442145a6846ed93b4b38e0e466122",
+      "sequence": 29,
+      "kind": "tool_result",
+      "title": "discover_affected_systems returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:26:04.778107+00:00",
+      "status": "completed",
+      "tool": "discover_affected_systems",
+      "arguments": {
+        "policy_id": "POL-EACCD525"
+      },
+      "result": {
+        "ok": true,
+        "tool": "discover_affected_systems",
+        "data": {
+          "policy_id": "POL-EACCD525",
+          "criteria": {
+            "data_classification": [
+              "customer_pii",
+              "confidential"
+            ],
+            "estates": [
+              "Millhaven Estate 06"
+            ]
+          },
+          "in_scope": [
+            {
+              "id": "SYS-B443E6D3",
+              "name": "ArchiveWorkbench",
+              "lifecycle": "live",
+              "match_reasons": [
+                "data_classification=customer_pii"
+              ]
+            },
+            {
+              "id": "SYS-C040B386",
+              "name": "FraudStore",
+              "lifecycle": "live",
+              "match_reasons": [
+                "data_classification=customer_pii"
+              ]
+            }
+          ],
+          "needs_classification_review": [],
+          "excluded": [
+            {
+              "id": "SYS-59CB0525",
+              "name": "FraudGateway",
+              "lifecycle": "decommissioned",
+              "match_reasons": [
+                "data_classification=customer_pii"
+              ],
+              "excluded_because": "system is decommissioned"
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 0.899,
+      "batch_id": "93866404"
+    },
+    {
+      "id": "f2306d7cb9794fc9a359d7a88cf4dd74",
+      "sequence": 30,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 4 · investigation route",
+      "timestamp": "2026-11-09T16:26:04.779560+00:00",
+      "status": "completed",
+      "duration_ms": 7890.97
+    },
+    {
+      "id": "acfc22bc08bc42b0b310e08426657f71",
+      "sequence": 31,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:26:12.671186+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 7890.97
+    },
+    {
+      "id": "ed3af5810e9e414393fa8c538642520b",
+      "sequence": 32,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Inspect privileged access grants and existing control exceptions for all in-scope systems under POL-EACCD525.",
+      "timestamp": "2026-11-09T16:26:12.676867+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "get_access_grants",
+          "get_control_exceptions",
+          "get_access_grants",
+          "get_control_exceptions"
+        ]
+      }
+    },
+    {
+      "id": "7fad13ca345b41a39b8a8749b0562dd4",
+      "sequence": 33,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "4 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:26:12.677697+00:00",
+      "status": "completed",
+      "batch_id": "fcc96ab0"
+    },
+    {
+      "id": "16e70a675a2b44e9aaf4721ca152eb04",
+      "sequence": 34,
+      "kind": "tool_call",
+      "title": "get_access_grants",
+      "detail": "Check privileged access grants for in-scope system ArchiveWorkbench (SYS-B443E6D3)",
+      "timestamp": "2026-11-09T16:26:12.678460+00:00",
+      "status": "completed",
+      "tool": "get_access_grants",
+      "arguments": {
+        "privileged_only": true,
+        "system_id": "SYS-B443E6D3"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "fcc96ab0",
+      "duration_ms": 4.074
+    },
+    {
+      "id": "b95e00b619e3423bb5301984c48cb11a",
+      "sequence": 35,
+      "kind": "tool_call",
+      "title": "get_control_exceptions",
+      "detail": "Check approved control exceptions for ArchiveWorkbench (SYS-B443E6D3)",
+      "timestamp": "2026-11-09T16:26:12.679142+00:00",
+      "status": "completed",
+      "tool": "get_control_exceptions",
+      "arguments": {
+        "system_id": "SYS-B443E6D3"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "fcc96ab0",
+      "duration_ms": 4.68
+    },
+    {
+      "id": "9bdf5ea7ee184334bd2ec54f4aa3c0ce",
+      "sequence": 36,
+      "kind": "tool_call",
+      "title": "get_access_grants",
+      "detail": "Check privileged access grants for in-scope system FraudStore (SYS-C040B386)",
+      "timestamp": "2026-11-09T16:26:12.679812+00:00",
+      "status": "completed",
+      "tool": "get_access_grants",
+      "arguments": {
+        "privileged_only": true,
+        "system_id": "SYS-C040B386"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "fcc96ab0",
+      "duration_ms": 4.365
+    },
+    {
+      "id": "08884a4f16d54af3894f3e3f21ee24d0",
+      "sequence": 37,
+      "kind": "tool_call",
+      "title": "get_control_exceptions",
+      "detail": "Check approved control exceptions for FraudStore (SYS-C040B386)",
+      "timestamp": "2026-11-09T16:26:12.680390+00:00",
+      "status": "completed",
+      "tool": "get_control_exceptions",
+      "arguments": {
+        "system_id": "SYS-C040B386"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "fcc96ab0",
+      "duration_ms": 4.322
+    },
+    {
+      "id": "7ef9079b7603465097a42bbda6e5be7f",
+      "sequence": 38,
+      "kind": "tool_result",
+      "title": "get_access_grants returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:26:12.682847+00:00",
+      "status": "completed",
+      "tool": "get_access_grants",
+      "arguments": {
+        "privileged_only": true,
+        "system_id": "SYS-B443E6D3"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_access_grants",
+        "data": {
+          "system_id": "SYS-B443E6D3",
+          "grants": [
+            {
+              "account_type": "human",
+              "id": "ACG-466F65C6",
+              "last_review": "2026-07-16",
+              "mfa_enabled": true,
+              "principal": "adm-c968",
+              "privileged": true,
+              "reviewer_id": "EMP-03A5951D",
+              "role": "administrator",
+              "system_id": "SYS-B443E6D3"
+            },
+            {
+              "account_type": "human",
+              "id": "ACG-5257D030",
+              "last_review": "2026-08-25",
+              "mfa_enabled": false,
+              "principal": "adm-4912",
+              "privileged": true,
+              "reviewer_id": "EMP-03A5951D",
+              "role": "database administrator",
+              "system_id": "SYS-B443E6D3"
+            },
+            {
+              "account_type": "human",
+              "id": "ACG-C874821E",
+              "last_review": "2026-07-11",
+              "mfa_enabled": true,
+              "principal": "adm-55be",
+              "privileged": true,
+              "reviewer_id": "EMP-03A5951D",
+              "role": "administrator",
+              "system_id": "SYS-B443E6D3"
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 4.365,
+      "batch_id": "fcc96ab0"
+    },
+    {
+      "id": "f8da4df52e6b4ed081723de522cf3ad0",
+      "sequence": 39,
+      "kind": "tool_result",
+      "title": "get_control_exceptions returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:26:12.683471+00:00",
+      "status": "completed",
+      "tool": "get_control_exceptions",
+      "arguments": {
+        "system_id": "SYS-B443E6D3"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_control_exceptions",
+        "data": {
+          "system_id": "SYS-B443E6D3",
+          "exceptions": []
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 4.322,
+      "batch_id": "fcc96ab0"
+    },
+    {
+      "id": "47188d7392fd4ff684e171d0f0b5690f",
+      "sequence": 40,
+      "kind": "tool_result",
+      "title": "get_access_grants returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:26:12.683898+00:00",
+      "status": "completed",
+      "tool": "get_access_grants",
+      "arguments": {
+        "privileged_only": true,
+        "system_id": "SYS-C040B386"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_access_grants",
+        "data": {
+          "system_id": "SYS-C040B386",
+          "grants": [
+            {
+              "account_type": "human",
+              "id": "ACG-2835650E",
+              "last_review": "2026-08-26",
+              "mfa_enabled": true,
+              "principal": "adm-d053",
+              "privileged": true,
+              "reviewer_id": "EMP-615039E0",
+              "role": "administrator",
+              "system_id": "SYS-C040B386"
+            },
+            {
+              "account_type": "human",
+              "id": "ACG-73B3719B",
+              "last_review": "2026-07-13",
+              "mfa_enabled": true,
+              "principal": "adm-fce0",
+              "privileged": true,
+              "reviewer_id": "EMP-615039E0",
+              "role": "administrator",
+              "system_id": "SYS-C040B386"
+            }
+          ]
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 4.074,
+      "batch_id": "fcc96ab0"
+    },
+    {
+      "id": "f16967fafe374a73873a53f06655e1c6",
+      "sequence": 41,
+      "kind": "tool_result",
+      "title": "get_control_exceptions returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:26:12.685078+00:00",
+      "status": "completed",
+      "tool": "get_control_exceptions",
+      "arguments": {
+        "system_id": "SYS-C040B386"
+      },
+      "result": {
+        "ok": true,
+        "tool": "get_control_exceptions",
+        "data": {
+          "system_id": "SYS-C040B386",
+          "exceptions": []
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 4.68,
+      "batch_id": "fcc96ab0"
+    },
+    {
+      "id": "ab9742500a2b4cc09e1d700b4b5d2908",
+      "sequence": 42,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 5 · investigation route",
+      "timestamp": "2026-11-09T16:26:12.687112+00:00",
+      "status": "completed",
+      "duration_ms": 11125.53
+    },
+    {
+      "id": "16367b7314db4c7e8ebe5c89ca691a43",
+      "sequence": 43,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:26:23.813649+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 11125.53
+    },
+    {
+      "id": "91c0728223774c9faa0805dd28639bc6",
+      "sequence": 44,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "Produce an audit review case for the identified gap where a privileged account lacks MFA without an approved exception.",
+      "timestamp": "2026-11-09T16:26:23.819757+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "calls",
+        "tools": [
+          "create_review_case"
+        ]
+      }
+    },
+    {
+      "id": "e41023b366994c37883f80819f158f25",
+      "sequence": 45,
+      "kind": "orchestration",
+      "title": "Dispatch tool batch",
+      "detail": "1 independent action(s) · runtime validation and permissions enforced.",
+      "timestamp": "2026-11-09T16:26:23.820736+00:00",
+      "status": "completed",
+      "batch_id": "73de7f7c"
+    },
+    {
+      "id": "6058d1b7caa24ec8bd6c369666bf3c68",
+      "sequence": 46,
+      "kind": "tool_call",
+      "title": "create_review_case",
+      "detail": "Create an audit review case for the non-compliant privileged human account lacking MFA.",
+      "timestamp": "2026-11-09T16:26:23.821877+00:00",
+      "status": "completed",
+      "tool": "create_review_case",
+      "arguments": {
+        "case_type": "audit",
+        "evidence": [
+          "ACG-5257D030",
+          "SYS-B443E6D3",
+          "POL-EACCD525"
+        ],
+        "priority": "high",
+        "summary": "Privileged human account adm-4912 lacks MFA on in-scope system ArchiveWorkbench (SYS-B443E6D3) violating FFSB-SN-2026-530"
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "batch_id": "73de7f7c",
+      "duration_ms": 1.258
+    },
+    {
+      "id": "1f34d2c261164743a3b0ca4757d530a7",
+      "sequence": 47,
+      "kind": "tool_result",
+      "title": "create_review_case returned evidence",
+      "detail": "Business tool response · synthetic enterprise",
+      "timestamp": "2026-11-09T16:26:23.823146+00:00",
+      "status": "completed",
+      "tool": "create_review_case",
+      "arguments": {
+        "case_type": "audit",
+        "evidence": [
+          "ACG-5257D030",
+          "SYS-B443E6D3",
+          "POL-EACCD525"
+        ],
+        "priority": "high",
+        "summary": "Privileged human account adm-4912 lacks MFA on in-scope system ArchiveWorkbench (SYS-B443E6D3) violating FFSB-SN-2026-530"
+      },
+      "result": {
+        "ok": true,
+        "tool": "create_review_case",
+        "data": {
+          "review_case_id": "RVW-DE6162-01",
+          "case_type": "audit",
+          "evidence_ids": [
+            "ACG-5257D030",
+            "SYS-B443E6D3",
+            "POL-EACCD525"
+          ],
+          "summary": "Privileged human account adm-4912 lacks MFA on in-scope system ArchiveWorkbench (SYS-B443E6D3) violating FFSB-SN-2026-530",
+          "priority": "high",
+          "simulated": true
+        }
+      },
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 1.258,
+      "batch_id": "73de7f7c"
+    },
+    {
+      "id": "28db192a16594265bbb592dbde502954",
+      "sequence": 48,
+      "kind": "model",
+      "title": "Selecting the next action",
+      "detail": "Investigation iteration 6 · investigation route",
+      "timestamp": "2026-11-09T16:26:23.825384+00:00",
+      "status": "completed",
+      "duration_ms": 25254.6
+    },
+    {
+      "id": "a6f47e7cd5a24569afc9c1dd1990fa80",
+      "sequence": 49,
+      "kind": "model",
+      "title": "Model response received",
+      "detail": "Validated structured action request.",
+      "timestamp": "2026-11-09T16:26:49.080578+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "duration_ms": 25254.6
+    },
+    {
+      "id": "4342ae426e41491fa11e37a66bad5628",
+      "sequence": 50,
+      "kind": "decision",
+      "title": "Next action selected",
+      "detail": "The investigation into FFSB-SN-2026-530 is complete with sufficient evidence. An audit review case (RVW-DE6162-01) has been filed for the identified MFA gap.",
+      "timestamp": "2026-11-09T16:26:49.086796+00:00",
+      "status": "completed",
+      "provider": "agy",
+      "model": "gemini-3.8-flash-medium",
+      "result": {
+        "kind": "finish",
+        "tools": []
+      }
+    },
+    {
+      "id": "95db1787616440ae98a084a3f4f95748",
+      "sequence": 51,
+      "kind": "validation",
+      "title": "Evidence references validated",
+      "detail": "5 cited record(s) were observed in successful tool responses. This validates provenance, not correctness of interpretation.",
+      "timestamp": "2026-11-09T16:26:49.091595+00:00",
+      "status": "completed",
+      "evidence_ids": [
+        "POL-EACCD525",
+        "SYS-B443E6D3",
+        "SYS-C040B386",
+        "ACG-5257D030",
+        "RVW-DE6162-01"
+      ]
+    },
+    {
+      "id": "4a216769842a45dab4e7b90784ea4837",
+      "sequence": 52,
+      "kind": "outcome",
+      "title": "Investigation concluded",
+      "detail": "Evaluation of regulatory notice FFSB-SN-2026-530 identified two in-scope systems. Privileged access grant ACG-5257D030 on SYS-B443E6D3 lacks required MFA and has no approved control exception, creating a compliance gap.",
+      "timestamp": "2026-11-09T16:26:49.093085+00:00",
+      "status": "completed",
+      "result": {
+        "actions": [
+          {
+            "action": "create_review_case",
+            "record_id": "RVW-DE6162-01",
+            "summary": "Created audit review case for privileged account adm-4912 lacking MFA on ArchiveWorkbench (SYS-B443E6D3)"
+          }
+        ],
+        "by_workflow": {
+          "regulatory_compliance": "open_audit_item_gap_found"
+        },
+        "conclusion": "Policy POL-EACCD525 applies to systems ArchiveWorkbench (SYS-B443E6D3) and FraudStore (SYS-C040B386). An audit gap was detected on SYS-B443E6D3 where human privileged account adm-4912 (ACG-5257D030) lacks MFA without an approved exception. Review case RVW-DE6162-01 has been created for remediation.",
+        "departments": [
+          "Compliance",
+          "IT Security"
+        ],
+        "evidence": [
+          {
+            "note": "Regulatory notice policy record for FFSB-SN-2026-530",
+            "record_id": "POL-EACCD525"
+          },
+          {
+            "note": "In-scope live system ArchiveWorkbench containing customer PII",
+            "record_id": "SYS-B443E6D3"
+          },
+          {
+            "note": "In-scope live system FraudStore containing customer PII (fully compliant)",
+            "record_id": "SYS-C040B386"
+          },
+          {
+            "note": "Privileged human account adm-4912 lacking MFA",
+            "record_id": "ACG-5257D030"
+          },
+          {
+            "note": "Logged audit review case for non-compliant access grant",
+            "record_id": "RVW-DE6162-01"
+          }
+        ],
+        "outcome_code": "open_audit_item_gap_found",
+        "recommendations": [
+          "Enable multi-factor authentication on grant ACG-5257D030 for principal adm-4912 on ArchiveWorkbench (SYS-B443E6D3).",
+          "Track review case RVW-DE6162-01 to ensure full compliance ahead of policy effective date 2026-10-08."
+        ],
+        "requires_approval": false,
+        "risk": "high",
+        "summary": "Evaluation of regulatory notice FFSB-SN-2026-530 identified two in-scope systems. Privileged access grant ACG-5257D030 on SYS-B443E6D3 lacks required MFA and has no approved control exception, creating a compliance gap.",
+        "unresolved": []
+      }
+    }
+  ],
+  "approvals": [],
+  "metrics": {
+    "tool_calls": 12,
+    "iterations": 6,
+    "model_calls": 7,
+    "unsafe_actions_blocked": 0,
+    "usage": {
+      "input_tokens": 75661,
+      "output_tokens": 14293,
+      "thinking_tokens": 12449,
+      "cache_read_tokens": 0,
+      "total_tokens": 89954,
+      "latency_ms": 136358.4
+    },
+    "providers": [
+      "agy/gemini-3.8-flash-low",
+      "agy/gemini-3.8-flash-medium"
+    ]
+  }
+}

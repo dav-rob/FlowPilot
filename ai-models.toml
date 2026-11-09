@@ -1,0 +1,78 @@
+# FlowPilot AI models: the ONE place that decides which local authenticated CLI model runs which role,
+# and what happens when a subscription reaches an explicit usage or rate limit.
+#
+#  * Changes apply to the next run or call that starts (no restart needed). An active run or router
+#    snapshot finishes on the policy chain it started with.
+#  * A missing, unreadable or invalid policy file blocks new AI work with a clear PolicyError; nothing
+#    falls back to an older copy or to a paid API key.
+#  * Routes are tried in the order listed, and ONLY an explicit usage or rate limit (category="rate_limit")
+#    moves work to the next route. Malformed output, schema failures, tool activity, sign-in errors,
+#    missing CLI binaries and timeouts fail closed without silent substitution.
+#  * A route that reports a usage limit cools down in memory until its reported reset time, or for
+#    default_cooldown_minutes when no reset time was reported.
+#  * Incoming documents and tool outputs are untrusted: every CLI adapter runs in an empty temporary
+#    working directory outside the repository (without data/ or evaluation/) with all filesystem, shell,
+#    browser and MCP tools disabled or denied.
+
+default_cooldown_minutes = 5
+
+[roles]
+# Argon is first for escalation: a live Claude probe emitted native enterprise tool-use
+# blocks instead of the JSON action protocol; the adapter correctly rejected it.
+# This explicit policy choice is separate from automatic quota-only fallback.
+# screening:     first-pass CLI classification when JEV API credentials are not configured
+# investigation: standard low-cost multi-step tool selection and evidence evaluation
+# escalated:     stronger reasoning models for uncertain, ambiguous, conflicting or cross-domain cases
+screening     = ["agy-flash", "claude-haiku", "codex-luna"]
+investigation = ["agy-flash-investigation", "claude-haiku", "codex-luna"]
+escalated     = ["agy-argon", "claude-sonnet", "agy-sonnet", "codex-sol"]
+
+[routes.agy-flash]
+adapter = "agy"
+model   = "gemini-3.8-flash"
+effort  = "low"
+timeout = 90
+
+[routes.claude-haiku]
+adapter = "claude"
+model   = "claude-haiku-5-5"
+effort  = "low"
+timeout = 90
+
+[routes.codex-luna]
+adapter = "codex"
+model   = "gpt-6-luna"
+effort  = "low"
+timeout = 90
+
+[routes.claude-sonnet]
+adapter = "claude"
+model   = "claude-sonnet-5-5"
+effort  = "high"
+timeout = 360
+
+[routes.agy-sonnet]
+adapter = "agy"
+model   = "claude-sonnet-5-5"
+effort  = "high"
+timeout = 360
+
+[routes.agy-argon]
+adapter = "agy"
+model   = "gemini-4-argon"
+effort  = "high"
+timeout = 360
+
+[routes.codex-sol]
+adapter = "codex"
+model   = "gpt-6.1-sol"
+effort  = "high"
+timeout = 360
+
+# Low-effort Flash produced repeated malformed action envelopes in live evaluation.
+# Keep classification inexpensive; use medium effort for structured investigation.
+[routes.agy-flash-investigation]
+adapter = "agy"
+model = "gemini-3.8-flash"
+effort = "medium"
+timeout = 120

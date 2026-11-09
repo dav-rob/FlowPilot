@@ -3,15 +3,23 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "flowpilot-data"
-version = "1.0.0"
-description = "Synthetic UK financial-services enterprise dataset generator, mock tools, and offline evaluation harness for Flow4AI agentic demonstrations."
+name = "flowpilot"
+version = "0.1.0"
+description = "Local enterprise AI investigation console with governed dynamic tool calling."
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = []
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "httpx>=0.27,<1", "jsonschema>=4.23,<5"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-asyncio>=0.24,<2"]
 
 [project.scripts]
 flowpilot-data = "flowpilot_data.cli:main"
+flowpilot = "flowpilot.__main__:main"
 
 [tool.setuptools.packages.find]
-include = ["flowpilot_data*"]
+include = ["flowpilot*", "flowpilot_data*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
