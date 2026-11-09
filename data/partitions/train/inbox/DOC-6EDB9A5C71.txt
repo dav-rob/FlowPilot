@@ -1,0 +1,17 @@
+Notice FFSB-SN-2026-759 - please assess
+Received 2026-09-13T02:54:00Z from Imogen Holloway <imogen.holloway@harbourline.example>
+
+Can someone look at this?
+
+New notice FFSB-SN-2026-759 - 'Encryption of customer data at rest' - has been issued by Fictional Financial Standards Board (FFSB).
+
+Can Compliance work out which platforms are in scope and whether we meet the new encryption requirement?
+
+Notice reference: FFSB-SN-2026-759
+Estate in scope: Larkfield Estate 64
+Policy record: POL-4E85DE60
+
+Regards,
+Imogen Holloway
+Analyst, Compliance
+Harbourline Mutual Finance Ltd

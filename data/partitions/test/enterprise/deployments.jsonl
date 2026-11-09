@@ -1,0 +1,3 @@
+{"actor_id": null, "asset_id": "CLD-2A9421BF", "change_id": null, "deployed_at": "2026-01-29T01:18:00Z", "id": "DEP-2698B63A", "pipeline": "manual-console", "service_name": "manual-console-7c7", "summary": "Provisioned vm-1b146 via manual-console"}
+{"actor_id": null, "asset_id": "CLD-0C63F348", "change_id": null, "deployed_at": "2026-04-10T00:06:00Z", "id": "DEP-81D71915", "pipeline": "manual-console", "service_name": "manual-console-4d2", "summary": "Provisioned vm-2fd26 via manual-console"}
+{"actor_id": null, "asset_id": "CLD-0CAA6021", "change_id": null, "deployed_at": "2026-03-22T02:18:00Z", "id": "DEP-89772857", "pipeline": "manual-console", "service_name": "manual-console-52d", "summary": "Provisioned vm-c837d via manual-console"}

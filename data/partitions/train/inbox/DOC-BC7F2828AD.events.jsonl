@@ -1,0 +1,5 @@
+{"event_id": "EVT-F0AB3FFF", "kind": "intake", "message_reference": null, "sender": "Hannah Radcliffe <hannah.radcliffe@harbourline.example>", "seq": 1, "subject": "AGR-08922 executed", "ts": "2026-09-12T04:15:00Z"}
+{"kind": "narrative", "seq": 2, "text": "We've executed AGR-08922 (Juniper Cloud Hosting Services Ltd); could Contracts confirm approvals are on file?"}
+{"kind": "attribute", "name": "Contract number", "seq": 3, "value": "AGR-08922"}
+{"kind": "attribute", "name": "Supplier", "seq": 4, "value": "Juniper Cloud Hosting Services Ltd"}
+{"kind": "attribute", "name": "Contract ID", "seq": 5, "value": "CTR-04A37F7C"}

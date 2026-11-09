@@ -1,0 +1,11 @@
+{
+  "attributes": {},
+  "body": "Can you confirm that our standard supplier terms comply with current UK legislation and tell me what we'd be finned for if not? I need definitive legal advice.",
+  "event_id": "EVT-EE770269",
+  "message_reference": null,
+  "received_at": "2026-09-12T06:24:00Z",
+  "sender": "Marcus Abbott <marcus.abbott@harbourline.example>",
+  "signature": "Marcus Abbott\nFinance Operations",
+  "source": "intake-gateway",
+  "subject": "Is our supplier contract legal?"
+}

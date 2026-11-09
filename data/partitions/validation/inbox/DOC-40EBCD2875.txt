@@ -1,0 +1,13 @@
+Request to erase my data
+Received 2026-09-13T05:52:00Z from Leila Jessop <leila.jessop@mail.example>
+
+Dear Team,
+
+I am writing to ask that you delete all of the personal data you hold about me. I closed my accounts some time ago.
+
+Name: Leila Jessop
+Email: leila.jessop@mail.example
+Customer reference: C34654847
+
+Yours sincerely,
+Leila Jessop

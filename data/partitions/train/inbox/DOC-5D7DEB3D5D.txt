@@ -1,0 +1,16 @@
+Security alert on production host
+Received 2026-09-13T07:16:00Z from Connor Quayle <connor.quayle@harbourline.example>
+
+Can someone look at this?
+
+An alert fired on hlbat239: 'Unknown binary running with outbound connections'. Is this expected, or do we need to act?
+
+Hostname: hlbat239
+Alert: Unknown binary running with outbound connections
+Severity: critical
+Asset ID: CI-307AC084
+
+Ta,
+Connor Quayle
+Manager, Information Security
+Harbourline Mutual Finance Ltd

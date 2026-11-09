@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Estate in scope": "Millhaven Estate 46",
+    "Notice reference": "FFSB-SN-2026-737",
+    "Policy record": "POL-4B6761F6"
+  },
+  "body": "New notice FFSB-SN-2026-737 - 'Encryption of customer data at rest' - has been issued by Fictional Financial Standards Board (FFSB).\n\nPlease identify which of our systems are affected and confirm whether encryption at rest is in plaace for each of them.",
+  "event_id": "EVT-FDA842B4",
+  "message_reference": null,
+  "received_at": "2026-09-12T01:39:00Z",
+  "sender": "Quentin Quayle <quentin.quayle@harbourline.example>",
+  "signature": "Quentin Quayle\nManager, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Notice FFSB-SN-2026-737 - please assess"
+}

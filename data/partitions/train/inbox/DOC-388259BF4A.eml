@@ -1,0 +1,21 @@
+From: Paula Fenwick <paula.fenwick@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T06:04:00Z
+Subject: CMDB vs network discovery
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Hey there,
+
+Network discovery reports host responding on 10.79.198.72, but the CMDB doesn't line up. Please investigate and fix the record or the host.
+
+The previous thread is below if useful, though I think most of it is superseded.
+
+Hostname: hlapp395
+IP address: 10.79.198.72
+Discovery source: network scan
+
+Speak soon,
+Paula Fenwick
+Manager, Information Security
+Harbourline Mutual Finance Ltd

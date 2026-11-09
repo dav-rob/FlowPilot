@@ -1,0 +1,30 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Python bytecode & packaging
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Test & tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+
+# Temporary staging & OS files
+.flowpilot_stage_*/
+tmp/
+.DS_Store
+
+# Application runtime and local configuration
+.runtime/
+.env
+frontend/node_modules/
+frontend/dist/

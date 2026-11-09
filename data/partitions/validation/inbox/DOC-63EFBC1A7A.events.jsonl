@@ -1,0 +1,5 @@
+{"event_id": "EVT-BC286545", "kind": "intake", "message_reference": null, "sender": "Megan Okafor <megan.okafor@mail.example>", "seq": 1, "subject": "Delete my details", "ts": "2026-09-14T06:43:00Z"}
+{"kind": "narrative", "seq": 2, "text": "I am writing to ask tat you delete all of the persnal data you hold about me. I closed my accounts some time ago."}
+{"kind": "narrative", "seq": 3, "text": "I'm out of office from Thurday so please copy in the shhared mailbox."}
+{"kind": "attribute", "name": "Name", "seq": 4, "value": "Megan Okafor"}
+{"kind": "attribute", "name": "Email", "seq": 5, "value": "megan.okafor@mail.example"}

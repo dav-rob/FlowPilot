@@ -1,0 +1,18 @@
+From: Hannah Abbott <hannah.abbott@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T08:22:00Z
+Subject: Unrecognised VM in cloud estate
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Resource vm-c1777 turned up in the weekly discovery wiith no owner tag.
+
+Resource name: vm-c1777
+Region: uk-south
+Source: weekly cloud discovery
+Asset ID: CLD-1F1103B8
+
+Cheers
+Hannah Abbott
+Analyst, Information Security
+Harbourline Mutual Finance Ltd

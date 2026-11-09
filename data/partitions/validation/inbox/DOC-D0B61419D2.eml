@@ -1,0 +1,27 @@
+From: Isla Pemberton <isla.pemberton@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T05:59:00Z
+Subject: Asset discovered: vm-97101
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Can someone look at this?
+
+---------- Forwarded message ----------
+From: Isla Pemberton <isla.pemberton@harbourline.example>
+Subject: Asset discoveed: vm-97101
+
+Something in the cloud estate doesn't look right and has no clear owner - details below.
+
+Sorry for the formatting, sent from my phone.
+
+Our reference for this is in the subject line; ignore the older one.
+
+Resource name: vm-97101
+Region: uk-south
+Source: weekly cloud discovery
+
+Regards
+Isla Pemberton
+Team Lead, Information Security
+Harbourline Mutual Finance Ltd

@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Email": "tessa.ellery@mail.example",
+    "Name": "Tessa Ellery",
+    "New address": "44 Exchange Court, Kingsmere ZZ4 7UH"
+  },
+  "body": "Some of the details you have for me are out of date and I would like them corrected, as set out below.\n\nI'm out of office frrom Thursday so please copy in the shared mailbox.",
+  "event_id": "EVT-B0380497",
+  "message_reference": null,
+  "received_at": "2026-09-13T00:07:00Z",
+  "sender": "Tessa Ellery <tessa.ellery@mail.example>",
+  "signature": "Tessa Ellery",
+  "source": "intake-gateway",
+  "subject": "Update my records - Tessa Ellery"
+}

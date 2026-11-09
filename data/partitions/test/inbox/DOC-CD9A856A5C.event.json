@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Contract ID": "CTR-C4DD173D",
+    "Contract number": "AGR-93716",
+    "Supplier": "Pennine Print Solutions Ltd"
+  },
+  "body": "A new supplier agreement is ready from our side - could you push it through the process?",
+  "event_id": "EVT-3F218277",
+  "message_reference": null,
+  "received_at": "2026-09-12T00:29:00Z",
+  "sender": "Ravi Yardley <ravi.yardley@harbourline.example>",
+  "signature": "Ravi Yardley\nManager, Procurement\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Pennine Print Solutions Ltd agreement"
+}

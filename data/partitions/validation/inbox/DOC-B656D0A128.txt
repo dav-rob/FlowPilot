@@ -1,0 +1,17 @@
+Privileged access review - new requirement
+Received 2026-09-14T05:46:00Z from Hannah Vaughan <hannah.vaughan@harbourline.example>
+
+Hello -
+
+New notice FFSB-SN-2026-787 - 'Quarterly review of privileged access' - has been issued by Fictional Financial Standards Board (FFSB).
+
+Which of our systems are affected, and are their access reviews up to date?
+
+Notice reference: FFSB-SN-2026-787
+Estate in scope: Ravenscar Estate 07
+Policy record: POL-2ABF2CA1
+
+Regards
+Hannah Vaughan
+Manager, Compliance
+Harbourline Mutual Finance Ltd

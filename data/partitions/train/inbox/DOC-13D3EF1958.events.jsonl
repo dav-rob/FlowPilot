@@ -1,0 +1,6 @@
+{"event_id": "EVT-4C9BDE9D", "kind": "intake", "message_reference": null, "sender": "Umar Kerrigan <umar.kerrigan@harbourline.example>", "seq": 1, "subject": "Wexcombe Cloud Hosting Group Ltd renewal AGR-83842", "ts": "2026-09-13T03:03:00Z"}
+{"kind": "narrative", "seq": 2, "text": "This one renews next month; I assume it's fine to roll over - can you confirm?"}
+{"kind": "narrative", "seq": 3, "text": "The previous thread is below if useful, though I think most of it is superseded."}
+{"kind": "attribute", "name": "Contract number", "seq": 4, "value": "AGR-83842"}
+{"kind": "attribute", "name": "Supplier", "seq": 5, "value": "Wexcombe Cloud Hosting Group Ltd"}
+{"kind": "attribute", "name": "Contract ID", "seq": 6, "value": "CTR-F59F2849"}

@@ -1,0 +1,48 @@
+{"id": "CCT-00CF958D", "objective": "Synthetic control objective: Key management", "reference": "FPC-699", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-09AB2F06", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-731", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-0B061D77", "objective": "Synthetic control objective: Key management", "reference": "FPC-169", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-0B47CE0B", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-611", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-178F8537", "objective": "Synthetic control objective: Key management", "reference": "FPC-977", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-19B0C2D1", "objective": "Synthetic control objective: Key management", "reference": "FPC-501", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-23A16966", "objective": "Synthetic control objective: Key management", "reference": "FPC-489", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-25245E68", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-559", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-277DB7EA", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-246", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-2C5F327E", "objective": "Synthetic control objective: Key management", "reference": "FPC-460", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-2FA3E08B", "objective": "Synthetic control objective: Key management", "reference": "FPC-413", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-35982163", "objective": "Synthetic control objective: Key management", "reference": "FPC-802", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-3681BEF2", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-076", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-3A3C220A", "objective": "Synthetic control objective: Key management", "reference": "FPC-812", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-3B4E31C2", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-709", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-49BCC135", "objective": "Synthetic control objective: Key management", "reference": "FPC-201", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-515E3613", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-499", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-5312253F", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-898", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-63543501", "objective": "Synthetic control objective: Key management", "reference": "FPC-992", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-6B244BBB", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-130", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-6DD2141C", "objective": "Synthetic control objective: Key management", "reference": "FPC-511", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-79DF1147", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-555", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-822E1B41", "objective": "Synthetic control objective: Key management", "reference": "FPC-988", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-8B5EBAA3", "objective": "Synthetic control objective: Key management", "reference": "FPC-874", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-8FAADE09", "objective": "Synthetic control objective: Key management", "reference": "FPC-689", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-924B74E8", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-021", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-97D9A92B", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-124", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-9926CEEC", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-954", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-9D378A5E", "objective": "Synthetic control objective: Key management", "reference": "FPC-864", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-A066B62F", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-058", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-AC973E94", "objective": "Synthetic control objective: Key management", "reference": "FPC-920", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-B1BA4643", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-581", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-B1C9736B", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-612", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-CEA5F113", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-271", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-CEBC1391", "objective": "Synthetic control objective: Key management", "reference": "FPC-986", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-D06FF71A", "objective": "Synthetic control objective: Key management", "reference": "FPC-293", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-D5E83FB7", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-359", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-D7352978", "objective": "Synthetic control objective: Key management", "reference": "FPC-187", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-DAF2FA8C", "objective": "Synthetic control objective: Key management", "reference": "FPC-014", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-DD2186D9", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-925", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-E1301AEA", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-986", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-E7B8BEFC", "objective": "Synthetic control objective: Key management", "reference": "FPC-309", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-E7D7305A", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-421", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-E978AD4A", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-329", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-EF407742", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-763", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-F466FFA0", "objective": "Synthetic control objective: Encryption at rest", "reference": "FPC-552", "test_procedure": "Synthetic test procedure", "title": "Encryption at rest"}
+{"id": "CCT-F8319BA0", "objective": "Synthetic control objective: Key management", "reference": "FPC-545", "test_procedure": "Synthetic test procedure", "title": "Key management"}
+{"id": "CCT-FF161F30", "objective": "Synthetic control objective: Key management", "reference": "FPC-979", "test_procedure": "Synthetic test procedure", "title": "Key management"}

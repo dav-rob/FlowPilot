@@ -1,0 +1,19 @@
+From: Owen Cartwright <owen.cartwright@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-13T06:02:00Z
+Subject: Discovery mismatch for hldb802
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Morning!
+
+Reconciliation shows a mismatch involving hldb802 (host respnoding on 10.82.189.121).
+
+Hostname: hldb802
+IP address: 10.82.189.121
+Discovery source: network scan
+
+Thanks so much!
+Oewn Cartwright
+Head of Functon, Information Security
+Harbourline Mutual Finance Ltd

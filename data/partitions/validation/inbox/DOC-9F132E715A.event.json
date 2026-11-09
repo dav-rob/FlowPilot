@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "Amount": "\u00a37,315.40",
+    "Invoice number": "SI-43487A"
+  },
+  "body": "Second reminder: invoice SI-43487A remains unpaid. Copy attached.",
+  "event_id": "EVT-51D01B68",
+  "message_reference": "65a7630b89e475f7@burnsidecourier.example",
+  "received_at": "2026-09-12T02:48:00Z",
+  "sender": "Zainab Sandhu <zainab.sandhu@burnsidecourier.example>",
+  "signature": "Zainab Sandhu\nCredit Control, Burnside Courier Ltd",
+  "source": "intake-gateway",
+  "subject": "Reminder - invoice SI-43487A"
+}

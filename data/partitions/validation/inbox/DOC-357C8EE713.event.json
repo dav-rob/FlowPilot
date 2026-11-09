@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "Email": "stuart.lowther@mail.example",
+    "Name": "Stuart Lowther"
+  },
+  "body": "I am writing to ask that you delete all of the personal data you hold about me. I closed my accounts some time ago.\n\nThe previous thread is below if useful, though I think most of it is superseded.",
+  "event_id": "EVT-B15D9376",
+  "message_reference": null,
+  "received_at": "2026-09-14T04:44:00Z",
+  "sender": "Stuart Lowther <stuart.lowther@mail.example>",
+  "signature": "Stuart Lowther",
+  "source": "intake-gateway",
+  "subject": "Data erasure request - Stuart Lowther"
+}

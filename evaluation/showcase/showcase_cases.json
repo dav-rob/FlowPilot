@@ -1,0 +1,168 @@
+{
+  "cases": [
+    {
+      "case_id": "IN-B148DF6144",
+      "example_path": [
+        {
+          "args": {
+            "invoice_number": "SI-79253"
+          },
+          "tool": "search_invoices"
+        },
+        {
+          "args": {
+            "supplier_id": "SUP-47D4A998"
+          },
+          "tool": "get_supplier_record"
+        },
+        {
+          "args": {
+            "message_id": "MSG-0C0E250E"
+          },
+          "tool": "verify_email_origin"
+        }
+      ],
+      "partition": "train",
+      "reasons": [
+        "6 valid investigation paths",
+        "simulated service outage with recovery",
+        "conflicting evidence",
+        "critical risk with a sensitive action to withhold or approve",
+        "category not clear from the input alone"
+      ],
+      "score": 17,
+      "workflow": "supplier_fraud"
+    },
+    {
+      "case_id": "IN-4988DE6162",
+      "example_path": [
+        {
+          "args": {
+            "query": "FFSB-SN-2026-530",
+            "record_types": [
+              "policy"
+            ]
+          },
+          "tool": "search_records"
+        },
+        {
+          "args": {
+            "policy_id": "POL-EACCD525"
+          },
+          "tool": "discover_affected_systems"
+        },
+        {
+          "args": {
+            "privileged_only": true,
+            "system_id": "SYS-B443E6D3"
+          },
+          "tool": "get_access_grants"
+        }
+      ],
+      "partition": "train",
+      "reasons": [
+        "4 valid investigation paths",
+        "conflicting evidence",
+        "high risk with a sensitive action to withhold or approve",
+        "category not clear from the input alone"
+      ],
+      "score": 17,
+      "workflow": "regulatory_compliance"
+    },
+    {
+      "case_id": "IN-D687B92A2F",
+      "example_path": [
+        {
+          "args": {
+            "email": "joanna.iqbal@mail.example"
+          },
+          "tool": "find_customer"
+        },
+        {
+          "args": {
+            "record_id": "CUS-B9609E8D"
+          },
+          "tool": "get_audit_trail"
+        },
+        {
+          "args": {
+            "customer_id": "CUS-B9609E8D"
+          },
+          "tool": "verify_identity_status"
+        }
+      ],
+      "partition": "train",
+      "reasons": [
+        "6 valid investigation paths",
+        "conflicting evidence",
+        "high risk with a sensitive action to withhold or approve"
+      ],
+      "score": 12,
+      "workflow": "gdpr_data"
+    },
+    {
+      "case_id": "IN-F8352D982B",
+      "example_path": [
+        {
+          "args": {
+            "hostname": "hlbat209"
+          },
+          "tool": "search_assets"
+        },
+        {
+          "args": {
+            "asset_id": "CI-B33F4001"
+          },
+          "tool": "get_security_alerts"
+        },
+        {
+          "args": {
+            "asset_id": "CI-B33F4001"
+          },
+          "tool": "get_cmdb_item"
+        }
+      ],
+      "partition": "train",
+      "reasons": [
+        "conflicting evidence",
+        "critical risk with a sensitive action to withhold or approve",
+        "category not clear from the input alone"
+      ],
+      "score": 15,
+      "workflow": "it_asset"
+    },
+    {
+      "case_id": "IN-8649D7CEB6",
+      "example_path": [
+        {
+          "args": {
+            "contract_number": "AGR-12722"
+          },
+          "tool": "find_contracts"
+        },
+        {
+          "args": {
+            "contract_id": "CTR-8649A3D3"
+          },
+          "tool": "get_approval_workflow"
+        },
+        {
+          "args": {
+            "contract_id": "CTR-8649A3D3"
+          },
+          "tool": "get_contract"
+        }
+      ],
+      "partition": "train",
+      "reasons": [
+        "4 valid investigation paths",
+        "conflicting evidence",
+        "high risk with a sensitive action to withhold or approve",
+        "category not clear from the input alone"
+      ],
+      "score": 14,
+      "workflow": "contract_risk"
+    }
+  ],
+  "note": "Evaluator/presenter fixture only. Curated automatically from the train partition. Example paths illustrate one valid investigation trajectory; agents receive only public case data and select tools dynamically."
+}

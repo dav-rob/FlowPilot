@@ -1,0 +1,18 @@
+Cloud inventory exception
+Received 2026-09-12T04:41:00Z from Gareth Nightingale <gareth.nightingale@harbourline.example>
+
+Dear colleagues,
+
+Resource vm-f542c turned up in the weekly discovery with no owner tag.
+
+Apologies for the short notice - this has been sitting in my inbox.
+
+Resource name: vm-f542c
+Region: uk-south
+Source: weekly cloud discovery
+Asset ID: CLD-717EBE69
+
+Kind regards,
+Gareth Nightingale
+Engineer, Information Security
+Harbourline Mutual Finance Ltd

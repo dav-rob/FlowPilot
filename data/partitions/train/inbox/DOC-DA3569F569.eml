@@ -1,0 +1,24 @@
+From: Nadia Dunmore <nadia.dunmore@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-11T23:06:00Z
+Subject: Security alert on production host
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Dear colleagues,
+
+Something odd on one of the production servers. Can someone with context check whether it's expected?
+
+This was raised at the weekly operations catch-up but without a clear owner.
+
+Sorry for the formatting, sent from my phone.
+
+Hostname: hldb445
+Alert: Port scan detected
+Severity: high
+Asset ID: CI-281988AD
+
+Yours sincerely,
+Nadia Dunmore
+Team Lead, Information Security
+Harbourline Mutual Finance Ltd

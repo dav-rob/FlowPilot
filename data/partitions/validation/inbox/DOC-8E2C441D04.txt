@@ -1,0 +1,17 @@
+Update: access reviews
+Received 2026-09-14T04:54:00Z from Isla Zielinski <isla.zielinski@harbourline.example>
+
+Can someone look at this?
+
+Fictional Financial Standards Board (FFSB) has published notice FFSB-SN-2026-671 (Quarterly review of privileged access). It takes effect on 2026-11-08.
+
+Please confirm that privileged access reviews on the affected platforms meet the new 90-day requirement.
+
+Notice reference: FFSB-SN-2026-671
+Estate in scope: Ashdown Green Estate 02
+Policy record: POL-22BC6F49
+
+Regards,
+Isla Zielinski
+Analyst, Compliance
+Harbourline Mutual Finance Ltd

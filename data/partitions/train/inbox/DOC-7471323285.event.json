@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Discovery source": "network scan",
+    "Hostname": "hldb613",
+    "IP address": "10.89.22.34"
+  },
+  "body": "Inventory reconciliation threw up an oddity - see the fields below.\n\nLet me know if you need anything else from our side.",
+  "event_id": "EVT-B1364973",
+  "message_reference": null,
+  "received_at": "2026-09-14T01:57:00Z",
+  "sender": "Quentin Ellery <quentin.ellery@harbourline.example>",
+  "signature": "Quentin Ellery\nHead of Function, Information Security\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "CMDB vs network discovery"
+}

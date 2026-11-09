@@ -1,0 +1,19 @@
+From: Marcus Zielinski <marcus.zielinski@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T23:04:00Z
+Subject: Discovery mismatch for hlapp062
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Morning!
+
+Reconciliation shows a mismatch involving hlapp062 (host responding on 10.14.25.207).
+
+Hostname: hlapp062
+IP address: 10.14.25.207
+Discovery source: network scan
+
+Speak soon,
+Marcus Zielinski
+Head of Function, Information Security
+Harbourline Mutual Finance Ltd

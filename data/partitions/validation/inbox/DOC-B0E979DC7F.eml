@@ -1,0 +1,21 @@
+From: Nia Underhill <nia.underhill@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T05:30:00Z
+Subject: Unrecognised VM in cloud estate
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Good morning,
+
+Our cloud posture scan found a VM called vm-75584 that I can't match to a service. Can someone work out whose it is and what to do with it?
+
+Resource name: vm-75584
+Region: uk-south
+Source: weekly cloud discovery
+Public IP: 198.51.100.201
+Asset ID: CLD-0EE4FCB6
+
+Yours sincerely,
+Nia Underhill
+Manager, Information Security
+Harbourline Mutual Finance Ltd

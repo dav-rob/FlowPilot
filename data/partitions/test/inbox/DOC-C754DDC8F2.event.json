@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Estate in scope": "Westfold Estate 51",
+    "Notice reference": "FFSB-SN-2026-897",
+    "Policy record": "POL-E2A92616"
+  },
+  "body": "Fictional Financial Standards Board (FFSB) has published notice FFSB-SN-2026-897 (Retention of audit logs). It takes effect on 2026-11-07.\n\nWe need to know which systems this applies to and whether their audit-log retention is sufficient.",
+  "event_id": "EVT-3B13E8A1",
+  "message_reference": null,
+  "received_at": "2026-09-14T08:36:00Z",
+  "sender": "Owen Kerrigan <owen.kerrigan@harbourline.example>",
+  "signature": "Owen Kerrigan\nHead of Function, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Audit log retention requirement"
+}

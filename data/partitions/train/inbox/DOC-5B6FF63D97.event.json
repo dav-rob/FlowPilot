@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Discovery source": "network scan",
+    "Hostname": "hldb245",
+    "IP address": "10.92.168.82"
+  },
+  "body": "Network discovery reports decommissioned host still responding, but the CMDB doesn't line up. Please investigate and fix the record or the host.",
+  "event_id": "EVT-97656774",
+  "message_reference": null,
+  "received_at": "2026-09-14T04:30:00Z",
+  "sender": "Leila Gilmour <leila.gilmour@harbourline.example>",
+  "signature": "Leila Gilmour\nAnalyst, Information Security\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Inventory discrepancy"
+}

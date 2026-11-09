@@ -1,0 +1,4 @@
+{"event_id": "EVT-E26E8E3D", "kind": "intake", "message_reference": "69595eccdf93f015@harbouriine.example", "sender": "Stuart Sandhu <stuart.sandhu@harbouriine.example>", "seq": 1, "subject": "Please pay today", "ts": "2026-09-13T03:46:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Plesae make a payment of \u00a372,000.00 to Stonebridge Office Supplies Limited today. Their invoice is attached; the supplier is new and has agreed to start immediately."}
+{"kind": "narrative", "seq": 3, "text": "I'm travelling so can't take calls - please just process it."}
+{"kind": "attribute", "name": "Invoice number", "seq": 4, "value": "HL-85970"}

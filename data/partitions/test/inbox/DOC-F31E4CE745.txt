@@ -1,0 +1,17 @@
+Request to erase my data
+Received 2026-09-12T00:56:00Z from Tessa Fenwick <tessa.fenwick@mail.example>
+
+Dear colleagues,
+
+I'd like my information remoevd from everywhere it's stored, wherever that may be.
+
+Apologies for the short notice - thhis has been sitting in my inbox.
+
+Our reference for this is in the subject line; ignore the older one.
+
+Name: Tessa Fenwick
+Email: tessa.fenwick@mail.example
+Customer refreence: C43852953
+
+With thanks,
+Tessa Fenwick

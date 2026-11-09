@@ -1,0 +1,24 @@
+From: Zainab Fenwick <zainab.fenwick@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T02:50:00Z
+Subject: Alert: hlbat696
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Can someone look at this?
+
+---------- Forwarded message ----------
+From: Zainab Fenwick <zainab.fenwick@harbourline.example>
+Subject: Alert: hlbat696
+
+EDR flagged hlbat696 (Unexpected service restart and new binary). Please triage.
+
+Hostname: hlbat696
+Alert: Unexpected service restart and new binary
+Severity: medium
+Asset ID: CI-F00E265A
+
+Regards
+Zainab Fenwick
+Team Lead, Information Security
+Harbourline Mutual Finance Ltd

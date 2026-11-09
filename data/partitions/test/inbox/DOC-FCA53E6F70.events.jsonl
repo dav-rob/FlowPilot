@@ -1,0 +1,5 @@
+{"event_id": "EVT-132243EB", "kind": "intake", "message_reference": null, "sender": "Imogen Thackeray <imogen.thackeray@mail.example>", "seq": 1, "subject": "Request for copy of my data", "ts": "2026-09-14T01:30:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Please send me a copy of all the personal data you hold about me."}
+{"kind": "attribute", "name": "Name", "seq": 3, "value": "Imogen Thackeray"}
+{"kind": "attribute", "name": "Email", "seq": 4, "value": "imogen.thackeray@mail.example"}
+{"kind": "attribute", "name": "Customer reference", "seq": 5, "value": "C10671812"}

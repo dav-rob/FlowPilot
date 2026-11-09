@@ -1,0 +1,18 @@
+Ashby Security Services Services Ltd - invoice attached
+Received 2026-09-13T02:45:00Z from Tessa Nightingale <tessa.nightingale@ashbysecurityservicesservices.example>
+Reference: 394a2bf7c42e8326@ashbysecurityservicesservices.example
+
+Hi all,
+
+Attached is our invoice SI-84929 (PO PO-275554) for £4,850.00.
+
+We have recently moved banks so payment should go to the account on the invoice rather than the old one.
+
+Invoice number: SI-84929
+Amount: £4,850.00
+Supplier ID: SUP-32CA5D21
+
+Speak soon,
+Tessa Nightingale
+Accounts Receivable, Ashby Security Services Services Ltd
+0161 496 0255

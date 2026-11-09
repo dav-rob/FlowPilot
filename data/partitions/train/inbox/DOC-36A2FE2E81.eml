@@ -1,0 +1,24 @@
+From: Lucy Ashworth <lucy.ashworth@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T05:13:00Z
+Subject: Alert: hldb531
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Can someone look at this?
+
+---------- Forwarded message ----------
+From: Lucy Ashworth <lucy.ashworth@harbourline.example>
+Subject: Alert: hldb531
+
+An alert fired on hldb531: 'Port scan detected'. Is this expected, or do we need to act?
+
+Hostname: hldb531
+Alert: Port scan detected
+Severity: high
+Asset ID: CI-C28F53B9
+
+Regards
+Lucy Ashworth
+Head of Function, Information Security
+Harbourline Mutual Finance Ltd

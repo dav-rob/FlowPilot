@@ -1,0 +1,15 @@
+Discovery mismatch for hlbat209
+Received 2026-09-13T05:50:00Z from Tessa Bellamy <tessa.bellamy@harbourline.example>
+
+FYI - pllease see below.
+
+Inventory reconciliation threw up an oddity - see the fields below.
+
+Hostname: hlbat209
+IP address: 10.86.149.22
+Discovery source: network scan
+
+Thanks,
+Tessa Bellamy
+Head of Function, Information Security
+Haarbourline Mutual Finance Ltd

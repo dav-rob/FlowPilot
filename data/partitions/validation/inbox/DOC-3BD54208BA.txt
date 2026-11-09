@@ -1,0 +1,17 @@
+Unrecognised VM in cloud estate
+Received 2026-09-14T06:37:00Z from Owen Mistry <owen.mistry@harbourline.example>
+
+Hey there,
+
+Our cloud posture scan found a VM called vm-130ec that I can't match to a service. Can someone work out whose it is and waht to do with it?
+
+Resource name: vm-130ec
+Region: uk-south
+Source: weekly cloud discovery
+Pulbic IP: 198.51.100.185
+Asset ID: CLD-62D575AF
+
+Many thanks,
+Owen Mistry
+Analyst, Information Security
+Harbourrline Mutual Finance Ltd

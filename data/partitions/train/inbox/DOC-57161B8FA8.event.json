@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Discovery source": "network scan",
+    "Hostname": "hlbat909",
+    "IP address": "10.48.163.35"
+  },
+  "body": "Reconciliation shows a mismatch involving hlbat909 (decommissioned host still responding).\n\nThis was raised at the weekly operations catch-up but without a clear owner.",
+  "event_id": "EVT-564AD3D3",
+  "message_reference": null,
+  "received_at": "2026-09-14T04:46:00Z",
+  "sender": "Marcus Ashworth <marcus.ashworth@harbourline.example>",
+  "signature": "Marcus Ashworth\nHead of Function, Information Security\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Discovery mismatch for hlbat909"
+}

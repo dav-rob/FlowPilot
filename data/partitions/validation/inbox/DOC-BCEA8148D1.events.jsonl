@@ -1,0 +1,4 @@
+{"event_id": "EVT-B8A64715", "kind": "intake", "message_reference": null, "sender": "Priya Ashworth <priya.ashworth@harbourline.example>", "seq": 1, "subject": "Amendment - Wexcombe Archiving Group Ltd", "ts": "2026-09-14T03:24:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Renewal paperwork is back from the supplier, they say nothing much has changed. OK to proceed?"}
+{"kind": "attribute", "name": "Contract number", "seq": 3, "value": "AGR-77044"}
+{"kind": "attribute", "name": "Supplier", "seq": 4, "value": "Wexcombe Archiving Group Ltd"}

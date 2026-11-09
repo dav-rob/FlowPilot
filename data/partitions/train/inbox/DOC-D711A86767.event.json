@@ -1,0 +1,16 @@
+{
+  "attributes": {
+    "Customer reference": "C81882600",
+    "Email": "joanna.vaughan@mail.example",
+    "Name": "Joanna Vaughan",
+    "New address": "2 Quay Street, Kingsmere ZZ8 1QF"
+  },
+  "body": "I have moved house. Could you change the address you hold for me to 2 Quay Street, Kingsmere ZZ8 1QF?",
+  "event_id": "EVT-27C1B291",
+  "message_reference": null,
+  "received_at": "2026-09-12T08:26:00Z",
+  "sender": "Joanna Vaughan <joanna.vaughan@mail.example>",
+  "signature": "Joanna Vaughan",
+  "source": "intake-gateway",
+  "subject": "Change of address"
+}

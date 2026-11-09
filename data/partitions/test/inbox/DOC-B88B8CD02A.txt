@@ -1,0 +1,17 @@
+Endpoint check-in: hllap8085
+Received 2026-09-12T03:35:00Z from Dev Dunmore <dev.dunmore@harbourline.example>
+
+Hi,
+
+Inventory and MDM disagree about an endpoint.
+
+Soorry for the formatting, sent from my phone.
+
+Hostname: hllap8085
+Serial: SNF6A3AACC
+Last check-in: 14/09/2026
+
+Cheers
+Dev Dunmore
+Team Lead, Information Security
+Harbourline Mutual Finance Ltd

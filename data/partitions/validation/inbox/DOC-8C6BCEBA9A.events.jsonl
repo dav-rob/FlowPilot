@@ -1,0 +1,5 @@
+{"event_id": "EVT-EA0435EA", "kind": "intake", "message_reference": null, "sender": "Dev Pemberton <dev.pemberton@harbourline.example>", "seq": 1, "subject": "Amendment - Ullswater Catering Ltd", "ts": "2026-09-12T00:46:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Ullswater Catering Ltd have sent over the renewal amendment for AGR-69278; they say it's only housekeeping. Please approve."}
+{"kind": "attribute", "name": "Contract number", "seq": 3, "value": "AGR-69278"}
+{"kind": "attribute", "name": "Supplier", "seq": 4, "value": "Ullswater Catering Ltd"}
+{"kind": "attribute", "name": "Contract ID", "seq": 5, "value": "CTR-2FE26DD8"}

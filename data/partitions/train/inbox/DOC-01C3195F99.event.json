@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Contract ID": "CTR-468912C6",
+    "Contract number": "AGR-91290",
+    "Supplier": "Quarry Payments Tech Limited"
+  },
+  "body": "We've executed AGR-91290 (Quarry Payments Tech Limited); could Contracts confirm approvals are on file?",
+  "event_id": "EVT-00F5CA02",
+  "message_reference": null,
+  "received_at": "2026-09-14T04:53:00Z",
+  "sender": "Tessa Pemberton <tessa.pemberton@harbourline.example>",
+  "signature": "Tessa Pemberton\nManager, Procurement\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Retrospective approval check"
+}

@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Contract ID": "CTR-C45C1655",
+    "Contract number": "AGR-92054",
+    "Supplier": "Pennine Consulting Ltd"
+  },
+  "body": "Here's the latest agreement; I'd like it signed this month.\n\nOur reference for this is in the subject line; ignore the older one.",
+  "event_id": "EVT-AEEE4CA8",
+  "message_reference": null,
+  "received_at": "2026-09-12T08:41:00Z",
+  "sender": "Dev Delaney <dev.delaney@harbourline.example>",
+  "signature": "Dev Delaney\nHead of Function, Procurement\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Pennine Consulting Ltd agreement"
+}

@@ -1,0 +1,18 @@
+{
+  "attributes": {
+    "Account name": "Kestrel Courier Services Ltd",
+    "Account number": "96706255",
+    "Sort code": "00-79-30",
+    "Supplier": "Kestrel Courier Services Ltd",
+    "Supplier ID": "SUP-EAB61904",
+    "VAT number": "GB000817237"
+  },
+  "body": "Could you please make sure your records for us are current? Details below.",
+  "event_id": "EVT-0191D7F8",
+  "message_reference": "607725cc11ff6ccc@kestrelcourierservices.example",
+  "received_at": "2026-09-14T07:45:00Z",
+  "sender": "Stuart Kerrigan <stuart.kerrigan@kestrelcourierservices.example>",
+  "signature": "Stuart Kerrigan\nCredit Controller, Kestrel Courier Services Ltd",
+  "source": "intake-gateway",
+  "subject": "Change of bank details"
+}

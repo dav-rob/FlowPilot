@@ -1,0 +1,16 @@
+{"control_catalogue_id": "CCT-C6EB0F9A", "control_ref": "FPC-110", "evidence_ref": "EVI-53815", "id": "CTL-055FA6D1", "last_tested": "2025-12-05", "status": "not_tested", "system_id": "SYS-6AF2FC73"}
+{"control_catalogue_id": "CCT-9A13AB79", "control_ref": "FPC-536", "evidence_ref": "EVI-99971", "id": "CTL-17E25028", "last_tested": "2026-07-28", "status": "implemented", "system_id": "SYS-4D3448EE"}
+{"control_catalogue_id": "CCT-7BF9D809", "control_ref": "FPC-398", "evidence_ref": "EVI-70120", "id": "CTL-291DB3F5", "last_tested": "2026-08-17", "status": "implemented", "system_id": "SYS-1CDF9EFD"}
+{"control_catalogue_id": "CCT-14678AA9", "control_ref": "FPC-445", "evidence_ref": "EVI-05889", "id": "CTL-362D3180", "last_tested": "2026-08-12", "status": "implemented", "system_id": "SYS-10A13B7D"}
+{"control_catalogue_id": "CCT-F174D8FB", "control_ref": "FPC-405", "evidence_ref": "EVI-86987", "id": "CTL-39795B30", "last_tested": "2026-08-10", "status": "implemented", "system_id": "SYS-A92D99BF"}
+{"control_catalogue_id": "CCT-681791CD", "control_ref": "FPC-527", "evidence_ref": "EVI-97341", "id": "CTL-4256F2B9", "last_tested": "2026-08-22", "status": "implemented", "system_id": "SYS-67ADFA5A"}
+{"control_catalogue_id": "CCT-678A3C40", "control_ref": "FPC-106", "evidence_ref": "EVI-82594", "id": "CTL-4CEC6CA7", "last_tested": "2026-08-19", "status": "implemented", "system_id": "SYS-79476C33"}
+{"control_catalogue_id": "CCT-B379BD44", "control_ref": "FPC-021", "evidence_ref": "EVI-53725", "id": "CTL-5C513829", "last_tested": "2025-09-16", "status": "not_tested", "system_id": "SYS-0FF17410"}
+{"control_catalogue_id": "CCT-287F3551", "control_ref": "FPC-905", "evidence_ref": "EVI-56013", "id": "CTL-5EDEBF1B", "last_tested": "2026-07-26", "status": "implemented", "system_id": "SYS-3CB3CFDC"}
+{"control_catalogue_id": "CCT-2DCCFDEF", "control_ref": "FPC-628", "evidence_ref": "EVI-48911", "id": "CTL-6DCFD306", "last_tested": "2026-07-07", "status": "implemented", "system_id": "SYS-725166BA"}
+{"control_catalogue_id": "CCT-147FC970", "control_ref": "FPC-011", "evidence_ref": "EVI-88620", "id": "CTL-90380348", "last_tested": "2026-07-16", "status": "implemented", "system_id": "SYS-AC550DE9"}
+{"control_catalogue_id": "CCT-DA8E050A", "control_ref": "FPC-588", "evidence_ref": "EVI-28360", "id": "CTL-93B1AC07", "last_tested": "2025-09-08", "status": "not_tested", "system_id": "SYS-33F65DF7"}
+{"control_catalogue_id": "CCT-9878E655", "control_ref": "FPC-047", "evidence_ref": "EVI-89741", "id": "CTL-97C21A6C", "last_tested": "2026-08-22", "status": "implemented", "system_id": "SYS-D9CCF765"}
+{"control_catalogue_id": "CCT-CC7CD79A", "control_ref": "FPC-876", "evidence_ref": "EVI-75379", "id": "CTL-9E53BACB", "last_tested": "2026-07-26", "status": "implemented", "system_id": "SYS-096BC5D0"}
+{"control_catalogue_id": "CCT-0BF2B277", "control_ref": "FPC-735", "evidence_ref": "EVI-50079", "id": "CTL-CD15A830", "last_tested": "2026-08-14", "status": "implemented", "system_id": "SYS-AADBAD94"}
+{"control_catalogue_id": "CCT-B71BFCCA", "control_ref": "FPC-078", "evidence_ref": "EVI-17334", "id": "CTL-DB683144", "last_tested": "2026-07-07", "status": "implemented", "system_id": "SYS-CB3058E0"}

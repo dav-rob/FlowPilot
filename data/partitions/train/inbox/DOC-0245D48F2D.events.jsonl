@@ -1,0 +1,6 @@
+{"event_id": "EVT-2F1DCA80", "kind": "intake", "message_reference": null, "sender": "Isla Whitlock <isla.whitlock@mail.example>", "seq": 1, "subject": "Please correct my details", "ts": "2026-09-14T00:44:00Z"}
+{"kind": "narrative", "seq": 2, "text": "I have moved house. Could you change the address you hold for me to 71 Orchard Way, Oldcastle ZZ4 7WG?"}
+{"kind": "attribute", "name": "Name", "seq": 3, "value": "Isla Whitlock"}
+{"kind": "attribute", "name": "Email", "seq": 4, "value": "isla.whitlock@mail.example"}
+{"kind": "attribute", "name": "New address", "seq": 5, "value": "71 Orchard Way, Oldcastle ZZ4 7WG"}
+{"kind": "attribute", "name": "Customer reference", "seq": 6, "value": "C85935674"}

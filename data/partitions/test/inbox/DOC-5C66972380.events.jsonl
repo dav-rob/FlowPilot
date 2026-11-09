@@ -1,0 +1,4 @@
+{"event_id": "EVT-2B49B412", "kind": "intake", "message_reference": null, "sender": "Aisha Brennan <aisha.brennan@mail.example>", "seq": 1, "subject": "Request to erase my data", "ts": "2026-09-12T07:20:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Please make sure all copies of my data are deleted."}
+{"kind": "attribute", "name": "Name", "seq": 3, "value": "Aisha Brennan"}
+{"kind": "attribute", "name": "Email", "seq": 4, "value": "aisha.brennan@mail.example"}

@@ -1,0 +1,16 @@
+{
+  "attributes": {
+    "Alert": "Unknown binary running with outbound connections",
+    "Asset ID": "CI-221F5792",
+    "Hostname": "hldb876",
+    "Severity": "critical"
+  },
+  "body": "EDR flagged hldb876 (Unknown binary running with outbound connections). Please triage.",
+  "event_id": "EVT-AF022BA7",
+  "message_reference": null,
+  "received_at": "2026-09-13T04:17:00Z",
+  "sender": "Kwame Sandhu <kwame.sandhu@harbourline.example>",
+  "signature": "Kwame Sandhu\nAnalyst, Information Security\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Anomaly needs triage"
+}

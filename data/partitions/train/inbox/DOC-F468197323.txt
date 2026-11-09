@@ -1,0 +1,18 @@
+Alert: hlweb446
+Received 2026-09-14T01:11:00Z from Marcus Fairbairn <marcus.fairbairn@harbourline.example>
+
+Hey there,
+
+Monitoring raised an alert; the details are below.
+
+We are mid-way through quarter-end so response times may be slower than usual.
+
+Hostname: hlweb446
+Alert: Unexpected service restart and new binary
+Severity: medium
+Asset ID: CI-F88CAF6D
+
+Many thanks,
+Marcus Fairbairn
+Analyst, Information Security
+Harbourline Mutual Finance Ltd

@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Contract ID": "CTR-185C622F",
+    "Contract number": "AGR-10469",
+    "Supplier": "Northgate Archiving Group Ltd"
+  },
+  "body": "Please review and approve the attached agreement with Northgate Archiving Group Ltd for payments tech agreement. Annual value is \u00a3240,000 over 24 months.",
+  "event_id": "EVT-CFF88EEA",
+  "message_reference": null,
+  "received_at": "2026-09-11T23:39:00Z",
+  "sender": "Megan Ashworth <megan.ashworth@harbourline.example>",
+  "signature": "Megan Ashworth\nAnalyst, Procurement\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Contract AGR-10469 - approval request"
+}

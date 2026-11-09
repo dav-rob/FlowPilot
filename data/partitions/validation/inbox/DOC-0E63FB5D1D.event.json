@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Contract ID": "CTR-7B5ADA6C",
+    "Contract number": "AGR-71420",
+    "Supplier": "Garnet Training Ltd"
+  },
+  "body": "Garnet Training Ltd have sent over the renewal amendment for AGR-71420; they say it's only housekeeping. Please approve.",
+  "event_id": "EVT-E32EAB87",
+  "message_reference": null,
+  "received_at": "2026-09-14T02:57:00Z",
+  "sender": "Ravi Dunmore <ravi.dunmore@harbourline.example>",
+  "signature": "Ravi Dunmore\nTeam Lead, Procurement\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "AGR-71420 renewal amendment"
+}

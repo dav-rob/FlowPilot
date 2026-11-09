@@ -1,0 +1,18 @@
+Unrecognised VM in cloud estate
+Received 2026-09-13T02:34:00Z from Megan Jessop <megan.jessop@harbourline.example>
+
+Hi,
+
+Weekly discovery flagged a machine that nobody seems to claim.
+
+The previous thread is below if useful, though I think most of it is superseded.
+
+Resource name: vm-19192
+Region: uk-south
+Source: weekly cloud discovery
+Public IP: 198.51.100.207
+
+Cheers
+Megan Jessop
+Manager, Information Security
+Harbourline Mutual Finance Ltd

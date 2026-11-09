@@ -1,0 +1,17 @@
+Update: access reviews
+Received 2026-09-13T00:48:00Z from Paula Thackeray <paula.thackeray@harbourline.example>
+
+Dear colleagues,
+
+New notice FFSB-SN-2026-786 - 'Quarterly review of privileged access' - has been issued by Fictional Financial Standards Board (FFSB).
+
+Which of our systems are affected, and are their access reviews up to date?
+
+Notice reference: FFSB-SN-2026-786
+Estate in scope: Eastbridge Estate 75
+Policy record: POL-1519DE9F
+
+Yours sincerely,
+Paula Thackeray
+Head of Function, Compliance
+Harbourline Mutual Finance Ltd

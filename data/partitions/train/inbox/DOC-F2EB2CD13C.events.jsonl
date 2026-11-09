@@ -1,0 +1,6 @@
+{"event_id": "EVT-1401EAB0", "kind": "intake", "message_reference": null, "sender": "Gareth Dunmore <gareth.dunmore@harbourline.example>", "seq": 1, "subject": "New notice: encryption at rest", "ts": "2026-09-13T08:30:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Fictional Financial Standards Board (FFSB) has published notice FFSB-SN-2026-289 (Encryption of customer data at rest). It takes effect on 2026-10-11."}
+{"kind": "narrative", "seq": 3, "text": "Please identify which of our systems are affected and confirm whether encryption at rest is in place for each of them."}
+{"kind": "attribute", "name": "Notice reference", "seq": 4, "value": "FFSB-SN-2026-289"}
+{"kind": "attribute", "name": "Estate in scope", "seq": 5, "value": "Ravenscar Estate 01"}
+{"kind": "attribute", "name": "Policy record", "seq": 6, "value": "POL-38670B58"}

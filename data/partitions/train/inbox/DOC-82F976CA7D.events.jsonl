@@ -1,0 +1,7 @@
+{"event_id": "EVT-24BC6346", "kind": "intake", "message_reference": null, "sender": "Isla Iqbal <isla.iqbal@mail.example>", "seq": 1, "subject": "Please correct my details", "ts": "2026-09-11T23:10:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Please update my address on your records to: 88 Priory Close, Westfold ZZ5 4HJ."}
+{"kind": "narrative", "seq": 3, "text": "This was raised at the weekly operations catch-up but without a clear owner."}
+{"kind": "narrative", "seq": 4, "text": "Apologies for the short notice - this has been sitting in my inbox."}
+{"kind": "attribute", "name": "Name", "seq": 5, "value": "Isla Iqbal"}
+{"kind": "attribute", "name": "Email", "seq": 6, "value": "isla.iqbal@mail.example"}
+{"kind": "attribute", "name": "New address", "seq": 7, "value": "88 Priory Close, Westfold ZZ5 4HJ"}

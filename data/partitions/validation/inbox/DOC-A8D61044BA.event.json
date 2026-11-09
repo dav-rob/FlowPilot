@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Notice reference": "FFSB-SN-2026-401"
+  },
+  "body": "Sharing the latest update on periodic checks of elevated rights - do the platform owners know?",
+  "event_id": "EVT-8375529D",
+  "message_reference": null,
+  "received_at": "2026-09-12T07:08:00Z",
+  "sender": "Zainab Quayle <zainab.quayle@harbourline.example>",
+  "signature": "Zainab Quayle\nHead of Function, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "FFSB-SN-2026-401 access review frequency"
+}

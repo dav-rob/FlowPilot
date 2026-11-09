@@ -1,0 +1,24 @@
+From: Sanjay Brennan <sanjay.brennan@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-13T03:11:00Z
+Subject: Security alert on production host
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Hi,
+
+---------- Forwarded message ----------
+From: Sanjay Brennan <sanjay.brennan@harbourline.example>
+Subject: Security alert on production host
+
+An alert fired on hlbat627: 'Unknown binary running with outbound connections'. Is this expected, or do we need to act?
+
+Hostname: hlbat627
+Alert: Unknown binary running with outbound connections
+Severity: critical
+Asset ID: CI-968E471E
+
+Regards
+Sanjay Brennan
+Analyst, Information Security
+Harbourline Mutual Finance Ltd

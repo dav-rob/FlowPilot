@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Invoice number": "IN-16180"
+  },
+  "body": "I need Vantage Legal Support Limited paid today (\u00a34,850.00) to avoid a service interruption. Invoice attached.",
+  "event_id": "EVT-FF97721E",
+  "message_reference": "503f9e8e42523588@harbourline.example",
+  "received_at": "2026-09-14T03:35:00Z",
+  "sender": "Nadia Iqbal <nadia.iqbal@harbourline.example>",
+  "signature": "Nadia Iqbal\nFinance Director",
+  "source": "intake-gateway",
+  "subject": "Quick favour: supplier payment"
+}

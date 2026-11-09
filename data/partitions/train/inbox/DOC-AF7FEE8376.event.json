@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Estate in scope": "Ravenscar Estate 01",
+    "Notice reference": "FFSB-SN-2026-529",
+    "Policy record": "POL-430D2676"
+  },
+  "body": "Fictional Financial Standards Board (FFSB) has published notice FFSB-SN-2026-529 (Encryption of customer data at rest). It takes effect on 2026-10-26.\n\nCan Compliance work out which platforms are in scope and whether we meet the new encryption requirement?",
+  "event_id": "EVT-EB541BAD",
+  "message_reference": null,
+  "received_at": "2026-09-14T02:52:00Z",
+  "sender": "Joanna Lowther <joanna.lowther@harbourline.example>",
+  "signature": "Joanna Lowther\nAnalyst, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Regulatory update for review"
+}

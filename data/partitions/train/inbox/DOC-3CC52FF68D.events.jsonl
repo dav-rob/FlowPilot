@@ -1,0 +1,5 @@
+{"event_id": "EVT-5564616D", "kind": "intake", "message_reference": null, "sender": "Joanna Fairbairn <joanna.fairbairn@harbourline.example>", "seq": 1, "subject": "FFSB-SN-2026-006 - supplier resilience terms", "ts": "2026-09-14T08:29:00Z"}
+{"kind": "narrative", "seq": 2, "text": "There's a new notice about what our supplier agreements need to say. Not suure who owns the check."}
+{"kind": "narrative", "seq": 3, "text": "The previous thread is below if useful, though I tink mst of it is superseded."}
+{"kind": "attribute", "name": "Notice reference", "seq": 4, "value": "FFSB-SN-2026-006"}
+{"kind": "attribute", "name": "Programme", "seq": 5, "value": "Westfold Programme 94"}

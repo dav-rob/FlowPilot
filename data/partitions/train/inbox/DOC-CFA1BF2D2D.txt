@@ -1,0 +1,15 @@
+Retrospective approval check
+Received 2026-09-14T00:37:00Z from Ffion Chaudhry <ffion.chaudhry@harbourline.example>
+
+Dear Team,
+
+We've executed AGR-08616 (Calder Engineering LLP); could Contracts confirm approvals are on file?
+
+Contract number: AGR-08616
+Supplier: Calder Engineering LLP
+Contract ID: CTR-2B9EC481
+
+With thanks,
+Ffion Chaudhry
+Team Lead, Procurement
+Harbourline Mutual Finance Ltd

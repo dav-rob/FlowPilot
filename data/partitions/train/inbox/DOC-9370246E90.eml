@@ -1,0 +1,19 @@
+From: Nadia Ellery <nadia.ellery@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T08:22:00Z
+Subject: CMDB vs network discovery
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Hey there,
+
+Network discovery reports decommissioned host still responding, but the CMDB doesn't line up. Please investigate and fix the record or the host.
+
+Hostname: hlbat796
+IP address: 10.19.84.36
+Discovery source: network scan
+
+Thanks so much!
+Nadia Ellery
+Team Lead, Information Security
+Harbourline Mutual Finance Ltd

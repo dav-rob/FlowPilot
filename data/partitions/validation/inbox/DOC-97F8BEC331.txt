@@ -1,0 +1,14 @@
+Reminder - invoice SI 00594
+Received 2026-09-12T03:17:00Z from Imogen Brennan <imogen.brennan@marlowsoftwareservices.example>
+Reference: 3dda76a32c81794d@marlowsoftwareservices.example
+
+Hello -
+
+We have not yet received payment for the attached - please advise.
+
+Invoice number: SI 00594
+Amount: £72,000.00
+
+Regards
+Imogen Brennan
+Credit Control, Marlow Software Services Ltd

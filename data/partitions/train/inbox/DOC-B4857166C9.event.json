@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Notice reference": "FFSB-SN-2026-801"
+  },
+  "body": "Another notice on how people sign in to sensitive systems. Could someone check we comply and let me know?",
+  "event_id": "EVT-7BCCF46D",
+  "message_reference": null,
+  "received_at": "2026-09-12T23:48:00Z",
+  "sender": "Aisha Lowther <aisha.lowther@harbourline.example>",
+  "signature": "Aisha Lowther\nManager, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "FFSB-SN-2026-801 privileged MFA"
+}

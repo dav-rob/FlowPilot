@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Name": "Paula Yardley"
+  },
+  "body": "My name is Paula Yardley. Can you tell me what data you have on me?\n\nSorry for the formatting, sent from my phone.",
+  "event_id": "EVT-7CFDCEE9",
+  "message_reference": null,
+  "received_at": "2026-09-14T04:53:00Z",
+  "sender": "Paula Yardley <paula.yardley@mail.example>",
+  "signature": "Paula Yardley",
+  "source": "intake-gateway",
+  "subject": "Request for my information"
+}

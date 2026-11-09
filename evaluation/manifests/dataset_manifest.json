@@ -1,0 +1,142 @@
+{
+  "abstain_expected": 43,
+  "by_difficulty": {
+    "difficult": 50,
+    "moderate": 75,
+    "straightforward": 125
+  },
+  "by_document_quality": {
+    "clean": 139,
+    "heavy_ocr": 35,
+    "minor_noise": 76
+  },
+  "by_group": {
+    "contract_risk": 40,
+    "cross_domain": 25,
+    "distractor": 25,
+    "gdpr_data": 40,
+    "it_asset": 40,
+    "regulatory_compliance": 40,
+    "supplier_fraud": 40
+  },
+  "by_outcome": {
+    "apply_correction": 4,
+    "approve_and_process": 10,
+    "approve_bank_change": 3,
+    "block_pending_privacy_assessment": 4,
+    "callback_verification_required": 2,
+    "close_as_authorised_activity": 8,
+    "complete_decommission_with_ticket": 4,
+    "decommission_stale_asset": 3,
+    "escalate_to_senior_approval": 11,
+    "fulfil_access_request": 6,
+    "fulfil_erasure": 5,
+    "hold_payment_and_open_fraud_case": 7,
+    "isolate_and_open_incident": 11,
+    "monitor_approved_exception": 4,
+    "no_action_already_applied": 3,
+    "no_action_required": 26,
+    "no_business_action": 10,
+    "no_record_found_notify_requester": 4,
+    "open_audit_item_gap_found": 18,
+    "partial_erasure_with_retention_exemption": 5,
+    "query_supplier_discrepancy": 7,
+    "reconcile_inventory_record": 6,
+    "recover_device_and_open_ticket": 3,
+    "refer_to_security_review": 4,
+    "refuse_erasure_legal_hold": 3,
+    "register_asset_and_assign_owner": 5,
+    "reject_change_and_open_fraud_case": 8,
+    "reject_duplicate_invoice": 2,
+    "reject_third_party_request": 3,
+    "reject_unsupported_request": 8,
+    "request_clarification": 7,
+    "request_clause_renegotiation": 4,
+    "request_identity_verification": 7,
+    "request_missing_documents": 8,
+    "request_owner_attestation": 7,
+    "request_supporting_evidence": 4,
+    "route_for_standard_approval": 16
+  },
+  "by_partition": {
+    "test": {
+      "by_difficulty": {
+        "difficult": 10,
+        "moderate": 15,
+        "straightforward": 25
+      },
+      "by_group": {
+        "contract_risk": 8,
+        "cross_domain": 5,
+        "distractor": 5,
+        "gdpr_data": 8,
+        "it_asset": 8,
+        "regulatory_compliance": 8,
+        "supplier_fraud": 8
+      },
+      "cases": 50
+    },
+    "train": {
+      "by_difficulty": {
+        "difficult": 30,
+        "moderate": 45,
+        "straightforward": 75
+      },
+      "by_group": {
+        "contract_risk": 24,
+        "cross_domain": 15,
+        "distractor": 15,
+        "gdpr_data": 24,
+        "it_asset": 24,
+        "regulatory_compliance": 24,
+        "supplier_fraud": 24
+      },
+      "cases": 150
+    },
+    "validation": {
+      "by_difficulty": {
+        "difficult": 10,
+        "moderate": 15,
+        "straightforward": 25
+      },
+      "by_group": {
+        "contract_risk": 8,
+        "cross_domain": 5,
+        "distractor": 5,
+        "gdpr_data": 8,
+        "it_asset": 8,
+        "regulatory_compliance": 8,
+        "supplier_fraud": 8
+      },
+      "cases": 50
+    }
+  },
+  "by_primary_category": {
+    "contract_risk": 45,
+    "gdpr_data": 45,
+    "it_asset": 40,
+    "out_of_scope": 25,
+    "regulatory_compliance": 55,
+    "supplier_fraud": 40
+  },
+  "by_risk": {
+    "critical": 18,
+    "high": 54,
+    "low": 103,
+    "medium": 75
+  },
+  "difficulty_fractions": {
+    "difficult": 0.2,
+    "moderate": 0.3,
+    "straightforward": 0.5
+  },
+  "escalation_expected": 113,
+  "generator_version": "1.0.0",
+  "human_review_required": 89,
+  "multi_label": 25,
+  "note": "Intended difficulty levels only. No model scores are generated.",
+  "reference_now": "2026-09-14T09:00:00Z",
+  "seed": 42,
+  "size": 250,
+  "total_cases": 250
+}

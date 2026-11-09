@@ -1,0 +1,5 @@
+{"event_id": "EVT-FB168B20", "kind": "intake", "message_reference": null, "sender": "Nia Holloway <nia.holloway@harbourline.example>", "seq": 1, "subject": "Ullswater Legal Support LLP renewal AGR-69192", "ts": "2026-09-13T02:58:00Z"}
+{"kind": "narrative", "seq": 2, "text": "AGR-69192 with Ullswater Legal Support LLP is due for renewal. Please confirm that supplier risk is acceptable before it goes to approval."}
+{"kind": "attribute", "name": "Contract number", "seq": 3, "value": "AGR-69192"}
+{"kind": "attribute", "name": "Supplier", "seq": 4, "value": "Ullswater Legal Support LLP"}
+{"kind": "attribute", "name": "Contract ID", "seq": 5, "value": "CTR-0SD2B649"}

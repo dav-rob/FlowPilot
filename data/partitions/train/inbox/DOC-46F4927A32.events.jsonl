@@ -1,0 +1,3 @@
+{"event_id": "EVT-AD2D4B97", "kind": "intake", "message_reference": "ae1d38af18e186b7@harbourline.example", "sender": "Leila Whitlock <leila.whitlock@harbourline.example>", "seq": 1, "subject": "Quick favour: supplier payment", "ts": "2026-09-13T23:08:00Z"}
+{"kind": "narrative", "seq": 2, "text": "I need Vantage Analytics Services Ltd paid today (\u00a336,900.00) to avoid a service interruption. Invoice attached."}
+{"kind": "attribute", "name": "Invoice number", "seq": 3, "value": "HL-82335"}

@@ -1,0 +1,8 @@
+{"event_id": "EVT-DF1B4294", "kind": "intake", "message_reference": "a4704b1e90376067@newboldprintsolutionsservices.example", "sender": "Nia Lowther <nia.lowther@newboldprintsolutionsservices.example>", "seq": 1, "subject": "Invoice SI-93008", "ts": "2026-09-11T23:53:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Please find attached invoice SI-93008 for courier services - quarterly against PO-248561."}
+{"kind": "narrative", "seq": 3, "text": "Please note our bnak details have changed - the new account is shown on the invoice and reeplaces the prveious one."}
+{"kind": "narrative", "seq": 4, "text": "Let me know if you need anything else from our side."}
+{"kind": "narrative", "seq": 5, "text": "I'm out of office from Thursady so please copy in the shared maailbox."}
+{"kind": "attribute", "name": "Invoice number", "seq": 6, "value": "SI-93008"}
+{"kind": "attribute", "name": "Amount", "seq": 7, "value": "\u00a34,850.00"}
+{"kind": "attribute", "name": "Supplier ID", "seq": 8, "value": "SUP-7A19238A"}

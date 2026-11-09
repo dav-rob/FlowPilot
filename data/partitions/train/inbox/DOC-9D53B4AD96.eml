@@ -1,0 +1,20 @@
+From: Priya Mistry <priya.mistry@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-13T01:05:00Z
+Subject: Anomaly needs triage
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Dear colleageus,
+
+An alert fired on hlweb084: 'Unexpected service restart and new binary'. Is this expected, or do we need to act?
+
+Hostname: hlweb084
+Alert: Unexpected service restart and new binary
+Severity: medium
+Asset ID: CI-8A34FC38
+
+With thanks,
+Priya Mistry
+Head of Function, Information Security
+Harbourline Mutual Finance Ltd

@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Customer reference": "C10259960",
+    "Email": "joanna.gallagher@mail.example",
+    "Name": "Joanna Gallagher"
+  },
+  "body": "I am writing to ask that you delete all of the personal data you hold about me. I closed my accounts some time ago.",
+  "event_id": "EVT-E0A3D829",
+  "message_reference": null,
+  "received_at": "2026-09-12T00:40:00Z",
+  "sender": "Joanna Gallagher <joanna.gallagher@mail.example>",
+  "signature": "Joanna Gallagher",
+  "source": "intake-gateway",
+  "subject": "Data erasure request - Joanna Gallagher"
+}

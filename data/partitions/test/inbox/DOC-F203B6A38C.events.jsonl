@@ -1,0 +1,5 @@
+{"event_id": "EVT-735A663B", "kind": "intake", "message_reference": null, "sender": "Marcus Lowther <marcus.lowther@harbourline.example>", "seq": 1, "subject": "Contract AGR-27563 - approval request", "ts": "2026-09-12T05:01:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Please review and approve the attached agreement with Ashby Recruitment LLP for print solutions agreement. Annual value is \u00a360,000 over 24 months."}
+{"kind": "attribute", "name": "Contract number", "seq": 3, "value": "AGR-27563"}
+{"kind": "attribute", "name": "Supplier", "seq": 4, "value": "Ashby Recruitment LLP"}
+{"kind": "attribute", "name": "Contract ID", "seq": 5, "value": "CTR-A38164D4"}

@@ -1,0 +1,14 @@
+FFSB-SN-2026-238 privileged MFA
+Received 2026-09-13T02:13:00Z from Marcus Chaudhry <marcus.chaudhry@harbourline.example>
+
+FYI - please see below.
+
+Another notice on how people sign in to sensitive systems. Could someone check we comply and let me know?
+
+Notice reference: FFSB-SN-2026-238
+Policy record: POL-F6E05F41
+
+Regards,
+Marcus Chaudhry
+Engineer, Compliance
+Harbourline Mutual Finance Ltd

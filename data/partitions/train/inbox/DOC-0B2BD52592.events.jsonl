@@ -1,0 +1,5 @@
+{"event_id": "EVT-A6194A46", "kind": "intake", "message_reference": null, "sender": "Beth Chaudhry <beth.chaudhry@harbourline.example>", "seq": 1, "subject": "CMDB vs network discovery", "ts": "2026-09-14T01:34:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Network discovery reports host responding on 10.77.169.154, but the CMDB doesn't line up. Please investigate and fix the record or the host."}
+{"kind": "attribute", "name": "Hostname", "seq": 3, "value": "hldb475"}
+{"kind": "attribute", "name": "IP address", "seq": 4, "value": "10.77.169.154"}
+{"kind": "attribute", "name": "Discovery source", "seq": 5, "value": "network scan"}

@@ -1,0 +1,8 @@
+{"event_id": "EVT-30C0DD05", "kind": "intake", "message_reference": "9541b534f0d0fc6c@quarryconsulting.example", "sender": "Vera Underhill <vera.underhill@quarryconsulting.example>", "seq": 1, "subject": "Change of bank details", "ts": "2026-09-12T05:20:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Please update our bank details with immediate effect. Future payments should be made to the account below."}
+{"kind": "attribute", "name": "Supplier", "seq": 3, "value": "Quarry Consulting LLP"}
+{"kind": "attribute", "name": "Account name", "seq": 4, "value": "Quarry Consulting LLP"}
+{"kind": "attribute", "name": "Sort code", "seq": 5, "value": "00-53-44"}
+{"kind": "attribute", "name": "Account number", "seq": 6, "value": "95268383"}
+{"kind": "attribute", "name": "Supplier ID", "seq": 7, "value": "SUP-58906539"}
+{"kind": "attribute", "name": "VAT number", "seq": 8, "value": "GB000922702"}

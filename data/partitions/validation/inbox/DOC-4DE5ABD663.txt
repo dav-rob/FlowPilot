@@ -1,0 +1,14 @@
+Invoice SI-72492B copy
+Received 2026-09-14T07:40:00Z from Joanna Brennan <joanna.brennan@marlowanalytics.example>
+Reference: 5a79948f63ae0dab@marlowanalytics.example
+
+FYI - please see below.
+
+Our records show invoice SI-72492B for £24,637.50 is still outstanding against PO-114136. Please arrange payment.
+
+Invoice number: SI-72492B
+Amount: £24,637.50
+
+Ta,
+Joanna Brennan
+Credit Control, Marlow Analytics Limited

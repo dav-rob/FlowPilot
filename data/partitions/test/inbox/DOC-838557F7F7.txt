@@ -1,0 +1,16 @@
+Fraud awareness: spotting changed bank details
+Received 2026-09-14T05:41:00Z from Umar Quayle <umar.quayle@harbourline.example>
+
+Hi,
+
+Awareness note: invoice redirection fraud is on the rise. No action is needed unless you have received something suspicious.
+
+This was raised at the weekly operations catch-up but without a clear owner.
+
+Let me know if you need anything else from our side.
+
+Bulletin: SEC-112
+
+Cheers
+Umar Quayle
+Information Security

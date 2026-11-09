@@ -1,0 +1,4 @@
+{"event_id": "EVT-C81901F9", "kind": "intake", "message_reference": null, "sender": "Connor Gallagher <connor.gallagher@harbourline.example>", "seq": 1, "subject": "New notice: critical supplier contracts", "ts": "2026-09-13T06:05:00Z"}
+{"kind": "narrative", "seq": 2, "text": "FFSB-SN-2026-079 covers audit rights and incident notification in critical supplier contracts. Please assess our contracts under Millhaven Programme 28."}
+{"kind": "attribute", "name": "Notice reference", "seq": 3, "value": "FFSB-SN-2026-079"}
+{"kind": "attribute", "name": "Programme", "seq": 4, "value": "Millhaven Programme 28"}

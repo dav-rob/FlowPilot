@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "Notice reference": "FFSB-SN-2026-921",
+    "Programme": "Millhaven Programme 42"
+  },
+  "body": "A new notice sets minimum terms for contracts with critical suppliers. Can we check the agreements under our programme and report back?",
+  "event_id": "EVT-DE93A7DD",
+  "message_reference": null,
+  "received_at": "2026-09-14T06:17:00Z",
+  "sender": "Oscar Delaney <oscar.delaney@harbourline.example>",
+  "signature": "Oscar Delaney\nTeam Lead, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "FFSB-SN-2026-921 - supplier resilience terms"
+}

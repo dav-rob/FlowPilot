@@ -1,0 +1,5 @@
+{"event_id": "EVT-06850DBC", "kind": "intake", "message_reference": null, "sender": "Vera Thackeray <vera.thackeray@harbourline.example>", "seq": 1, "subject": "Lindale Security Services Ltd renewal AGR-61013", "ts": "2026-09-14T04:46:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Renewal of Lindale Security Services Ltd (AGR-61013): can Risk confirm there is nothing blocking?"}
+{"kind": "attribute", "name": "Contract number", "seq": 3, "value": "AGR-61013"}
+{"kind": "attribute", "name": "Supplier", "seq": 4, "value": "Lindale Security Services Ltd"}
+{"kind": "attribute", "name": "Contract ID", "seq": 5, "value": "CTR-0AFB7F0F"}

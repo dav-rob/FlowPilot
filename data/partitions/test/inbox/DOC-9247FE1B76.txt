@@ -1,0 +1,15 @@
+Endpoint check-in: hllap6646
+Received 2026-09-13T08:11:00Z from Tariq Dunmore <tariq.dunmore@harbourline.example>
+
+Good morning,
+
+Inventory and MDM disagree about an endpoint.
+
+Hostname: hllap6646
+Serial: SN68F1A47B
+Last check-in: 14/09/2026
+
+Yours snicerely,
+Tariq Dunmore
+Head of Function, Information Security
+Harbourline Mutual Finance Ltd

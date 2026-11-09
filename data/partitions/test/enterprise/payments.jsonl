@@ -1,0 +1,8 @@
+{"amount_gbp": 12400.5, "id": "PAY-147DFE50", "invoice_id": "INV-3F7743DB", "payment_reference": "RUN-685265", "scheduled_for": "2026-09-16", "status": "scheduled", "supplier_id": "SUP-B4E4A3D4"}
+{"amount_gbp": 4850.0, "id": "PAY-4A6289DC", "invoice_id": "INV-A35AF9EB", "payment_reference": "RUN-143796", "scheduled_for": "2026-09-17", "status": "scheduled", "supplier_id": "SUP-32CA5D21"}
+{"amount_gbp": 36900.0, "id": "PAY-6C3D8C6F", "invoice_id": "INV-2CA5F5BE", "payment_reference": "RUN-001756", "scheduled_for": "2026-09-17", "status": "scheduled", "supplier_id": "SUP-91185158"}
+{"amount_gbp": 72000.0, "id": "PAY-9ED75FE8", "invoice_id": "INV-9B99361D", "payment_reference": "RUN-511015", "scheduled_for": "2026-09-16", "status": "scheduled", "supplier_id": "SUP-8FDFEDD4"}
+{"amount_gbp": 4850.0, "id": "PAY-A83EF030", "invoice_id": "INV-BD2BD0D3", "payment_reference": "RUN-342612", "scheduled_for": "2026-09-16", "status": "scheduled", "supplier_id": "SUP-AF70A125"}
+{"amount_gbp": 18250.0, "id": "PAY-B2C32A4C", "invoice_id": "INV-C50E482F", "payment_reference": "RUN-167775", "scheduled_for": "2026-09-18", "status": "scheduled", "supplier_id": "SUP-552258B8"}
+{"amount_gbp": 12400.5, "id": "PAY-C5E684AA", "invoice_id": "INV-715E115D", "payment_reference": "RUN-560577", "scheduled_for": "2026-09-19", "status": "scheduled", "supplier_id": "SUP-4AD47CE5"}
+{"amount_gbp": 4850.0, "id": "PAY-FE490BD8", "invoice_id": "INV-71ECC88A", "payment_reference": "RUN-393149", "scheduled_for": "2026-09-17", "status": "scheduled", "supplier_id": "SUP-7A19238A"}

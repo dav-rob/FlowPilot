@@ -1,0 +1,14 @@
+Overdue: SI-96024B
+Received 2026-09-14T00:18:00Z from Priya Hargreaves <priya.hargreaves@denholmanalytics.example>
+Reference: 56501c047acc9b92@denholmanalytics.example
+
+Hi all,
+
+Second reminder: invoice SI-96024B remains unpaid. Copy attached.
+
+Invoice number: SI-96024B
+Amount: £9,875.79
+
+Speak soon,
+Priya Hargreaves
+Credit Control, Denholm Analytics Limited

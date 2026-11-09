@@ -1,0 +1,20 @@
+From: Ravi Ashworth <ravi.ashworth@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-13T01:27:00Z
+Subject: Unrecognised VM in cloud estate
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Dear Team,
+
+Our cloud posture scan found a VM called vm-d2723 that I can't match to a service. Can someone work out whose it is and what to do with it?
+
+Resource name: vm-d2723
+Region: uk-south
+Source: weekly cloud discovery
+Asset ID: CLD-AA3936FB
+
+With thanks,
+Ravi Ashworth
+Head of Function, Information Security
+Harbourline Mutual Finance Ltd

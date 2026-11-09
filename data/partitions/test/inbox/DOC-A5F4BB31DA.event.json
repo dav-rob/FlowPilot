@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Bulletin": "SEC-233"
+  },
+  "body": "This month's bulletin reminds staff that criminals sometimes email invooices with altered bank account numbers. Always verify by phone using a number you already hold.\n\nOur reference for this is in the subject line; ignore the older one.",
+  "event_id": "EVT-F08E9F07",
+  "message_reference": null,
+  "received_at": "2026-09-13T08:05:00Z",
+  "sender": "Aisha Jessop <aisha.jessop@harbourline.example>",
+  "signature": "Aisha Jessop\nInformation Security",
+  "source": "intake-gateway",
+  "subject": "Fraud awareness: spotting changed bank details"
+}

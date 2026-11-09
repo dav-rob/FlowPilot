@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Invoice number": "SI-75790"
+  },
+  "body": "I need Newbold Security Services LLP paid today (\u00a336,900.00) to avoid a service interruption. Invoice attached.",
+  "event_id": "EVT-A9F24AB6",
+  "message_reference": "2fb8bfc8cc885e61@harbourline.example",
+  "received_at": "2026-09-13T05:48:00Z",
+  "sender": "Paula Cartwright <paula.cartwright@harbourline.example>",
+  "signature": "Paula Cartwright\nFinance Director",
+  "source": "intake-gateway",
+  "subject": "Quick favour: supplier payment"
+}

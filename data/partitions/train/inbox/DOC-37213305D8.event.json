@@ -1,0 +1,16 @@
+{
+  "attributes": {
+    "Alert": "Port scan detected",
+    "Asset ID": "CI-1AFB5117",
+    "Hostname": "hlweb076",
+    "Severity": "high"
+  },
+  "body": "Monitoring raised an alert; the details are below.\n\nApologies for the shhort notice - this has been sitting in my inbox.\n\nThe previous thread is below if useful, though I think most of it is superseded.",
+  "event_id": "EVT-669DB08C",
+  "message_reference": null,
+  "received_at": "2026-09-14T02:25:00Z",
+  "sender": "Fiona Fenwick <fiona.fenwick@harbourline.example>",
+  "signature": "Fiona Fenwick\nAnalyst, Information Security\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Alert: hlweb076"
+}

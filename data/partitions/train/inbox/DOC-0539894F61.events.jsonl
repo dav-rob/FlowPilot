@@ -1,0 +1,4 @@
+{"event_id": "EVT-3486AC85", "kind": "intake", "message_reference": null, "sender": "Leila Ellery <unknown.sender@mail.example>", "seq": 1, "subject": "Data request from Leila Ellery", "ts": "2026-09-13T06:33:00Z"}
+{"kind": "narrative", "seq": 2, "text": "I am Leila Ellery and would like a copy of the personal information you hold about me."}
+{"kind": "narrative", "seq": 3, "text": "I'm out of office from Thursday so please copy in the shared mailbox."}
+{"kind": "attribute", "name": "Name", "seq": 4, "value": "Leila Ellery"}

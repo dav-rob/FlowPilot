@@ -1,0 +1,7 @@
+{"event_id": "EVT-8E1B2409", "kind": "intake", "message_reference": null, "sender": "Paula Whitlock <paula.whitlock@mail.example>", "seq": 1, "subject": "Update my records - Paula Whitlock", "ts": "2026-09-14T00:11:00Z"}
+{"kind": "narrative", "seq": 2, "text": "My information on your system is wrong - please fix it."}
+{"kind": "narrative", "seq": 3, "text": "We are mid-way through quarter-end so response times may be slower than usuual."}
+{"kind": "narrative", "seq": 4, "text": "Apoogies for the short notice - this has been sitting in my inbox."}
+{"kind": "attribute", "name": "Name", "seq": 5, "value": "Paula Whitlock"}
+{"kind": "attribute", "name": "Email", "seq": 6, "value": "paula.whitlock@mail.example"}
+{"kind": "attribute", "name": "New address", "seq": 7, "value": "79 Quay Street, Kingsmere ZZ1 8ZU"}

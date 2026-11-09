@@ -1,0 +1,6 @@
+{"id": "SVC-B3A540AB", "message": "get_supplier_risk backing service degraded (maintenance window)", "mode": "down_for_first_n_calls", "n_failures": 2, "scope_case_id": "IN-4CFF16ADD1", "tool": "get_supplier_risk"}
+{"id": "SVC-C2BA41C4", "message": "lookup_asset_owner backing service degraded (maintenance window)", "mode": "down_for_first_n_calls", "n_failures": 2, "scope_case_id": "IN-C79EB7147E", "tool": "lookup_asset_owner"}
+{"id": "SVC-D99577CB", "message": "inspect_security_controls backing service degraded (maintenance window)", "mode": "down_for_first_n_calls", "n_failures": 2, "scope_case_id": "IN-D0E20C15B7", "tool": "inspect_security_controls"}
+{"id": "SVC-E6482668", "message": "get_supplier_risk backing service degraded (maintenance window)", "mode": "down_with_alternate", "n_failures": null, "scope_case_id": "IN-D47031F71A", "tool": "get_supplier_risk"}
+{"id": "SVC-FEAABDCC", "message": "get_supplier_risk backing service degraded (maintenance window)", "mode": "down_for_first_n_calls", "n_failures": 1, "scope_case_id": "IN-C7DBAAB160", "tool": "get_supplier_risk"}
+{"id": "SVC-FF40CC41", "message": "inspect_security_controls backing service degraded (maintenance window)", "mode": "down_for_first_n_calls", "n_failures": 2, "scope_case_id": "IN-70BAC88FFE", "tool": "inspect_security_controls"}

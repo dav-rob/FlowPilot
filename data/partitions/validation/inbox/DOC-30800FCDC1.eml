@@ -1,0 +1,21 @@
+From: Imogen Chaudhry <imogen.chaudhry@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-14T05:37:00Z
+Subject: Asset discovered: vm-6d4ac
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Hello -
+
+Something in the cloud estate doesn't look right and has no clear owner - details below.
+
+This was raised at the weekly operations catch-up but without a clear owner.
+
+Resource name: vm-6d4ac
+Region: uk-south
+Source: weekly cloud discovery
+
+Regards
+Imogen Chaudhry
+Engineer, Information Security
+Harbourline Mutual Finance Ltd

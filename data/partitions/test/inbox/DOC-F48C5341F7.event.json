@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Hostname": "hllap8775",
+    "Last check-in": "2026-09-14",
+    "Serial": "SNB6491456"
+  },
+  "body": "The MDM console shows hllap8775 active but we can't reconcile it to the CMDB.",
+  "event_id": "EVT-1906B73C",
+  "message_reference": null,
+  "received_at": "2026-09-13T00:44:00Z",
+  "sender": "Priya Pemberton <priya.pemberton@harbourline.example>",
+  "signature": "Priya Pemberton\nTeam Lead, Information Security\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Endpoint check-in: hllap8775"
+}

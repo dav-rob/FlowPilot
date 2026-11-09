@@ -1,0 +1,18 @@
+New MFA requirement - please check
+Received 2026-09-13T06:21:00Z from Rosa Cartwright <rosa.cartwright@harbourline.example>
+
+Hi all,
+
+Heads-up on a new sign-in security expectation for elevated users; please advise on our position.
+
+Sorry for the formatting, sent from my phone.
+
+We are mid-way through quarter-end so response times may be slower than usual.
+
+Notice reference: FFSB-SN-2026-245
+Policy record: POL-5BAC8F4E
+
+Many thanks,
+Rosa Cartwright
+Head of Function, Compliance
+Harbourline Mutual Finance Ltd

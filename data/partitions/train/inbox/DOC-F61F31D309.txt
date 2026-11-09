@@ -1,0 +1,17 @@
+New notice: encryption at rest
+Received 2026-09-14T01:18:00Z from Fiona Dunmore <fiona.dunmore@harbourline.example>
+
+Dear Team,
+
+Fictional Financial Standards Board (FFSB) has published notice FFSB-SN-2026-316 (Encryption of customer data at rest). It takes effect on 2026-10-18.
+
+Please identify which of our systems are affected and confirm whether encryption at rest is in place for each of them.
+
+Notice reference: FFSB-SN-2026-316
+Estate in scope: Eastbridge Estate 54
+Policy record: POL-5C8F10EE
+
+With thanks,
+Fiona Dunmore
+Manager, Compliance
+Harbourline Mutual Finance Ltd

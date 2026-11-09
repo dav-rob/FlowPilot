@@ -1,0 +1,4 @@
+{"event_id": "EVT-63BD742D", "kind": "intake", "message_reference": null, "sender": "Ravi Bellamy <ravi.bellamy.alt@mail.example>", "seq": 1, "subject": "Data request from Ravi Bellamy", "ts": "2026-09-13T00:03:00Z"}
+{"kind": "narrative", "seq": 2, "text": "My name is Ravi Bellamy; please send me the data you hold on me."}
+{"kind": "attribute", "name": "Name", "seq": 3, "value": "Ravi Bellamy"}
+{"kind": "attribute", "name": "Postcode", "seq": 4, "value": "ZZ6 4DZ"}

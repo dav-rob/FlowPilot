@@ -1,0 +1,19 @@
+From: Ffion Yardley <ffion.yardley@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-12T02:35:00Z
+Subject: CMDB vs network discovery
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Hey there,
+
+Network discovery reports hostname hlbat937 seen with an unfamiliar hardware address, but the CMDB doesn't line up. Please investigate and fix the record or the host.
+
+Hostname: hlbat937
+IP address: 10.81.227.102
+Discovery source: network scan
+
+Many thanks,
+Ffion Yardley
+Engineer, Information Security
+Harbourline Mutual Finance Ltd

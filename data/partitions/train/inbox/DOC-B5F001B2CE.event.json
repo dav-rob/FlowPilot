@@ -1,0 +1,18 @@
+{
+  "attributes": {
+    "Account name": "Stonebridge Print Solutions Group Ltd",
+    "Account number": "92095589",
+    "Sort code": "00-15-42",
+    "Supplier": "Stonebridge Print Solutions Group Ltd",
+    "Supplier ID": "SUP-0E743166",
+    "VAT number": "GB000634479"
+  },
+  "body": "Following a change of bank we ask that you update our remittance account as per the details below.\n\nWe are mid-way through quarter-end so response times may be slower than usual.",
+  "event_id": "EVT-F50B5082",
+  "message_reference": "a072ca78c5363118@stonebridgeprintsolutionsgroup.example",
+  "received_at": "2026-09-14T08:41:00Z",
+  "sender": "Connor Abbott <connor.abbott@stonebridgeprintsolutionsgroup.example>",
+  "signature": "Connor Abbott\nSales Executive, Stonebridge Print Solutions Group Ltd",
+  "source": "intake-gateway",
+  "subject": "Stonebridge Print Solutions Group Ltd - account update"
+}

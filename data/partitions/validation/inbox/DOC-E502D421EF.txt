@@ -1,0 +1,18 @@
+Invoice IN-00935 copy
+Received 2026-09-13T03:52:00Z from Owen Zielinski <owen.zielinski@stonebridgesoftware.example>
+Reference: 6179bfa1d437c703@stonebridgesoftware.example
+
+Can someone lok at this?
+
+Our records show invoice IN-00935 for £7,315.40 is still outstanding against PO-350515. Please arrange payment.
+
+Let me know if you need anything else from our side.
+
+The previous thread is below if useful, though I think most of it is superseded.
+
+Invoice number: IN-00935
+Amount: £7,315.40
+
+Regards,
+Owen Zielinski
+Credit Control, Stonebridge Software Limited

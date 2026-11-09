@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flowpilot-data"
+version = "1.0.0"
+description = "Synthetic UK financial-services enterprise dataset generator, mock tools, and offline evaluation harness for Flow4AI agentic demonstrations."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+flowpilot-data = "flowpilot_data.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["flowpilot_data*"]

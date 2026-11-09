@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Invoice number": "SI-79253"
+  },
+  "body": "Can you get the attached through today? I'm in meetings so can't take calls.\n\nOur reference for this is in the subject line; ignore the older one.\n\nThe previous thread is below if useful, though I think most of it is superseded.",
+  "event_id": "EVT-B1135297",
+  "message_reference": "587c0aab68ce9d0b@harbouriine.example",
+  "received_at": "2026-09-13T00:37:00Z",
+  "sender": "Zainab Thackeray <zainab.thackeray@harbouriine.example>",
+  "signature": "Zainab Thackeray\nFinance Director",
+  "source": "intake-gateway",
+  "subject": "Please pay today"
+}

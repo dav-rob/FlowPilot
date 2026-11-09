@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Amount": "\u00a372,000.00",
+    "Invoice number": "IN-45431",
+    "Supplier ID": "SUP-8FDFEDD4"
+  },
+  "body": "Attached is our invoice IN-45431 (PO PO-844559) for \u00a372,000.00.\n\nPlease pay to the account shown on the invoice.",
+  "event_id": "EVT-66F55D2E",
+  "message_reference": "1475ed23bf7861d9@ironbridgesoftware.example",
+  "received_at": "2026-09-12T01:20:00Z",
+  "sender": "Tessa Fenwick <tessa.fenwick@ironbridgesoftware.example>",
+  "signature": "Tessa Fenwick\nAccounts Receivable, Ironbridge Software Ltd\n020 7946 0037",
+  "source": "intake-gateway",
+  "subject": "Payment of invoice IN-45431"
+}

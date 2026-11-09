@@ -1,0 +1,5 @@
+{"event_id": "EVT-E53FDBAA", "kind": "intake", "message_reference": null, "sender": "Dominic Holloway <dominic.holloway@harbourline.example>", "seq": 1, "subject": "Unregistered endpoint", "ts": "2026-09-13T23:13:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Endpoint hllap9918 (serial SN35AEF484) is checking in but the inventory record looks wrong or missing. Please establish who has it and sort the record out."}
+{"kind": "attribute", "name": "Hostname", "seq": 3, "value": "hllap9918"}
+{"kind": "attribute", "name": "Serial", "seq": 4, "value": "SN35AEF484"}
+{"kind": "attribute", "name": "Last check-in", "seq": 5, "value": "2026-09-14"}

@@ -1,0 +1,17 @@
+MFA for admin accounts - new notice
+Received 2026-09-13T03:03:00Z from Owen Ellery <owen.ellery@harbourline.example>
+
+Good morning,
+
+Fictional Financial Standards Board (FFSB) has published notice FFSB-SN-2026-537 (Multi-factor authentication for privileged accounts). It takes effect on 2026-10-28.
+
+Please check whether privileged accounts on the in-scope systems are covered by MFA and raise audit items for any gaps.
+
+Notice reference: FFSB-SN-2026-537
+Estate in scope: Westfold Estate 68
+Policy record: POL-A6B9353F
+
+Kind regards,
+Owen Ellery
+Team Lead, Compliance
+Harbourline Mutual Finance Ltd

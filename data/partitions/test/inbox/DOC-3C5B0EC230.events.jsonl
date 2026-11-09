@@ -1,0 +1,5 @@
+{"event_id": "EVT-2ED24B2F", "kind": "intake", "message_reference": null, "sender": "Beth Kerrigan <beth.kerrigan@harbourline.example>", "seq": 1, "subject": "Brightwell Training Group Ltd agreement", "ts": "2026-09-12T05:15:00Z"}
+{"kind": "narrative", "seq": 2, "text": "New agreement AGR-30996 with Brightwell Training Group Ltd is ready for approval; value \u00a3120,000 per year."}
+{"kind": "attribute", "name": "Contract number", "seq": 3, "value": "AGR-30996"}
+{"kind": "attribute", "name": "Supplier", "seq": 4, "value": "Brightwell Training Group Ltd"}
+{"kind": "attribute", "name": "Contract ID", "seq": 5, "value": "CTR-CDD901FF"}

@@ -1,0 +1,22 @@
+{"action": "view", "actor": "EMP-4DD994D7", "id": "LOG-0093B99C", "subject_id": "SUP-8FDFEDD4", "summary": "Supplier record viewed during annual review", "timestamp": "2026-08-01T08:58:00Z"}
+{"action": "review", "actor": "EMP-4A04763D", "id": "LOG-01E39182", "subject_id": "SUP-9B85FD29", "summary": "Supplier record reviewed", "timestamp": "2025-09-23T03:09:00Z"}
+{"action": "review", "actor": "EMP-8C07B73B", "id": "LOG-0333F031", "subject_id": "SUP-BEDCC91E", "summary": "Supplier record reviewed", "timestamp": "2026-07-30T07:18:00Z"}
+{"action": "view", "actor": "EMP-89D922E3", "id": "LOG-12445F61", "subject_id": "SUP-AF70A125", "summary": "Supplier record viewed during annual review", "timestamp": "2026-07-05T04:29:00Z"}
+{"action": "review", "actor": "EMP-4A04763D", "id": "LOG-12588415", "subject_id": "SUP-6A58349B", "summary": "Supplier record reviewed", "timestamp": "2026-06-01T00:43:00Z"}
+{"action": "review", "actor": "EMP-F55442B0", "id": "LOG-1325DBE1", "subject_id": "SUP-954BF148", "summary": "Supplier record reviewed", "timestamp": "2025-11-24T06:41:00Z"}
+{"action": "view", "actor": "EMP-136C3363", "id": "LOG-1CBB3AF6", "subject_id": "SUP-7A19238A", "summary": "Supplier record viewed during annual review", "timestamp": "2026-06-18T04:55:00Z"}
+{"action": "review", "actor": "EMP-8C07B73B", "id": "LOG-1E5C19C0", "subject_id": "SUP-DC9C7822", "summary": "Supplier record reviewed", "timestamp": "2026-05-21T05:51:00Z"}
+{"action": "review", "actor": "EMP-57314D69", "id": "LOG-3C738B56", "subject_id": "SUP-424025A6", "summary": "Supplier record reviewed", "timestamp": "2026-06-08T07:05:00Z"}
+{"action": "view", "actor": "EMP-FE63C3C5", "id": "LOG-475FBC1B", "subject_id": "SUP-B4E4A3D4", "summary": "Supplier record viewed during annual review", "timestamp": "2026-06-19T23:09:00Z"}
+{"action": "review", "actor": "EMP-8C07B73B", "id": "LOG-4882A119", "subject_id": "SUP-630B1895", "summary": "Supplier record reviewed", "timestamp": "2026-04-20T08:02:00Z"}
+{"action": "view", "actor": "EMP-8C1E5902", "id": "LOG-6018B06E", "subject_id": "SUP-552258B8", "summary": "Supplier record viewed during annual review", "timestamp": "2026-06-16T05:52:00Z"}
+{"action": "view", "actor": "EMP-9B2FB36C", "id": "LOG-6E6B1AE2", "subject_id": "SUP-4AD47CE5", "summary": "Supplier record viewed during annual review", "timestamp": "2026-07-12T04:27:00Z"}
+{"action": "review", "actor": "EMP-A76915E2", "id": "LOG-6F45D238", "subject_id": "SUP-4AC065C3", "summary": "Supplier record reviewed", "timestamp": "2026-06-08T07:32:00Z"}
+{"action": "review", "actor": "EMP-A555C4A6", "id": "LOG-7DD8EAD2", "subject_id": "SUP-4FE6C30E", "summary": "Supplier record reviewed", "timestamp": "2026-04-18T08:37:00Z"}
+{"action": "view", "actor": "EMP-0B36E761", "id": "LOG-B38ED648", "subject_id": "SUP-91185158", "summary": "Supplier record viewed during annual review", "timestamp": "2026-05-08T04:34:00Z"}
+{"action": "view", "actor": "EMP-775FBB83", "id": "LOG-BC96B902", "subject_id": "SUP-32CA5D21", "summary": "Supplier record viewed during annual review", "timestamp": "2026-06-05T08:32:00Z"}
+{"action": "review", "actor": "EMP-F55442B0", "id": "LOG-C7B3B1AD", "subject_id": "SUP-64264BBA", "summary": "Supplier record reviewed", "timestamp": "2025-11-27T00:12:00Z"}
+{"action": "review", "actor": "EMP-0C33ED19", "id": "LOG-CB7C0865", "subject_id": "SUP-683AFBD3", "summary": "Supplier record reviewed", "timestamp": "2025-08-12T08:54:00Z"}
+{"action": "review", "actor": "EMP-018DB2C5", "id": "LOG-E8D7A9BC", "subject_id": "SUP-193DE71D", "summary": "Supplier record reviewed", "timestamp": "2026-07-06T02:58:00Z"}
+{"action": "review", "actor": "EMP-018DB2C5", "id": "LOG-ED679CEB", "subject_id": "SUP-6F22BFAB", "summary": "Supplier record reviewed", "timestamp": "2026-05-20T07:52:00Z"}
+{"action": "review", "actor": "EMP-465A18C6", "id": "LOG-F790B51F", "subject_id": "SUP-95C6E99F", "summary": "Supplier record reviewed", "timestamp": "2026-06-17T05:28:00Z"}

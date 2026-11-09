@@ -1,0 +1,4 @@
+{"event_id": "EVT-420B494A", "kind": "intake", "message_reference": null, "sender": "Priya Fenwick <priya.fenwick@harbourline.example>", "seq": 1, "subject": "Notice on supplier contract terms", "ts": "2026-09-12T00:41:00Z"}
+{"kind": "narrative", "seq": 2, "text": "A new notice sets minimum terms for contracts with critical suppliers. Can we check the agreements under our programme and report back?"}
+{"kind": "attribute", "name": "Notice reference", "seq": 3, "value": "FFSB-SN-2026-666"}
+{"kind": "attribute", "name": "Programme", "seq": 4, "value": "Larkfield Programme 17"}

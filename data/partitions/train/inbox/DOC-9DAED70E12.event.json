@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "Contract number": "AGR-60327",
+    "Supplier": "Ullswater Security Services Limited"
+  },
+  "body": "We've executed AGR-60327 (Ullswater Security Services Limited); could Contracts confirm approvals are on file?\n\nThe previous thread is below if useful, though I think most of it is superseded.",
+  "event_id": "EVT-54B1E166",
+  "message_reference": null,
+  "received_at": "2026-09-14T01:38:00Z",
+  "sender": "Hannah Quayle <hannah.quayle@harbourline.example>",
+  "signature": "Hannah Quayle\nTeam Lead, Procurement\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Contract signed - please update records"
+}

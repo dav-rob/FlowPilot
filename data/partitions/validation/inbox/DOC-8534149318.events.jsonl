@@ -1,0 +1,5 @@
+{"event_id": "EVT-09121A2F", "kind": "intake", "message_reference": "fdf2d46d3af1c80b@duxfordcatering.example", "sender": "Joanna Bellamy <joanna.bellamy@harbourline.example>", "seq": 1, "subject": "Renewal amendment received", "ts": "2026-09-12T23:16:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Amended paperwork from the supplier, can we get this through?"}
+{"kind": "narrative", "seq": 3, "text": "Our reference for this is in the subject line; ignore the older one."}
+{"kind": "attribute", "name": "Contract number", "seq": 4, "value": "AGR-78240"}
+{"kind": "attribute", "name": "Supplier", "seq": 5, "value": "Duxford Catering Ltd"}

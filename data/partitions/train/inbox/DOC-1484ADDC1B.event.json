@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Invoice number": "SI-99442"
+  },
+  "body": "I need Marlow Payments Tech Group Ltd paid today (\u00a372,000.00) to avoid a service interruption. Invoice attached.\n\nPO and approvals are on file.",
+  "event_id": "EVT-15EF4159",
+  "message_reference": "d953b69d5c500e0d@harbourline.example",
+  "received_at": "2026-09-11T23:26:00Z",
+  "sender": "Hannah Ellery <hannah.ellery@harbourline.example>",
+  "signature": "Hannah Ellery\nFinance Director",
+  "source": "intake-gateway",
+  "subject": "Please pay today"
+}

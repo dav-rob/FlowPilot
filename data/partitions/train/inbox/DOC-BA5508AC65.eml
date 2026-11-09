@@ -1,0 +1,20 @@
+From: Leila Yardley <leila.yardley@harbourline.example>
+To: it.operations@harbourline.example
+Date: 2026-09-14T01:40:00Z
+Subject: Security alert on production host
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+Dear Team,
+
+An alert fired on hlweb173: 'Unknown binary running with outbound connections'. Is this expected, or do we need to act?
+
+Hostname: hlweb173
+Alert: Unknown binary running with outbound connections
+Severity: critical
+Asset ID: CI-3AAF15BE
+
+Kind regards,
+Leila Yardley
+Engineer, Information Security
+Harbourline Mutual Finance Ltd

@@ -1,0 +1,13 @@
+Subject access request
+Received 2026-09-13T08:18:00Z from Hannah Brennan <hannah.brennan@mail.example>
+
+Dear colleagues,
+
+Please send me a copy of all the personal data you hold about me.
+
+Name: Hannah Brennan
+Email: hannah.brennan@mail.example
+Customer reference: C00830521
+
+Kind regards,
+Hannah Brennan

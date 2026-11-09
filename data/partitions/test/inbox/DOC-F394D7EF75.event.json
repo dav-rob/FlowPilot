@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Hostname": "hllap5129",
+    "Last check-in": "2026-09-14",
+    "Serial": "SN8C72EBD3"
+  },
+  "body": "Endpoint hllap5129 (serial SN8C72EBD3) is checking in but the inventory record looks wrong or missing. Please establish who has it and sort the record out.",
+  "event_id": "EVT-08B0EBCA",
+  "message_reference": null,
+  "received_at": "2026-09-14T01:49:00Z",
+  "sender": "Megan Hargreaves <megan.hargreaves@harbourline.example>",
+  "signature": "Megan Hargreaves\nAnalyst, Information Security\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Endpoint check-in: hllap5129"
+}

@@ -1,0 +1,4 @@
+{"id": "SVC-43C3D8C1", "message": "get_supplier_change_history backing service degraded (maintenance window)", "mode": "down_with_alternate", "n_failures": null, "scope_case_id": "IN-C639AED6BE", "tool": "get_supplier_change_history"}
+{"id": "SVC-77C40B9B", "message": "get_supplier_risk backing service degraded (maintenance window)", "mode": "down_for_first_n_calls", "n_failures": 1, "scope_case_id": "IN-6C2A2E0AD7", "tool": "get_supplier_risk"}
+{"id": "SVC-9DAD35EF", "message": "verify_email_origin backing service degraded (maintenance window)", "mode": "down_with_alternate", "n_failures": null, "scope_case_id": "IN-96AB15CEB6", "tool": "verify_email_origin"}
+{"id": "SVC-C0B9CECD", "message": "get_supplier_risk backing service degraded (maintenance window)", "mode": "down_with_alternate", "n_failures": null, "scope_case_id": "IN-803F7463CF", "tool": "get_supplier_risk"}

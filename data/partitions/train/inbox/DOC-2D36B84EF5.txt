@@ -1,0 +1,16 @@
+New MFA requirement - please check
+Received 2026-09-12T02:51:00Z from Nadia Vaughan <nadia.vaughan@harbourline.example>
+
+Morning!
+
+New notice FFSB-SN-2026-365 - 'Multi-factor authentication for privileged accounts' - has been issued by Fictional Financial Standards Board (FFSB).
+
+Please check whether privileged accounts on the in-scope systems are covered by MFA and raise audit items for any gaps.
+
+Notice reference: FFSB-SN-2026-365
+Estate in scope: Westfold Estate 91
+
+Thanks so much!
+Nadia Vaughan
+Engineer, Compliance
+Harbourline Mutual Finance Ltd

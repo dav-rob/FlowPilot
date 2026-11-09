@@ -1,0 +1,12 @@
+Request for my information
+Received 2026-09-13T02:56:00Z from Hamish Fairbairn <hamish.fairbairn.alt@mail.example>
+
+Hello -
+
+My name is Hamish Fairbairn; please send me the data you hold on me.
+
+Name: Hamish Fairbairn
+Postcode: ZZ4 8HB
+
+Cheers
+Hamish Fairbairn

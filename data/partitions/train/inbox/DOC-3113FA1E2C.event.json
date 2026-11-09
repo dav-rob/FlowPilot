@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Discovery source": "network scan",
+    "Hostname": "hldb007",
+    "IP address": "10.78.64.26"
+  },
+  "body": "Network discovery reports decommissioned host still responding, but the CMDB doesn't line up. Please investigate and fix the record or the host.",
+  "event_id": "EVT-89BB25B2",
+  "message_reference": null,
+  "received_at": "2026-09-12T08:49:00Z",
+  "sender": "Gareth Ellery <gareth.ellery@harbourline.example>",
+  "signature": "Gareth Ellery\nHead of Function, Information Security\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Inventory discrepancy"
+}

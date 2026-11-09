@@ -1,0 +1,13 @@
+FFSB-SN-2026-889: log retention
+Received 2026-09-14T04:49:00Z from Tessa Zielinski <tessa.zielinski@harbourline.example>
+
+FYI - please see below.
+
+Regulator wants records of activity kept for longer. I'd like a view on where that bites for us.
+
+Notice reference: FFSB-SN-2026-889
+
+Thanks,
+Tessa Zielinski
+Manager, Compliance
+Harbourline Mutual Finance Ltd

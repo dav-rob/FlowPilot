@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "Estate in scope": "Millhaven Estate 09",
+    "Notice reference": "FFSB-SN-2026-792"
+  },
+  "body": "New notice FFSB-SN-2026-792 - 'Quarterly revew of privileged access' - has been issued by Fictional Financial Standards Board (FFSB).\n\nPlease confirm that privileged access reviews on the affected platforms meet the new 90-day requirement.",
+  "event_id": "EVT-B9E4E431",
+  "message_reference": null,
+  "received_at": "2026-09-12T23:40:00Z",
+  "sender": "Isla Fenwick <isla.fenwick@harbourline.example>",
+  "signature": "Isla Fenwick\nEngineer, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Privileged access review - new requirement"
+}

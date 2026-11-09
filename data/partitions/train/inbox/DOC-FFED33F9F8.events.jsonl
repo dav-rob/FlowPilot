@@ -1,0 +1,4 @@
+{"event_id": "EVT-530DEB5F", "kind": "intake", "message_reference": null, "sender": "Gareth Ashworth <gareth.ashworth@harbourline.example>", "seq": 1, "subject": "Notice on supplier contract terms", "ts": "2026-09-14T00:29:00Z"}
+{"kind": "narrative", "seq": 2, "text": "FFSB-SN-2026-834 covers audit rights and incident notification in critical supplier contracts. Please assess our contracts under Oldcastle Programme 21."}
+{"kind": "attribute", "name": "Notice reference", "seq": 3, "value": "FFSB-SN-2026-834"}
+{"kind": "attribute", "name": "Programme", "seq": 4, "value": "Oldcastle Programme 21"}

@@ -1,0 +1,13 @@
+{
+  "attributes": {
+    "Notice reference": "FFSB-SN-2026-706"
+  },
+  "body": "Heads-up on a new sign-in security expectation for elevated users; please advise on our position.",
+  "event_id": "EVT-0BE59B9C",
+  "message_reference": null,
+  "received_at": "2026-09-14T03:25:00Z",
+  "sender": "Paula Iqbal <paula.iqbal@harbourline.example>",
+  "signature": "Paula Iqbal\nAnalyst, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "FFSB-SN-2026-706 privileged MFA"
+}

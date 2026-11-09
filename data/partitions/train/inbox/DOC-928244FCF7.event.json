@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "Notice reference": "FFSB-SN-2026-594",
+    "Programme": "Ashdown Green Programme 93"
+  },
+  "body": "A new notice sets minimum terms for contracts with critical suppliers. Can we check the agreements under our programme and report back?",
+  "event_id": "EVT-C26D56CB",
+  "message_reference": null,
+  "received_at": "2026-09-14T06:08:00Z",
+  "sender": "Lucy Ellery <lucy.ellery@harbourline.example>",
+  "signature": "Lucy Ellery\nEngineer, Compliance\nHarbourline Mutual Finance Ltd",
+  "source": "intake-gateway",
+  "subject": "Notice on supplier contract terms"
+}

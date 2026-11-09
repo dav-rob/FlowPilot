@@ -1,0 +1,6 @@
+{"event_id": "EVT-8619EAA6", "kind": "intake", "message_reference": null, "sender": "Isla Zielinski <isla.zielinski@harbourline.example>", "seq": 1, "subject": "Endpoint check-in: hllap4610", "ts": "2026-09-14T02:08:00Z"}
+{"kind": "narrative", "seq": 2, "text": "Inventory and MDM disagree about an endpoint."}
+{"kind": "narrative", "seq": 3, "text": "Sorry for the formatting, sent from my phone."}
+{"kind": "attribute", "name": "Hostname", "seq": 4, "value": "hllap4610"}
+{"kind": "attribute", "name": "Serial", "seq": 5, "value": "SN6DD3D5F1"}
+{"kind": "attribute", "name": "Last check-in", "seq": 6, "value": "2026-09-14"}

@@ -1,0 +1,15 @@
+{
+  "attributes": {
+    "Email": "dev.underhill@mail.example",
+    "Name": "Dev Underhill",
+    "New address": "32 Canal Walk, Kingsmere ZZ8 3DN"
+  },
+  "body": "My information on your system is wrong - please fix it.\n\nApologies for the short notice - this has been sitting in my inbox.\n\nThis was raised at the weekly operations catch-up but without a clear owner.",
+  "event_id": "EVT-5CCB0B5D",
+  "message_reference": null,
+  "received_at": "2026-09-13T02:48:00Z",
+  "sender": "Dev Underhill <dev.underhill@mail.example>",
+  "signature": "Dev Underhill",
+  "source": "intake-gateway",
+  "subject": "Change of address"
+}
