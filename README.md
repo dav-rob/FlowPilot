@@ -63,13 +63,13 @@ Live runs use the already authenticated local `claude`, `agy`, and `codex` subsc
 
 ### JEV
 
-Export `TYPESAFE_API_KEY` (or `JEV_API_KEY`) to enable real JEV classification in live mode. `JEV_MODEL` defaults to `jev-latest`. Without a key, live classification uses a real local CLI; it is labelled accordingly. A failed configured JEV call is surfaced, never replaced with a synthetic response.
+Set `TYPESAFE_API_KEY` (or `JEV_API_KEY`) in your local `.env`, or export it, to enable real JEV classification in live mode. `JEV_MODEL` defaults to `jev-latest`. Without a key, live classification uses a real local CLI; it is labelled accordingly. A failed configured JEV call is surfaced, never replaced with a synthetic response.
 
 The adapter uses TypeSafe's official [System One API](https://docs.typesafe.ai/api/system-one): `POST https://api.typesafe.ai/v1/systemone`, bearer authentication, `state` and a map of typed questions. Choice selects the primary workflow; independent Noul questions allow multiple workflows and flag uncertainty; Score estimates business risk. Incoming documents remain untrusted data.
 
 Confidence is not proof. Business risk and uncertainty are separate fields. The initial uncertainty threshold is provisional, **not calibrated**. The evaluator reports threshold sweeps when real confidence data is available; use labelled validation cases before tuning. No JEV credentials are needed for offline use.
 
-Copy `.env.example` as a reference and export the settings you want. The server does **not** automatically source `.env`.
+Copy `.env.example` to `.env` and set the values you want. The standard launcher (`make run` or `python -m flowpilot`) loads this local file without executing shell code; exported environment variables take precedence. Restart the server after changing it. Keep `.env` private and out of Git. JEV credentials are excluded from investigation CLI child processes.
 
 ## Architecture
 

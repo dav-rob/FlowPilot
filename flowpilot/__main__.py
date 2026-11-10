@@ -1,6 +1,7 @@
 import argparse
 import uvicorn
 from .api import create_app
+from .config import load_local_env
 
 
 def main():
@@ -14,6 +15,7 @@ def main():
         help="Load the five bundled live recordings as read-only replays before starting",
     )
     args = parser.parse_args()
+    load_local_env()
     app = create_app()
     if args.import_recordings:
         from .catalog import ROOT

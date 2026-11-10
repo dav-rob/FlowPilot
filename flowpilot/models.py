@@ -238,6 +238,15 @@ _active: set[subprocess.Popen] = set()
 _active_lock = threading.Lock()
 
 
+def _cli_environment(env: dict[str, str]) -> dict[str, str]:
+    """JEV credentials belong only to the HTTP classifier, not CLI children."""
+    return {
+        key: value
+        for key, value in env.items()
+        if key not in ("TYPESAFE_API_KEY", "JEV_API_KEY")
+    }
+
+
 def _kill_group(proc: subprocess.Popen, sig: int = signal.SIGKILL) -> None:
     try:
         os.killpg(proc.pid, sig)
@@ -303,7 +312,7 @@ def _run_process(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         cwd=cwd,
-        env=env,
+        env=_cli_environment(env),
         start_new_session=True,
     )
     with _active_lock:
@@ -1246,6 +1255,7 @@ class AgyProvider:
                 timeout=20,
                 stdin=subprocess.DEVNULL,
                 cwd=tempfile.gettempdir(),
+                env=_cli_environment(dict(os.environ)),
             )
         except (OSError, subprocess.SubprocessError):
             raise AIError(_AGY_FAILURE_TEXT["unavailable"], "unavailable") from None
@@ -1457,7 +1467,7 @@ _CODEX_MAX_DISCOVERY = 4_000_000
 def _codex_clean_env() -> dict[str, str]:
     env = {k: v for k, v in os.environ.items() if not _CODEX_DROP_ENV.match(k)}
     env["NO_COLOR"] = "1"
-    return env
+    return _cli_environment(env)
 
 
 def _file_signature(path: str) -> tuple:
@@ -2010,7 +2020,7 @@ class CodexProvider:
         out = _run_process(
             [path, "debug", "prompt-input", *config, "canary"],
             cwd=cwd,
-            env=env,
+            env=_cli_environment(env),
             timeout=_CODEX_DISCOVERY_TIMEOUT,
         )
         try:

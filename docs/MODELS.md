@@ -54,7 +54,7 @@ Catalog discovery and fake-parser tests are covered. A successful live FlowPilot
 - Live mode with no JEV key uses the configured CLI screening route and labels the decision as CLI classification.
 - Live mode with `TYPESAFE_API_KEY` or `JEV_API_KEY` calls [TypeSafe System One](https://docs.typesafe.ai/api/system-one): `POST https://api.typesafe.ai/v1/systemone`, bearer authentication, `model`, `state`, and typed `questions`. Choice determines primary category, independent domain Noul questions allow multiple workflows, Score estimates risk, and Noul assesses ambiguity. Responses are validated and configured JEV failures never fall back to a heuristic.
 
-The uncertainty threshold (`FLOWPILOT_UNCERTAINTY_THRESHOLD=0.35`) and domain Noul threshold (0.55) are provisional and uncalibrated. Business risk alone does not trigger complexity escalation. A confidence value is never treated as correctness evidence. Real JEV inference remains unverified because no JEV key was configured; payload/response contracts and HTTP failures are covered by mocked tests.
+The uncertainty threshold (`FLOWPILOT_UNCERTAINTY_THRESHOLD=0.35`) and domain Noul threshold (0.55) are provisional and uncalibrated. Business risk alone does not trigger complexity escalation. A confidence value is never treated as correctness evidence. Live JEV inference has now been verified with an authenticated request: the API reported `jev-1.14.0` and classified the supplier showcase correctly, with ambiguity triggering escalation. Payload/response contracts and HTTP failures are also covered by mocked tests. The local `.env` is loaded by the standard launcher; JEV credentials are removed from CLI child environments.
 
 ## Verification
 
