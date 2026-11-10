@@ -1,13 +1,13 @@
-# Validation — 9 November 2026
+# Validation — 9–10 November 2026
 
 ## Automated checks
 
-- `.venv/bin/python -m pytest -q`: **52 passed, 1 skipped**. The skipped test requires live subscription inference and was run separately below. One upstream Starlette/httpx deprecation warning remains; it does not affect execution.
+- `.venv/bin/python -m pytest -q`: **56 passed, 1 skipped**. The skipped test requires live subscription inference and was run separately below. One upstream Starlette/httpx deprecation warning remains; it does not affect execution.
 - `FLOWPILOT_LIVE_TESTS=1 .venv/bin/python -m pytest tests/test_live.py -q`: **1 passed**, using the final Flash medium investigation route. The same input and instructions receive matching versus conflicting synthetic bank observations; the model concludes on matching records and selects follow-up actions for the discrepancy. This is real CLI inference, not a scripted responder.
 - `npm --prefix frontend run build`: TypeScript and Vite production build passed.
 - `.venv/bin/python -m flowpilot_data validate --root .`: **250 cases, 1,356 replayed evidence paths, zero errors**. The existing validator reports one warning: three masked decisive-evidence shapes recur across partitions as boilerplate. Dataset generation and enterprise records were preserved.
 
-Runtime tests cover dependent arguments, evidence-dependent branching, workflow/schema rejection, outcome-scope rejection, citation validation (including injected tool text with nonexistent IDs), protocol correction, stronger-role selection, high-risk review handoffs, budgets, cancellation (including evaluation and CLI-preflight races), durable single-use approval, legal-hold/retention/identity restrictions, failed-run approval rejection, and read-only replay/import. API and evaluator integration are included.
+Runtime tests cover local configuration loading, environment precedence, non-execution of configuration values, credential exclusion from CLI children, dependent arguments, evidence-dependent branching, workflow/schema rejection, outcome-scope rejection, citation validation (including injected tool text with nonexistent IDs), protocol correction, stronger-role selection, high-risk review handoffs, budgets, cancellation (including evaluation and CLI-preflight races), durable single-use approval, legal-hold/retention/identity restrictions, failed-run approval rejection, and read-only replay/import. API and evaluator integration are included.
 
 ## Five real live showcases
 
@@ -53,9 +53,9 @@ The native browser confirmed a simulated approval recorded an executed result. I
 
 ## Remaining limits
 
-- No JEV key was configured, so the live TypeSafe endpoint has not been exercised. Official-shaped requests, responses and failures are covered by mocked contract tests; live CLI classification is verified and clearly labelled as not JEV.
+- Live JEV classification is verified: the authenticated API returned `jev-1.14.0`, supplier-fraud classification with confidence 0.99 and uncertainty 0.70, and an escalation flag. This is one connection/contract check, not broader JEV calibration. Credentials are stored only in the ignored local `.env` with owner-only permissions and are excluded from investigation CLI child processes.
 - Codex catalog discovery and parser checks are covered; its application tool-registry preflight and a complete live business investigation remain unverified. Claude's structured-action limitation is recorded above.
 - Routing thresholds remain provisional. Run broader labelled validation before tuning; the existing evaluator supports confidence sweeps and paired-system comparisons, but the UI does not claim a measured paired comparison without two systems.
 - Cross-domain model reliability needs further evaluation. The runtime supports multiple permitted workflows and per-workflow outcomes, and rejects unsupported citations rather than manufacturing success.
 - This is a single-operator loopback application over synthetic records, without production integrations, multiuser authentication or distributed execution. Restarted active jobs are marked failed rather than automatically resumed.
-- No Git remote was configured. Delivery commits are local.
+- Public repository: [dav-rob/FlowPilot](https://github.com/dav-rob/FlowPilot). Full-history and publishable-file secret checks passed before publication; see [publication review](PUBLICATION_REVIEW.md).

@@ -1,0 +1,8 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "typesafe-jev-api-key"
+description = "TypeSafe JEV API credential"
+regex = '''\bapikey_[a-fA-F0-9]{16,64}_[a-fA-F0-9]{32,128}\b'''
+keywords = ["apikey_"]

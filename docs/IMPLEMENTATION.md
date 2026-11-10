@@ -26,7 +26,7 @@ The supplied 250-case dataset, generator and mock enterprise APIs were retained.
 5. Tested evidence-dependent branching with real CLI inference; recorded five successful live showcases.
 6. Reviewed runtime edge cases and corrected cancellation, empty evidence, approval constraints, replay, and outcome-scope issues.
 7. Verified API/browser behaviour, responsive/accessibility checks, reproducible recorded evaluation, build and automated tests.
-8. Documented limitations and prepared local version-controlled delivery.
+8. Documented limitations, verified live JEV, and published the reviewed source to https://github.com/dav-rob/FlowPilot.
 
 ## Delegation and integration
 
@@ -38,4 +38,4 @@ The supplied 250-case dataset, generator and mock enterprise APIs were retained.
 
 ## Remaining work
 
-No required implementation work remains for the local demonstration. Verified limits and further evaluation work are documented in `docs/VALIDATION.md`: JEV needs credentials for live verification, confidence thresholds need broader calibration, and stronger cross-domain conclusions can still fail evidence validation. Production integrations, deployment and multiuser operation are outside scope.
+No required implementation work remains for the local demonstration. Verified limits and further evaluation work are documented in `docs/VALIDATION.md`: live JEV authentication and classification are verified; confidence thresholds need broader calibration, and stronger cross-domain conclusions can still fail evidence validation. Production integrations, deployment and multiuser operation are outside scope.
