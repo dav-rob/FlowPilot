@@ -18,7 +18,7 @@ export async function api<T>(
     data = raw ? JSON.parse(raw) : null;
   } catch {
     throw new Error(
-      `The API returned an invalid response (${response.status}). Check that the local backend is running on port 8765.`,
+      `The API returned an invalid response (${response.status}). Check that the local FlowPilot service is running.`,
     );
   }
   if (!response.ok) {

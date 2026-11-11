@@ -1,27 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   Activity,
   ArrowLeft,
   ArrowUpRight,
-  Ban,
-  BrainCircuit,
   Check,
   CheckCircle2,
   ChevronDown,
-  CircleAlert,
   Clock3,
   Code2,
   Download,
   FileText,
   Fingerprint,
-  Flag,
   GitBranch,
-  Layers,
   LoaderCircle,
   LockKeyhole,
   MessageSquare,
-  Play,
-  RefreshCw,
   ShieldAlert,
   ShieldCheck,
   Sparkles,
@@ -47,8 +40,20 @@ import {
   Metrics,
   ModeBadge,
   Status,
-  WorkflowPath,
 } from "./shared";
+import {
+  businessText,
+  completedWork,
+  eventTitle,
+  failureSummary,
+  outcomeTitle,
+  priorityLabel,
+  referenceNames,
+  resultSummary,
+  toolLabel,
+  workflowDescription,
+  type ReferenceNames,
+} from "./presentation";
 export default function RunView({
   id,
   initial,
@@ -73,7 +78,6 @@ export default function RunView({
   const [actionError, setActionError] = useState("");
   const [version, setVersion] = useState(0);
   const [filter, setFilter] = useState("all");
-  const [showJson, setShowJson] = useState(false);
   const revision = useRef(0);
   const currentStatus = run?.status;
   useEffect(() => {
@@ -153,9 +157,6 @@ export default function RunView({
     else groups.push({ key: event.id, batch: event.batch_id, events: [event] });
   }
   const active = isActive(run?.status);
-  const escalation = [...events]
-    .reverse()
-    .find((event) => event.kind === "escalation");
   const workflowName = (value: string) =>
     workflows.find((w) => w.id === value)?.name ?? readable(value);
   if (starting && !id)
@@ -168,10 +169,10 @@ export default function RunView({
         <h1>Opening your investigation</h1>
         <ModeBadge mode={startingMode} />
         <p>
-          The backend is accepting your input. Execution will appear here as
-          soon as the run is created.
+          Your document is being saved. The investigation will appear here
+          shortly.
         </p>
-        <Loading text="Submitting to local backend…" />
+        <Loading text="Starting your investigation…" />
       </section>
     );
   if (!run)
@@ -195,49 +196,38 @@ export default function RunView({
         </section>
       </>
     );
-  const stage =
-    run.outcome || ["completed", "awaiting_approval"].includes(run.status)
-      ? 3
-      : run.classification
-        ? 2
-        : active
-          ? 1
-          : 0;
+  const names = referenceNames(run);
+  const text = (value?: string) => businessText(value, names);
+  const outcome = run.outcome;
+  const classification = run.classification;
+  const finalStatus =
+    run.mode === "replay" ? (run.source_status ?? run.status) : run.status;
+  const work = completedWork(run);
+  const pendingApprovals =
+    run.approvals?.filter((a) => a.status === "pending").length ?? 0;
+  const latestCheck = [...events]
+    .reverse()
+    .find((e) => e.kind === "tool_call" || e.kind === "decision");
   return (
-    <div className="run-page">
-      <div className="run-topline">
-        <button className="text-button back-link" onClick={onBack}>
-          <ArrowLeft size={15} /> Investigations
-        </button>
-        <span className="mono small muted">{run.id}</span>
-      </div>
+    <div className="run-page result-page">
+      <button className="text-button back-link" onClick={onBack}>
+        <ArrowLeft size={15} /> Investigations
+      </button>
       <div className="page-heading run-heading">
         <div>
-          <div className="eyebrow">
-            {run.source_run_id
-              ? "RECORDED REPLAY · NO NEW CALLS"
-              : "INVESTIGATION WORKSPACE"}
-          </div>
+          <div className="eyebrow">INVESTIGATION RESULTS</div>
           <h1>{run.title || "Untitled investigation"}</h1>
           <div className="heading-meta">
             <ModeBadge mode={run.mode} />
-            <Status status={run.status} />
+            <Status status={finalStatus} />
             <span>
               <Clock3 size={13} />
               {dateTime(run.created_at)}
             </span>
-            {run.partition && <span>{readable(run.partition)} partition</span>}
           </div>
         </div>
-        <div className="heading-actions">
-          <button
-            className="button secondary"
-            onClick={() => download(`flowpilot-${run.id}.json`, run)}
-          >
-            <Download size={15} />
-            <span>Download trace</span>
-          </button>
-          {active || run.status === "awaiting_approval" ? (
+        {(active || run.status === "awaiting_approval") &&
+          run.mode !== "replay" && (
             <button
               className="button danger-outline"
               disabled={!!action}
@@ -249,14 +239,373 @@ export default function RunView({
                 )
               }
             >
-              {action === "cancel" ? (
-                <LoaderCircle className="spin" size={15} />
-              ) : (
-                <Square size={13} />
-              )}{" "}
-              Cancel run
+              <Square size={13} /> Stop investigation
             </button>
+          )}
+      </div>
+      {error && (
+        <ErrorNotice message={error} retry={() => setVersion((v) => v + 1)} />
+      )}
+      {actionError && <ErrorNotice message={actionError} />}
+      {run.mode === "simulation" && (
+        <div className="result-mode-note">
+          <Sparkles size={16} />
+          Demonstration: these results follow simulated decisions, rather than a
+          live AI investigation. All business records are fictional.
+        </div>
+      )}
+      {run.mode === "replay" && (
+        <div className="result-mode-note">
+          <FileText size={16} />
+          Saved investigation ·{" "}
+          {run.source_mode === "live"
+            ? "Originally investigated by live AI."
+            : run.source_mode === "simulation"
+              ? "Originally a simulated demonstration."
+              : "Original mode is recorded in the technical details."}{" "}
+          Nothing is running or being changed.
+        </div>
+      )}
+      {run.mode === "live" && (
+        <p className="result-environment">
+          Investigating fictional business records. Any changes affect example
+          data only.
+        </p>
+      )}
+
+      <div className={`result-overview ${outcome ? "has-result" : ""}`}>
+        <section
+          className={`panel result-hero ${!outcome ? "result-incomplete" : ""}`}
+          aria-labelledby="business-outcome-title"
+          aria-live="polite"
+        >
+          <div className="result-section-label">
+            <ShieldCheck size={18} /> Business outcome
+          </div>
+          {outcome ? (
+            <>
+              <div className="result-headline">
+                <h2 id="business-outcome-title">{outcomeTitle(run)}</h2>
+                <span className={`badge risk-${outcome.risk}`}>
+                  {readable(outcome.risk)} risk
+                </span>
+              </div>
+              <p className="result-lede">
+                {text(outcome.conclusion || outcome.summary)}
+              </p>
+              {outcome.summary && outcome.summary !== outcome.conclusion && (
+                <details className="result-summary-note">
+                  <summary>More about this finding</summary>
+                  <p>{text(outcome.summary)}</p>
+                </details>
+              )}
+              {!!outcome.departments?.length && (
+                <div className="result-owner">
+                  <span>Teams to involve</span>
+                  {outcome.departments.map((d) => (
+                    <span className="tag" key={d}>
+                      {readable(d)}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {(work.reviews > 0 || work.tasks > 0 || work.applied > 0) && (
+                <div className="result-done">
+                  <CheckCircle2 size={16} />
+                  <span>
+                    {[
+                      work.reviews > 0
+                        ? `${work.reviews} review case${work.reviews === 1 ? "" : "s"} opened`
+                        : "",
+                      work.tasks > 0
+                        ? `${work.tasks} follow-up task${work.tasks === 1 ? "" : "s"} created`
+                        : "",
+                      work.applied > 0
+                        ? `${work.applied} approved change${work.applied === 1 ? "" : "s"} applied to example data`
+                        : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                </div>
+              )}
+              {(pendingApprovals > 0 ||
+                (outcome.requires_approval && !work.applied)) && (
+                <div className="result-approval-note">
+                  <LockKeyhole size={16} />
+                  {pendingApprovals > 0
+                    ? `${pendingApprovals} proposed change${pendingApprovals === 1 ? " needs" : "s need"} your approval below.`
+                    : "Approval is required before the proposed changes can be made."}
+                </div>
+              )}
+            </>
           ) : (
+            <>
+              <h2 id="business-outcome-title">
+                {active
+                  ? "Investigation in progress"
+                  : finalStatus === "cancelled"
+                    ? "Investigation stopped"
+                    : "No verified outcome available"}
+              </h2>
+              <p className="result-lede">
+                {active
+                  ? "The relevant records are being checked. Findings and recommended next steps will appear here when the investigation is complete."
+                  : finalStatus === "cancelled"
+                    ? "This investigation was stopped. The checks completed so far are saved below."
+                    : failureSummary(run.error)}
+              </p>
+              {active && (
+                <div className="result-progress">
+                  <LoaderCircle className="spin" size={16} />
+                  {latestCheck
+                    ? text(latestCheck.detail) || eventTitle(latestCheck)
+                    : "Reading the request and deciding which records to check…"}
+                </div>
+              )}
+            </>
+          )}
+        </section>
+
+        {outcome && (
+          <section
+            className="panel result-next"
+            aria-labelledby="recommendations-title"
+          >
+            <div className="result-section-label">
+              <ArrowUpRight size={18} /> Recommendations
+            </div>
+            <h2 id="recommendations-title">What to do next</h2>
+            {outcome.recommendations?.length ? (
+              <ol className="result-steps">
+                {outcome.recommendations.map((item, i) => (
+                  <li key={i}>
+                    <span className="result-step-number" aria-hidden="true">
+                      {i + 1}
+                    </span>
+                    <p>{text(item)}</p>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="result-no-next">
+                No further steps were recommended in this investigation.
+              </p>
+            )}
+            {!!outcome.unresolved?.length && (
+              <div className="result-questions">
+                <h3>
+                  <MessageSquare size={17} /> Questions still to resolve
+                </h3>
+                <ul>
+                  {outcome.unresolved.map((item, i) => (
+                    <li key={i}>{text(item)}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+        )}
+      </div>
+      {!!run.approvals?.length && (
+        <section
+          className="panel result-approvals"
+          aria-labelledby="approvals-title"
+        >
+          <div className="result-section-label">
+            <LockKeyhole size={18} /> Your decision
+          </div>
+          <h2 id="approvals-title">
+            {pendingApprovals > 0
+              ? "Review the proposed changes"
+              : "Approval decisions"}
+          </h2>
+          <p>
+            These actions affect fictional business records only. Review each
+            request before approving a simulated change.
+          </p>
+          {run.approvals.map((approval) => (
+            <ApprovalCard
+              key={approval.request_id}
+              approval={approval}
+              names={names}
+              busy={!!action}
+              readOnly={
+                run.mode === "replay" ||
+                active ||
+                run.status === "cancelled" ||
+                run.status === "failed"
+              }
+              onDecide={(approve) =>
+                void mutate(
+                  `/runs/${encodeURIComponent(id)}/approvals/${encodeURIComponent(approval.request_id)}`,
+                  { approve },
+                  approval.request_id,
+                )
+              }
+            />
+          ))}
+        </section>
+      )}
+
+      <div className="result-explanation-label">Explore the details</div>
+      {outcome && (
+        <Disclosure
+          title="Supporting evidence"
+          description={`${outcome.evidence?.length ?? 0} supporting record${outcome.evidence?.length === 1 ? "" : "s"}`}
+          icon={<Fingerprint size={18} />}
+        >
+          <p className="result-detail-intro">
+            The records behind this conclusion. Reference numbers identify the
+            exact sources used.
+          </p>
+          {outcome.evidence?.length ? (
+            <ul className="result-evidence">
+              {outcome.evidence.map((e, i) => (
+                <li key={`${e.record_id}-${i}`}>
+                  <p>{text(e.note)}</p>
+                  <code>{e.record_id}</code>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No supporting record references were reported.</p>
+          )}
+        </Disclosure>
+      )}
+
+      <Disclosure
+        title="About this request"
+        description="Request type and initial assessment"
+        icon={<FileText size={18} />}
+      >
+        {classification ? (
+          <>
+            <div className="result-request-types">
+              {classification.categories.map((category) => (
+                <div key={category}>
+                  <h3>{workflowName(category)}</h3>
+                  <p>{workflowDescription(category)}</p>
+                </div>
+              ))}
+            </div>
+            <dl className="result-assessment">
+              <div>
+                <dt>Initial risk</dt>
+                <dd>{readable(classification.risk)}</dd>
+              </div>
+              <div>
+                <dt>Priority</dt>
+                <dd>{priorityLabel(classification.urgency)}</dd>
+              </div>
+              <div>
+                <dt>Level of investigation</dt>
+                <dd>
+                  {classification.escalate ||
+                  events.some((e) => e.kind === "escalation")
+                    ? "A more detailed investigation was requested"
+                    : "Standard investigation"}
+                </dd>
+              </div>
+            </dl>
+            <p className="result-detail-intro">
+              This is the initial assessment of the request. The business
+              outcome above reflects what the investigation found.
+            </p>
+          </>
+        ) : (
+          <p>
+            {active
+              ? "The request is still being assessed."
+              : "No initial assessment was recorded."}
+          </p>
+        )}
+      </Disclosure>
+
+      <Disclosure
+        title="Investigation steps"
+        description={`${run.metrics?.tool_calls ?? 0} business check${run.metrics?.tool_calls === 1 ? " or action" : "s and actions"} · ${duration(run.duration_ms)}`}
+        icon={<Activity size={18} />}
+      >
+        <p className="result-detail-intro">
+          Follow the checks, the evidence returned and the decisions that
+          followed. AI decisions and automatic safeguards are labelled
+          separately.
+        </p>
+        <div
+          className="result-event-filters"
+          aria-label="Filter investigation steps"
+        >
+          {[
+            ["all", "All steps"],
+            ["tools", "Record checks"],
+            ["models", "AI decisions"],
+            ["orchestration", "Automatic steps"],
+            ["issues", "Problems"],
+          ].map(([value, label]) => (
+            <button
+              key={value}
+              className={filter === value ? "selected" : ""}
+              aria-pressed={filter === value}
+              onClick={() => setFilter(value)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="timeline-list">
+          {groups.length ? (
+            groups.map((group) => (
+              <div
+                key={group.key}
+                className={group.batch ? "result-batch" : "event-single"}
+              >
+                {group.batch && (
+                  <p className="result-batch-label">
+                    <GitBranch size={13} /> Checks started together
+                  </p>
+                )}
+                {group.events.map((event) => (
+                  <EventCard key={event.id} event={event} names={names} />
+                ))}
+              </div>
+            ))
+          ) : (
+            <Empty
+              title="No steps to show yet"
+              detail={
+                active
+                  ? "This section updates as the investigation progresses."
+                  : "No recorded steps match this filter."
+              }
+            />
+          )}
+        </div>
+      </Disclosure>
+
+      <Disclosure
+        title="Original document"
+        description="The information that started this investigation"
+        icon={<FileText size={18} />}
+      >
+        <pre tabIndex={0} className="input-document expanded">
+          {run.input ??
+            "The original document is not available in this saved record."}
+        </pre>
+      </Disclosure>
+      <Disclosure
+        title="Technical record"
+        description="Models, original findings and full execution data"
+        icon={<Code2 size={18} />}
+      >
+        <div className="result-technical-actions">
+          <button
+            className="button secondary"
+            onClick={() => download(`flowpilot-${run.id}.json`, run)}
+          >
+            <Download size={15} /> Download full record
+          </button>
+          {!active && run.mode !== "replay" && (
             <button
               className="button secondary"
               disabled={!!action}
@@ -268,495 +617,136 @@ export default function RunView({
                 )
               }
             >
-              {action === "replay" ? (
-                <LoaderCircle className="spin" size={15} />
-              ) : (
-                <Play size={14} />
-              )}{" "}
-              Replay trace
+              <FileText size={15} /> Open read-only recording
             </button>
           )}
         </div>
-      </div>
-      {error && (
-        <ErrorNotice
-          message={`Trace update failed. ${error}`}
-          retry={() => setVersion((v) => v + 1)}
-        />
-      )}
-      {actionError && <ErrorNotice message={actionError} />}
-      {run.error && <ErrorNotice message={run.error} />}
-      {run.mode === "simulation" && (
-        <div className="simulation-banner">
-          <Flag size={14} />
-          <span>
-            <strong>Simulation mode</strong> · Deterministic execution. No live
-            AI model calls. Consequential actions are simulated.
-          </span>
-        </div>
-      )}
-      {run.source_run_id && (
-        <div className="replay-banner">
-          <RefreshCw size={14} />
-          <span>
-            Recorded replay of <code>{run.source_run_id}</code>. Source
-            investigation:{" "}
-            <strong>{readable(run.source_status ?? "unknown")}</strong> ·{" "}
-            {readable(run.source_mode ?? "unknown")} mode. Events and metrics
-            reflect that execution.
-          </span>
-        </div>
-      )}
-      <WorkflowPath stage={stage} />
-      <section className="panel classification-panel">
-        <div className="classification-icon">
-          <BrainCircuit size={24} />
-        </div>
-        {run.classification ? (
-          <>
-            <div className="classification-main">
-              <div className="eyebrow">INPUT CLASSIFICATION</div>
-              <h2>{workflowName(run.classification.primary)}</h2>
-              <p>
-                {run.classification.rationale ||
-                  "No classification rationale reported."}
-              </p>
-              <div className="classification-tags">
-                {run.classification.categories?.map((category) => (
-                  <span className="tag" key={category}>
-                    {workflowName(category)}
-                  </span>
-                ))}
-                <span className={`badge risk-${run.classification.risk}`}>
-                  {readable(run.classification.risk)} risk
-                </span>
-                <span className="tag">
-                  Urgency {run.classification.urgency ?? "Unknown"}
-                </span>
-              </div>
-              <div className="model-line">
-                <span className="provider-badge">
-                  <Sparkles size={11} />
-                  {run.classification.provider || "Unknown provider"}
-                </span>
-                <span className="mono">
-                  {run.classification.model || "Unknown model"}
-                </span>
-                <span>
-                  Confidence{" "}
-                  {run.classification.confidence == null
-                    ? "Unknown"
-                    : `${(run.classification.confidence * 100).toFixed(1)}%`}
-                </span>
-                <span>
-                  Uncertainty{" "}
-                  {run.classification.uncertainty == null
-                    ? "Unknown"
-                    : `${(run.classification.uncertainty * 100).toFixed(1)}%`}
-                </span>
-              </div>
-            </div>
-            <div
-              className={`escalation-card ${run.classification.escalate || escalation ? "escalated" : ""}`}
-            >
-              <div>
-                <GitBranch size={17} />
-                <strong>
-                  {escalation
-                    ? run.mode === "simulation"
-                      ? "Simulated escalation signal"
-                      : "Model escalation recorded"
-                    : run.classification.escalate
-                      ? "Model escalation requested"
-                      : "Standard model route"}
-                </strong>
-              </div>
-              <p>
-                {escalation?.detail ||
-                  run.classification.escalation_reason ||
-                  (run.classification.escalate
-                    ? "No escalation reason reported."
-                    : "Classifier did not request escalation.")}
-              </p>
-              <span className="small muted">
-                {escalation
-                  ? "Escalation recorded in the execution trace"
-                  : "Routing decision recorded by the classifier"}
-              </span>
-            </div>
-          </>
-        ) : (
-          <div className="classification-main">
-            <div className="eyebrow">INPUT CLASSIFICATION</div>
-            <h2>
-              {active
-                ? "Classifying incoming document"
-                : "No classification recorded"}
-            </h2>
-            <p>
-              {active
-                ? "Waiting for the backend to return categories, risk, and model routing."
-                : "This trace does not contain a classification result."}
-            </p>
+        {run.error && (
+          <div className="error-notice">
+            <ShieldAlert size={17} />
+            <span>{run.error}</span>
           </div>
         )}
-      </section>
-      <div className={`execution-grid ${run.outcome ? "has-outcome" : ""}`}>
-        <div className="execution-main">
-          <section className="panel timeline-panel">
-            <div className="panel-header">
-              <div className="panel-title">
-                <Activity size={18} />
-                <h2>Execution timeline</h2>
-                <span className="counter">{events.length}</span>
-              </div>
-              {active ? (
-                <span className="live-update">
-                  <span className="live-dot" /> Updating live
-                </span>
-              ) : (
-                <span className="subtle-label">RECORDED EVENTS</span>
-              )}
-            </div>
-            <div
-              className="timeline-filters"
-              role="group"
-              aria-label="Filter trace events"
-            >
-              {[
-                { id: "all", label: "All events" },
-                { id: "tools", label: "Tools" },
-                { id: "models", label: "Agent & models" },
-                { id: "orchestration", label: "Orchestration" },
-                { id: "issues", label: "Issues" },
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  className={filter === item.id ? "active" : ""}
-                  aria-pressed={filter === item.id}
-                  onClick={() => setFilter(item.id)}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-            <div className="timeline">
-              {groups.length ? (
-                groups.map((group) =>
-                  group.batch ? (
-                    <details key={group.key} className="event-batch" open>
-                      <summary className="batch-heading">
-                        <Layers size={13} />
-                        <strong>Tool batch</strong>
-                        <code>{group.batch}</code>
-                        <span>{group.events.length} recorded events</span>
-                        <ChevronDown size={12} />
-                      </summary>
-                      {group.events.map((event) => (
-                        <EventCard key={event.id} event={event} />
-                      ))}
-                    </details>
-                  ) : (
-                    <div key={group.key} className="event-single">
-                      {group.events.map((event) => (
-                        <EventCard key={event.id} event={event} />
-                      ))}
-                    </div>
-                  ),
-                )
-              ) : (
-                <Empty
-                  title={
-                    active && filter === "all"
-                      ? "Waiting for the first event"
-                      : "No events to show"
-                  }
-                  detail={
-                    active && filter === "all"
-                      ? "The timeline updates every second as the backend records execution."
-                      : "Events matching this filter will appear here when recorded."
-                  }
-                />
-              )}
-            </div>
-            {active && events.length > 0 && (
-              <div className="timeline-listening">
-                <LoaderCircle className="spin" size={14} /> Listening for the
-                next recorded event…
-              </div>
-            )}
-          </section>
-          <details className="panel document-details">
-            <summary>
-              <span>
-                <FileText size={17} /> Input document{" "}
-                <span className="muted small">
-                  {run.input?.length.toLocaleString() ?? "Unknown"} characters
-                </span>
-              </span>
-              <ChevronDown size={16} />
-            </summary>
-            <pre tabIndex={0} className="input-document expanded">
-              {run.input ?? "Input document is not available in this trace."}
-            </pre>
-          </details>
-          <section className="panel technical-panel">
-            <button
-              className="technical-toggle"
-              onClick={() => setShowJson((v) => !v)}
-              aria-expanded={showJson}
-            >
-              <span>
-                <Code2 size={17} /> Technical trace
-              </span>
-              <ChevronDown className={showJson ? "rotate" : ""} size={16} />
-            </button>
-            {showJson && <Json value={run} />}
-          </section>
-        </div>
-        <aside className="outcome-column">
-          <section className="panel outcome-panel">
-            <div className="panel-header">
-              <div className="panel-title">
-                <ShieldCheck size={18} />
-                <h2>Business outcome</h2>
-              </div>
-              {run.outcome && (
-                <span className={`badge risk-${run.outcome.risk}`}>
-                  {readable(run.outcome.risk)}
-                </span>
-              )}
-            </div>
-            {run.outcome ? (
-              <div className="outcome-content">
-                <div className="outcome-code">
-                  <CheckCircle2 size={16} />
-                  {readable(run.outcome.outcome_code)}
-                </div>
-                <h3>{run.outcome.summary}</h3>
-                <p>{run.outcome.conclusion}</p>
-                {run.outcome.departments?.length ? (
-                  <div className="classification-tags">
-                    {run.outcome.departments.map((d) => (
-                      <span className="tag" key={d}>
-                        {readable(d)}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-                {run.outcome.requires_approval && (
-                  <div className="approval-required">
-                    <LockKeyhole size={14} /> Human approval required
-                  </div>
-                )}
-                <div className="outcome-section">
-                  <h4>
-                    <Fingerprint size={15} /> Supporting evidence{" "}
-                    <span>{run.outcome.evidence?.length ?? 0}</span>
-                  </h4>
-                  {run.outcome.evidence?.length ? (
-                    <ul className="evidence-list">
-                      {run.outcome.evidence.map((e, i) => (
-                        <li key={`${e.record_id}-${i}`}>
-                          <code>{e.record_id}</code>
-                          <p>{e.note}</p>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="muted small">
-                      No evidence references reported.
-                    </p>
-                  )}
-                </div>
-                <OutcomeList
-                  title="Recommendations"
-                  icon={ArrowUpRight}
-                  items={run.outcome.recommendations}
-                />
-                <OutcomeList
-                  title="Unresolved questions"
-                  icon={MessageSquare}
-                  items={run.outcome.unresolved}
-                />
-                {run.outcome.actions?.length ? (
-                  <details className="action-records">
-                    <summary>
-                      Proposed action details ({run.outcome.actions.length})
-                    </summary>
-                    <Json value={run.outcome.actions} />
-                  </details>
-                ) : null}
-              </div>
-            ) : (
-              <div className="outcome-waiting">
-                <div className="empty-icon">
-                  {active ? (
-                    <LoaderCircle size={23} className="spin" />
-                  ) : (
-                    <ShieldAlert size={23} />
-                  )}
-                </div>
-                <h3>
-                  {active ? "Building the evidence" : "No outcome recorded"}
-                </h3>
-                <p>
-                  {active
-                    ? "The business summary, evidence, and recommendations will appear when reported by the investigation."
-                    : "Review the recorded events and any errors for more detail."}
-                </p>
-              </div>
-            )}
-          </section>
-          {!!run.approvals?.length && (
-            <section className="panel approval-panel">
-              <div className="panel-header">
-                <div className="panel-title">
-                  <LockKeyhole size={17} />
-                  <h2>Simulated approvals</h2>
-                </div>
-              </div>
-              <p className="approval-disclaimer">
-                Review simulated business actions. These controls do not
-                authorize production changes.
-              </p>
-              {run.approvals.map((approval) => (
-                <ApprovalCard
-                  key={approval.request_id}
-                  approval={approval}
-                  busy={!!action}
-                  readOnly={
-                    run.mode === "replay" ||
-                    active ||
-                    run.status === "cancelled" ||
-                    run.status === "failed"
-                  }
-                  onDecide={(approve) =>
-                    void mutate(
-                      `/runs/${encodeURIComponent(id)}/approvals/${encodeURIComponent(approval.request_id)}`,
-                      { approve },
-                      approval.request_id,
-                    )
-                  }
-                />
-              ))}
-            </section>
-          )}
-          <section className="panel run-metrics">
-            <div className="panel-header">
-              <div className="panel-title">
-                <Clock3 size={17} />
-                <h2>Run metrics</h2>
-              </div>
-            </div>
-            <div className="metric-stats">
-              <div>
-                <span>Tool calls</span>
-                <strong>{run.metrics?.tool_calls ?? "Unknown"}</strong>
-              </div>
-              <div>
-                <span>Model calls</span>
-                <strong>{run.metrics?.model_calls ?? "Unknown"}</strong>
-              </div>
-              <div>
-                <span>Iterations</span>
-                <strong>{run.metrics?.iterations ?? "Unknown"}</strong>
-              </div>
-              <div>
-                <span>Duration</span>
-                <strong>{duration(run.duration_ms)}</strong>
-              </div>
-            </div>
-            <div className="metrics-bottom">
-              <div className="metric-row">
-                <span>
-                  <ShieldCheck size={13} /> Unsafe actions blocked
-                </span>
-                <strong>
-                  {run.metrics?.unsafe_actions_blocked ?? "Unknown"}
-                </strong>
-              </div>
-              <div className="metric-row">
-                <span>Providers</span>
-                <strong>
-                  {run.metrics?.providers?.length
-                    ? run.metrics.providers.join(", ")
-                    : "None reported"}
-                </strong>
-              </div>
-              <details>
-                <summary>Reported model usage</summary>
-                {run.metrics?.usage && Object.keys(run.metrics.usage).length ? (
-                  <Metrics
-                    value={run.metrics.usage as Record<string, unknown>}
-                  />
-                ) : (
-                  <p className="muted small">No model usage reported.</p>
-                )}
-              </details>
-              <p className="metric-caption">
-                Values are reported by the backend. Missing metrics are shown as
-                unknown.
-              </p>
-            </div>
-          </section>
-        </aside>
-      </div>
+        <h3>Execution details</h3>
+        <dl className="result-assessment">
+          <div>
+            <dt>Run ID</dt>
+            <dd className="mono">{run.id}</dd>
+          </div>
+          <div>
+            <dt>Data partition</dt>
+            <dd>{run.partition ?? "Not recorded"}</dd>
+          </div>
+          <div>
+            <dt>Models used</dt>
+            <dd>{run.metrics.providers?.join(", ") || "None recorded"}</dd>
+          </div>
+        </dl>
+        <Metrics value={run.metrics as Record<string, unknown>} />
+        <details>
+          <summary>Original input classification</summary>
+          <Json value={classification} />
+        </details>
+        <details>
+          <summary>Original business report and action records</summary>
+          <Json value={outcome} />
+        </details>
+        <details>
+          <summary>Complete execution trace (JSON)</summary>
+          <Json value={run} />
+        </details>
+      </Disclosure>
     </div>
   );
 }
-function OutcomeList({
+
+function Disclosure({
   title,
-  icon: Icon,
-  items,
+  description,
+  icon,
+  children,
 }: {
   title: string;
-  icon: typeof ArrowUpRight;
-  items?: string[];
+  description: string;
+  icon: ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <div className="outcome-section">
-      <h4>
-        <Icon size={15} />
-        {title}
-      </h4>
-      {items?.length ? (
-        <ul className="outcome-list">
-          {items.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ul>
-      ) : (
-        <p className="muted small">None reported.</p>
-      )}
-    </div>
+    <details className="panel result-disclosure">
+      <summary>
+        <span className="result-disclosure-icon">{icon}</span>
+        <span className="result-disclosure-heading">
+          <strong>{title}</strong>
+          <span>{description}</span>
+        </span>
+        <ChevronDown className="result-chevron" size={18} />
+      </summary>
+      <div className="result-disclosure-body">{children}</div>
+    </details>
   );
 }
+
 function ApprovalCard({
   approval,
+  names,
   busy,
   readOnly,
   onDecide,
 }: {
   approval: Approval;
+  names: ReferenceNames;
   busy: boolean;
   readOnly: boolean;
   onDecide: (approve: boolean) => void;
 }) {
+  const fields: Record<string, string> = {
+    invoice_id: "Invoice",
+    supplier_id: "Supplier",
+    customer_id: "Customer",
+    asset_id: "Asset",
+    grant_id: "Access permission",
+    contract_id: "Contract",
+    reason: "Reason",
+    justification: "Reason",
+    system_id: "System",
+    policy_id: "Policy",
+    account_number: "Account number",
+    sort_code: "Sort code",
+    fields: "Details to correct",
+  };
   return (
     <div className="approval-card">
       <div className="approval-card-head">
-        <code>{approval.tool}</code>
+        <h3>{toolLabel(approval.tool)}</h3>
         <Status status={approval.status} />
       </div>
-      <p>{approval.justification || "No justification reported."}</p>
+      <p>
+        {businessText(approval.justification, names) ||
+          "No reason was recorded for this request."}
+      </p>
+      <dl className="result-approval-fields">
+        {Object.entries(approval.args).map(([key, value]) => (
+          <div key={key}>
+            <dt>{fields[key] ?? readable(key)}</dt>
+            <dd>
+              {typeof value === "string" ? (
+                businessText(value, names)
+              ) : typeof value === "object" ? (
+                <Json value={value} />
+              ) : (
+                String(value)
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
       <details>
-        <summary>Requested arguments</summary>
-        <Json value={approval.args} />
+        <summary>Exact change details</summary>
+        <Json value={{ tool: approval.tool, arguments: approval.args }} />
       </details>
       {approval.result !== undefined && (
         <details>
-          <summary>Recorded result</summary>
+          <summary>Recorded action result</summary>
           <Json value={approval.result} />
         </details>
       )}
@@ -767,151 +757,113 @@ function ApprovalCard({
             className="button approve"
             onClick={() => onDecide(true)}
           >
-            <Check size={14} /> Approve simulation
+            <Check size={14} /> Approve simulated change
           </button>
           <button
             disabled={busy}
             className="button danger-outline"
             onClick={() => onDecide(false)}
           >
-            <X size={14} /> Deny
+            <X size={14} /> Decline
           </button>
         </div>
+      )}
+      {approval.status === "pending" && readOnly && (
+        <p className="result-approval-readonly">
+          This request is read-only until the investigation has finished
+          successfully, and cannot be approved from a saved replay.
+        </p>
       )}
     </div>
   );
 }
-function EventCard({ event }: { event: TraceEvent }) {
-  const orchestration = event.kind === "orchestration";
-  const icons: Record<string, typeof Activity> = {
-    orchestration: GitBranch,
-    classification: BrainCircuit,
-    escalation: Sparkles,
-    decision: BrainCircuit,
-    tool_call: Wrench,
-    tool_result: CheckCircle2,
-    validation: ShieldCheck,
-    outcome: Flag,
-    error: CircleAlert,
-    approval: LockKeyhole,
-    model: Sparkles,
-  };
-  const Icon =
-    event.status === "failed"
-      ? CircleAlert
-      : event.status === "blocked"
-        ? Ban
-        : (icons[event.kind] ?? Activity);
-  const hasData = event.arguments !== undefined || event.result !== undefined;
-  const extraFields = Object.fromEntries(
-    Object.entries(event).filter(
-      ([key]) =>
-        ![
-          "id",
-          "sequence",
-          "kind",
-          "title",
-          "detail",
-          "timestamp",
-          "status",
-          "tool",
-          "arguments",
-          "result",
-          "provider",
-          "model",
-          "duration_ms",
-          "batch_id",
-          "evidence_ids",
-        ].includes(key),
-    ),
-  );
+
+function EventCard({
+  event,
+  names,
+}: {
+  event: TraceEvent;
+  names: ReferenceNames;
+}) {
+  const automatic =
+    event.kind === "orchestration" || event.kind === "validation";
+  const detail =
+    event.kind === "tool_result"
+      ? resultSummary(event)
+      : event.kind === "classification"
+        ? "The request was assessed to identify the relevant business process and priority."
+        : event.kind === "escalation"
+          ? "The case was referred for more detailed reasoning. The recorded reason is available in the technical details."
+          : event.kind === "model"
+            ? "The AI reviewed the available information before selecting its next action."
+            : event.kind === "orchestration"
+              ? "The application prepared this step and enforced the investigation’s limits and permissions."
+              : event.kind === "error"
+                ? failureSummary(event.detail)
+                : businessText(event.detail, names);
   return (
     <article
-      className={`trace-event event-${event.kind} event-status-${event.status} ${orchestration ? "is-orchestration" : ""}`}
+      className={`trace-event event-${event.kind} event-status-${event.status} ${automatic ? "is-orchestration" : ""}`}
     >
       <div className="event-marker">
         {event.status === "running" ? (
           <LoaderCircle className="spin" size={16} />
+        ) : automatic ? (
+          <ShieldCheck size={16} />
+        ) : event.tool ? (
+          <Wrench size={16} />
         ) : (
-          <Icon size={16} />
+          <Sparkles size={16} />
         )}
       </div>
       <div className="event-body">
         <div className="event-topline">
-          <span
-            className={`event-kind ${orchestration ? "orchestration-label" : ""}`}
-          >
-            {orchestration
-              ? "Orchestration"
-              : ["tool_call", "tool_result", "decision", "model"].includes(
-                    event.kind,
-                  )
-                ? `Agent · ${readable(event.kind)}`
-                : readable(event.kind)}
+          <span className="event-kind">
+            {automatic
+              ? "Automatic step"
+              : event.tool
+                ? "Business record check"
+                : "Investigation decision"}
           </span>
           <span className="event-time">
-            #{event.sequence} <span>·</span>{" "}
-            {new Date(event.timestamp).toLocaleTimeString(undefined, {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            })}
+            Step {event.sequence}
             {event.duration_ms != null && ` · ${duration(event.duration_ms)}`}
           </span>
         </div>
         <div className="event-title">
-          <h3>{event.title}</h3>
+          <h3>{eventTitle(event)}</h3>
           <Status status={event.status} />
         </div>
-        {event.tool && <code className="tool-name">{event.tool}</code>}
-        {event.detail && <p className="event-detail">{event.detail}</p>}
-        {(event.provider || event.model) && (
-          <div className="model-line">
-            <span className="provider-badge">
-              <Sparkles size={10} />
-              {event.provider || "Unknown provider"}
-            </span>
-            <span className="mono">{event.model || "Unknown model"}</span>
-          </div>
-        )}
-        {!!event.evidence_ids?.length && (
-          <div className="event-evidence">
-            {event.evidence_ids.map((id, i) => (
-              <code key={`${id}-${i}`}>
-                <Fingerprint size={10} />
-                {id}
-              </code>
-            ))}
-          </div>
-        )}
-        {hasData && (
-          <div className="event-data">
-            {event.arguments !== undefined && (
-              <details>
-                <summary>
-                  <Code2 size={13} /> Tool arguments <ChevronDown size={12} />
-                </summary>
-                <Json value={event.arguments} />
-              </details>
-            )}
-            {event.result !== undefined && (
-              <details
-                open={event.status === "failed" || event.status === "blocked"}
-              >
-                <summary>
-                  <FileText size={13} /> Actual result <ChevronDown size={12} />
-                </summary>
-                <Json value={event.result} />
-              </details>
-            )}
-          </div>
-        )}
-        {Object.keys(extraFields).length > 0 && (
-          <details className="additional-fields">
-            <summary>Additional recorded fields</summary>
-            <Json value={extraFields} />
+        {detail && <p className="event-detail">{detail}</p>}
+        <details className="result-event-technical">
+          <summary>Technical details</summary>
+          {event.tool && (
+            <p>
+              Tool: <code>{event.tool}</code>
+            </p>
+          )}
+          {(event.provider || event.model) && (
+            <p>
+              Model: {event.provider} / {event.model}
+            </p>
+          )}
+          {event.arguments !== undefined && (
+            <>
+              <h4>Validated arguments</h4>
+              <Json value={event.arguments} />
+            </>
+          )}
+          {event.result !== undefined && (
+            <>
+              <h4>Returned data</h4>
+              <Json value={event.result} />
+            </>
+          )}
+          <details>
+            <summary>Full event record</summary>
+            <Json value={event} />
           </details>
-        )}
+        </details>
       </div>
     </article>
   );

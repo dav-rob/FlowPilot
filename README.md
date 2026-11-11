@@ -34,9 +34,9 @@ For frontend development, leave the Python server running and run `make dev` in 
 
 1. Select one of five curated examples, browse the generated inbox, or paste a new document.
 2. Choose **Simulation** or **Live AI**, then start an investigation.
-3. Follow classification, escalation, model-selected actions, tool batches and observed evidence in the timeline. Expand arguments and actual tool responses.
-4. Review the outcome, citations, unresolved questions and proposed actions. Approve or deny consequential simulated actions explicitly.
-5. Open prior runs from history or create a read-only replay. Download the public JSON trace from the execution screen.
+3. Read the business outcome and numbered recommendations first. Review any open questions or approval requests below them.
+4. Expand **Supporting evidence**, **About this request** or **Investigation steps** when you want to see the records checked and how the result was reached. These sections start collapsed. Model/provider information, original findings and raw responses remain available in **Technical record** and each step’s technical details.
+5. Approve or decline consequential simulated changes explicitly. Open prior runs from history or open a read-only recording from **Technical record**, where you can also download the complete JSON trace.
 6. Run bounded evaluations against hidden ground truth from the Evaluation screen. Simulation scores and live model scores remain separate.
 
 ### Honest execution modes
@@ -129,6 +129,7 @@ The model receives permitted tool descriptions and JSON schemas, document text a
 
 ```sh
 make test
+npm --prefix frontend test
 make validate
 
 # Requires authenticated local subscriptions and consumes subscription usage:

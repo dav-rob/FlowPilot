@@ -123,7 +123,17 @@ export function Status({ status }: { status: string }) {
       ) : (
         <Circle size={8} />
       )}{" "}
-      {readable(status)}
+      {(
+        {
+          awaiting_approval: "Needs your approval",
+          running: "In progress",
+          queued: "Waiting to start",
+          pending: "Awaiting a decision",
+          executed: "Change simulated",
+          denied: "Declined",
+          blocked: "Stopped by a safeguard",
+        } as Record<string, string>
+      )[status] ?? readable(status)}
     </span>
   );
 }
