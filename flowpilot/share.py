@@ -1,13 +1,12 @@
-"""Password-protected loopback gateway for an explicitly configured HTTPS share.
+"""Loopback gateway for an explicitly configured public HTTPS demo share.
 
-The investigation server stays local-only. This process forwards authenticated
+The investigation server stays local-only. This process forwards demo
 requests to that one server; it never opens another engine or database.
 """
 
 from __future__ import annotations
 
 import argparse
-import hmac
 from html import escape
 import json
 from contextlib import asynccontextmanager
@@ -16,15 +15,14 @@ from urllib.parse import quote, urlsplit
 
 import httpx
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse, Response
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 UPSTREAM = "http://127.0.0.1:8766"
 MAX_BODY = 100000
 
 
-def create_share_app(public_url: str, username: str, password: str, *, transport=None):
+def create_share_app(public_url: str, *, transport=None):
     parsed = urlsplit(public_url)
     if (
         parsed.scheme != "https"
@@ -37,13 +35,8 @@ def create_share_app(public_url: str, username: str, password: str, *, transport
         or ".." in parsed.path.split("/")
     ):
         raise ValueError("Share URL must be an HTTPS address ending in /.")
-    if not username or len(password) < 20:
-        raise ValueError(
-            "A username and a password of at least 20 characters are required."
-        )
     origin = f"https://{parsed.netloc}"
     prefix = parsed.path.rstrip("/")
-    security = HTTPBasic(auto_error=False)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -68,22 +61,8 @@ def create_share_app(public_url: str, username: str, password: str, *, transport
         )
         return response
 
-    def authenticate(credentials: HTTPBasicCredentials | None = Depends(security)):
-        user = credentials.username if credentials else ""
-        supplied = credentials.password if credentials else ""
-        valid_user = hmac.compare_digest(user.encode(), username.encode())
-        valid_password = hmac.compare_digest(supplied.encode(), password.encode())
-        if not (valid_user and valid_password):
-            raise HTTPException(
-                401,
-                "Sign in to FlowPilot.",
-                headers={
-                    "WWW-Authenticate": 'Basic realm="FlowPilot remote", charset="UTF-8"'
-                },
-            )
-
     @app.api_route("/{path:path}", methods=["GET", "HEAD", "POST", "OPTIONS"])
-    async def proxy(request: Request, path: str, _: None = Depends(authenticate)):
+    async def proxy(request: Request, path: str):
         # Validate the incoming origin before replacing it for the local server.
         if request.headers.get("host", "").lower() != parsed.netloc.lower():
             raise HTTPException(400, "Unexpected share address.")
@@ -146,7 +125,7 @@ def create_share_app(public_url: str, username: str, password: str, *, transport
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run the authenticated FlowPilot sharing gateway"
+        description="Run the public FlowPilot demo sharing gateway"
     )
     parser.add_argument("--config", type=Path, default=Path(".runtime/share.json"))
     parser.add_argument("--port", type=int, default=8767)
@@ -154,7 +133,7 @@ def main():
     if args.config.stat().st_mode & 0o077:
         raise SystemExit("Share configuration must be private: chmod 600 <config>.")
     config = json.loads(args.config.read_text())
-    app = create_share_app(config["url"], config["username"], config["password"])
+    app = create_share_app(config["url"])
     uvicorn.run(app, host="127.0.0.1", port=args.port, access_log=False)
 
 
