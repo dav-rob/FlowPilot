@@ -3,7 +3,7 @@ export async function api<T>(
   body?: unknown,
   signal?: AbortSignal,
 ): Promise<T> {
-  const response = await fetch(`/api${path}`, {
+  const response = await fetch(`./api${path}`, {
     method: body === undefined ? "GET" : "POST",
     headers: {
       Accept: "application/json",

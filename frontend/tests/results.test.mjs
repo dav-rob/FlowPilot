@@ -6,7 +6,8 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 const server = await createServer({
-  server: { middlewareMode: true },
+  server: { middlewareMode: true, hmr: false },
+  optimizeDeps: { noDiscovery: true, include: [] },
   appType: "custom",
 });
 const presentation = await server.ssrLoadModule("/src/presentation.ts");
@@ -188,4 +189,39 @@ test("failed checks are not described as successful evidence collection", () => 
   assert.match(html, /No verified outcome available/);
   assert.match(html, /no final conclusion was accepted/);
   assert.doesNotMatch(html, /What to do next/);
+});
+
+const { api } = await server.ssrLoadModule("/src/api.ts");
+
+test("API requests stay within the same app when shared under a URL prefix", async () => {
+  const original = globalThis.fetch;
+  const requests = [];
+  globalThis.fetch = async (path, options) => {
+    requests.push({ path, options });
+    return new Response('{"status":"ok"}', {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+  try {
+    assert.deepEqual(await api("/health"), { status: "ok" });
+    await api("/runs", { mode: "simulation" });
+    for (const { path } of requests) {
+      assert.equal(
+        new URL(path, "http://127.0.0.1:8766/").pathname.startsWith("/api/"),
+        true,
+      );
+      assert.equal(
+        new URL(
+          path,
+          "https://console.example.test:8443/flowpilot/",
+        ).pathname.startsWith("/flowpilot/api/"),
+        true,
+      );
+    }
+    assert.equal(requests[1].options.method, "POST");
+    assert.equal(requests[1].options.body, '{"mode":"simulation"}');
+  } finally {
+    globalThis.fetch = original;
+  }
 });
