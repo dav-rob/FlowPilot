@@ -26,6 +26,7 @@ class NewRun(BaseModel):
     partition: Literal["train", "validation", "test"] = "train"
     document: str | None = Field(default=None, max_length=50000)
     mode: Literal["simulation", "live"] = "simulation"
+    purpose: Literal["business", "test"] = "business"
     title: str | None = Field(default=None, max_length=160)
 
 
@@ -162,7 +163,7 @@ def create_app(root=ROOT, state_dir=None):
         return {
             "runs": [
                 {k: v for k, v in public_run(r).items() if k not in ("events", "input")}
-                for r in store.list("run")[:150]
+                for r in store.list("run")
             ]
         }
 
@@ -194,6 +195,7 @@ def create_app(root=ROOT, state_dir=None):
                 mode=body.mode,
                 title=body.title or (c["title"] if c else "New incoming document"),
                 session_case_id=session_case_id,
+                purpose=body.purpose,
             )
         except ValueError as e:
             raise HTTPException(422, str(e)) from e

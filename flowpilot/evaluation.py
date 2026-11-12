@@ -117,6 +117,7 @@ class Evaluator:
                     document=case["document"],
                     mode=obj["mode"],
                     title=case["title"],
+                    purpose="evaluation",
                 )
                 # Register evaluation-owned runs so approvals are locked until investigation completion.
                 task = asyncio.create_task(self.engine.execute(run["id"]))

@@ -63,7 +63,7 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
       <div className="page-heading">
         <div>
           <div className="eyebrow">THE RECORD OF EVERY DECISION</div>
-          <h1>Run history</h1>
+          <h1>Execution history</h1>
           <p>
             Revisit outcomes, inspect evidence, and replay recorded execution.
           </p>

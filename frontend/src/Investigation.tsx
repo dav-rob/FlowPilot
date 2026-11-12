@@ -110,20 +110,11 @@ export default function Investigation({
     <div className="landing-page">
       <section className="hero">
         <div className="hero-copy">
-          <div className="eyebrow">
-            <span className="live-dot" /> LIVE OPERATIONS{" "}
-            <span className="eyebrow-separator">/</span> HARBOURLINE MUTUAL
-            FINANCE
-          </div>
-          <h1>
-            Complex operations.
-            <br />
-            <span>Clearer outcomes.</span>
-          </h1>
+          <div className="eyebrow">DEVELOPER TOOLS / MANUAL TESTING</div>
+          <h1>Test workbench</h1>
           <p>
-            Turn incoming documents into evidence-backed decisions.
-            <br className="desktop-break" /> One intelligent investigation,
-            every step accounted for.
+            Test an example or paste a document to inspect routing and tool
+            calls. Test activity is kept out of the business dashboard.
           </p>
           <div className="hero-tags">
             <span>

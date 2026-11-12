@@ -101,3 +101,64 @@ def test_custom_document_and_evaluation(client):
     assert e["metrics"]["runtime"]["model_calls"] == 0
     assert "Deterministic" in e["warning"]
     assert all("expected" not in row for row in e["results"])
+
+
+def test_manual_tests_have_a_durable_purpose_without_changing_routing(client):
+    response = client.post(
+        "/api/runs",
+        json={
+            "case_id": "IN-B148DF6144",
+            "mode": "simulation",
+            "purpose": "test",
+        },
+    )
+    assert response.status_code == 202
+    run = wait_run(client, response.json()["id"])
+    assert run["purpose"] == "test"
+    assert run["classification"]["primary"] == "supplier_fraud"
+    assert client.get("/api/runs/" + run["id"]).json()["purpose"] == "test"
+    assert (
+        client.post(
+            "/api/runs", json={"document": "Example", "purpose": "unknown"}
+        ).status_code
+        == 422
+    )
+
+
+def test_custom_document_identity_groups_retries_without_mutating_saved_runs():
+    from flowpilot.engine import public_run
+
+    first = {"id": "one", "case_id": "CUSTOM-ONE", "input": "Original document"}
+    second = {"id": "two", "case_id": "CUSTOM-TWO", "input": "Original document"}
+    different = {
+        "id": "three",
+        "case_id": "CUSTOM-THREE",
+        "input": "Different document",
+    }
+    assert (
+        public_run(first)["document_fingerprint"]
+        == public_run(second)["document_fingerprint"]
+    )
+    assert (
+        public_run(first)["document_fingerprint"]
+        != public_run(different)["document_fingerprint"]
+    )
+    assert "document_fingerprint" not in first
+
+
+def test_case_dashboard_can_read_history_beyond_150_execution_attempts(client):
+    store = client.app.state.store
+    for index in range(155):
+        store.put(
+            "run",
+            {
+                "id": f"history-{index}",
+                "case_id": f"CASE-{index}",
+                "created_at": f"2026-09-13T00:{index // 60:02d}:{index % 60:02d}Z",
+                "input": "private input",
+                "events": [],
+            },
+        )
+    rows = client.get("/api/runs").json()["runs"]
+    assert len(rows) == 155
+    assert all("input" not in row and "events" not in row for row in rows)

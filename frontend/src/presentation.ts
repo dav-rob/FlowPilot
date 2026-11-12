@@ -139,6 +139,12 @@ export function businessText(
   for (const [name, label] of Object.entries(toolLabels))
     text = text.replace(new RegExp(`\\b${name}\\b`, "g"), label.toLowerCase());
   const phrases: [RegExp, string][] = [
+    [/\bBusiness Email Compromise \(BEC\)/gi, "email impersonation fraud"],
+    [/\bBEC\b/g, "email impersonation fraud"],
+    [/\bMAC address\b/gi, "device hardware address"],
+    [/\bARP mismatch\b/gi, "network identity mismatch"],
+    [/\bARP spoofing\b/gi, "device impersonation on the network"],
+
     [/\bprivileged access grants?\b/gi, "administrator access"],
     [/\bhuman privileged account(s?)\b/gi, "staff administrator account$1"],
     [/\bprivileged human account(s?)\b/gi, "staff administrator account$1"],

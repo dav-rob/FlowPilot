@@ -179,7 +179,7 @@ export default function RunView({
     return (
       <>
         <button className="text-button back-link" onClick={onBack}>
-          <ArrowLeft size={16} /> Back to investigations
+          <ArrowLeft size={16} /> Back to cases
         </button>
         {error && (
           <ErrorNotice message={error} retry={() => setVersion((v) => v + 1)} />
@@ -211,7 +211,7 @@ export default function RunView({
   return (
     <div className="run-page result-page">
       <button className="text-button back-link" onClick={onBack}>
-        <ArrowLeft size={15} /> Investigations
+        <ArrowLeft size={15} /> Cases &amp; findings
       </button>
       <div className="page-heading run-heading">
         <div>
@@ -247,6 +247,13 @@ export default function RunView({
         <ErrorNotice message={error} retry={() => setVersion((v) => v + 1)} />
       )}
       {actionError && <ErrorNotice message={actionError} />}
+      {(run.purpose === "test" || run.purpose === "evaluation") && (
+        <div className="result-mode-note">
+          <Code2 size={16} />
+          {run.purpose === "test" ? "Developer test" : "Evaluation run"} ·
+          Excluded from the business dashboard.
+        </div>
+      )}
       {run.mode === "simulation" && (
         <div className="result-mode-note">
           <Sparkles size={16} />

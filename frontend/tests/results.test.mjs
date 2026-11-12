@@ -12,6 +12,9 @@ const server = await createServer({
 });
 const presentation = await server.ssrLoadModule("/src/presentation.ts");
 const { default: RunView } = await server.ssrLoadModule("/src/RunView.tsx");
+const { api } = await server.ssrLoadModule("/src/api.ts");
+const business = await server.ssrLoadModule("/src/business.ts");
+const workspaceUI = await server.ssrLoadModule("/src/Workspace.tsx");
 test.after(() => server.close());
 const recordings = [
   "supplier_fraud",
@@ -191,8 +194,6 @@ test("failed checks are not described as successful evidence collection", () => 
   assert.doesNotMatch(html, /What to do next/);
 });
 
-const { api } = await server.ssrLoadModule("/src/api.ts");
-
 test("API requests stay within the same app when shared under a URL prefix", async () => {
   const original = globalThis.fetch;
   const requests = [];
@@ -224,4 +225,226 @@ test("API requests stay within the same app when shared under a URL prefix", asy
   } finally {
     globalThis.fetch = original;
   }
+});
+
+const sampleDocuments = [
+  {
+    case_id: "doc-invoice",
+    partition: "train",
+    title: "Please pay today",
+    preview: "",
+    media_type: "application/json",
+    received_at: "2026-09-13T00:37:00Z",
+    showcase: true,
+    workflow: "supplier_fraud",
+    document:
+      JSON.stringify({
+        subject: "Please pay today",
+        sender: "Alex <alex@example.test>",
+        body: "Please check this invoice.",
+        attributes: { "Invoice number": "SI-12345" },
+      }) +
+      "\n\n--- Attachment: invoice.txt ---\nTotal payable: £36,900.00\n\n--- Attachment: second-copy.txt ---\nTotal payable: £36,900.00",
+  },
+  {
+    case_id: "doc-customer",
+    partition: "train",
+    title: "Correct my address",
+    preview: "",
+    media_type: "application/x-ndjson",
+    received_at: "2026-09-13T00:37:00Z",
+    showcase: false,
+    workflow: null,
+    document: [
+      {
+        kind: "intake",
+        subject: "Correct my address",
+        sender: "Sam <sam@example.test>",
+      },
+      { kind: "narrative", text: "Please update my address." },
+      { kind: "attribute", name: "New address", value: "41 Priory Close" },
+    ]
+      .map(JSON.stringify)
+      .join("\n"),
+  },
+];
+
+test("business totals exclude tests and repeat replays while preserving older pending decisions", () => {
+  const run = structuredClone(traces[0]);
+  run.mode = "live";
+  run.status = "awaiting_approval";
+  run.approvals = [
+    {
+      request_id: "pending-original",
+      tool: "place_payment_hold",
+      args: {},
+      justification: "Review",
+      status: "pending",
+    },
+  ];
+  const newer = {
+    ...structuredClone(run),
+    id: "newer",
+    status: "completed",
+    created_at: "2027-01-01T00:00:00Z",
+    approvals: [],
+  };
+  const replay = {
+    ...structuredClone(run),
+    id: "replay",
+    mode: "replay",
+    source_mode: "live",
+    source_status: "awaiting_approval",
+    status: "completed",
+  };
+  const tests = ["test", "evaluation"].map((purpose) => ({
+    ...structuredClone(run),
+    id: purpose,
+    purpose,
+  }));
+  const entries = business.businessCases([
+    run,
+    newer,
+    replay,
+    ...tests,
+    { ...run, id: "offline", mode: "simulation" },
+  ]);
+  assert.equal(entries.length, 1);
+  assert.equal(entries[0].attempts, 2);
+  assert.equal(entries[0].run.id, "newer");
+  assert.equal(entries[0].decisions.length, 1);
+  assert.equal(entries[0].decisions[0].run.id, run.id);
+  assert.equal(business.caseState(entries[0]), "decisions");
+});
+
+test("saved examples have honest source statuses and never create actionable approvals", () => {
+  const replay = {
+    ...structuredClone(traces[0]),
+    mode: "replay",
+    source_mode: "live",
+    source_status: "awaiting_approval",
+    status: "completed",
+  };
+  const entries = business.businessCases([replay]);
+  assert.equal(entries.length, 1);
+  assert.equal(entries[0].decisions.length, 0);
+  assert.equal(business.caseState(entries[0]), "followup");
+  assert.equal(
+    business.businessCases([{ ...replay, purpose: "evaluation" }]).length,
+    0,
+  );
+});
+
+test("document readers preserve business fields and duplicate attachments without exposing transport JSON", () => {
+  const original = sampleDocuments[0].document;
+  const invoice = business.readableDocument(sampleDocuments[0]);
+  assert.equal(invoice.sender, "Alex <alex@example.test>");
+  assert.equal(invoice.body, "Please check this invoice.");
+  assert.equal(invoice.fields[0].value, "SI-12345");
+  assert.equal(invoice.attachments.length, 2);
+  assert.match(invoice.attachments[1].text, /£36,900.00/);
+  assert.equal(sampleDocuments[0].document, original);
+  const customer = business.readableDocument(sampleDocuments[1]);
+  assert.equal(customer.body, "Please update my address.");
+  assert.equal(customer.fields[0].value, "41 Priory Close");
+  const email = business.readableDocument({
+    ...sampleDocuments[0],
+    document:
+      "From: Pat <pat@example.test>\nSubject: Invoice\nMIME-Version: 1.0\n\nPlease check the amount.",
+  });
+  assert.equal(email.sender, "Pat <pat@example.test>");
+  assert.equal(email.body, "Please check the amount.");
+});
+
+test("normal routes lead to business pages; developer screens require explicit opt-in", () => {
+  assert.equal(business.workspaceRoute("", false).page, "overview");
+  assert.equal(
+    business.workspaceRoute("#investigations", false).page,
+    "overview",
+  );
+  assert.equal(business.workspaceRoute("#history", false).page, "cases");
+  for (const page of ["workbench", "evaluation", "registry"]) {
+    assert.equal(business.workspaceRoute("#" + page, false).page, "overview");
+    assert.equal(business.workspaceRoute("#" + page, true).page, page);
+  }
+  assert.equal(business.workspaceRoute("#run/abc", false).runId, "abc");
+  assert.equal(
+    business.workspaceRoute("#document/train/doc-invoice", false).documentId,
+    "doc-invoice",
+  );
+});
+
+test("the home page presents findings and decisions without launch or JSON controls", () => {
+  const html = renderToStaticMarkup(
+    createElement(workspaceUI.FinanceOverview, {
+      runs: traces,
+      cases: sampleDocuments,
+      workflows: [],
+      loading: false,
+      error: "",
+      retry: () => {},
+      onOpen: () => {},
+      onViewCases: () => {},
+      onInbox: () => {},
+    }),
+  );
+  assert.match(html, /Finance overview/);
+  assert.match(html, /Waiting for your decision/);
+  assert.match(html, /Latest case findings/);
+  assert.match(html, /Review decision/);
+  assert.doesNotMatch(
+    html,
+    /Input inspector|Execution mode|Start investigation|gemini|JEV|&quot;attributes&quot;/,
+  );
+});
+
+test("the inbox renders correspondence as text and does not ask the reader to choose a workflow", () => {
+  const evil = {
+    ...sampleDocuments[0],
+    document: JSON.stringify({
+      sender: "Alex",
+      body: '<script>alert("untrusted")</script>',
+      attributes: { "Invoice number": "SI-12345" },
+    }),
+  };
+  const html = renderToStaticMarkup(
+    createElement(workspaceUI.DocumentInbox, {
+      runs: [],
+      cases: [evil],
+      loading: false,
+      error: "",
+      retry: () => {},
+      documentId: "",
+      partition: "",
+      onSelect: () => {},
+      onProcess: () => {},
+      onOpen: () => {},
+    }),
+  );
+  assert.match(html, /Process document/);
+  assert.match(html, /SI-12345/);
+  assert.match(html, /&lt;script&gt;/);
+  assert.doesNotMatch(
+    html,
+    /<script>|Execution mode|Choose an investigation|&quot;attributes&quot;/,
+  );
+});
+
+test("identical custom submissions are one case, while different documents remain separate", () => {
+  const run = {
+    ...structuredClone(traces[0]),
+    mode: "live",
+    case_id: "CUSTOM-ONE",
+    document_fingerprint: "same-content",
+  };
+  const retry = { ...structuredClone(run), id: "retry", case_id: "CUSTOM-TWO" };
+  const different = {
+    ...structuredClone(run),
+    id: "different",
+    case_id: "CUSTOM-THREE",
+    document_fingerprint: "other-content",
+  };
+  const entries = business.businessCases([run, retry, different]);
+  assert.equal(entries.length, 2);
+  assert.equal(entries.find((c) => c.key.endsWith("same-content")).attempts, 2);
 });

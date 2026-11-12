@@ -3,6 +3,7 @@
 from __future__ import annotations
 import asyncio
 import copy
+import hashlib
 import json
 import os
 import re
@@ -187,7 +188,16 @@ def excerpt(result, limit=14000):
 
 
 def public_run(run):
-    return {k: copy.deepcopy(v) for k, v in run.items() if not k.startswith("_")}
+    result = {k: copy.deepcopy(v) for k, v in run.items() if not k.startswith("_")}
+    # Re-submitting the same custom document creates a new execution, not a new
+    # business case. Derive this for historical runs without changing their data.
+    if str(run.get("case_id", "")).startswith("CUSTOM-") and isinstance(
+        run.get("input"), str
+    ):
+        result["document_fingerprint"] = hashlib.sha256(
+            run["input"].encode("utf-8")
+        ).hexdigest()
+    return result
 
 
 class Engine:
@@ -251,8 +261,18 @@ class Engine:
         return event
 
     def create(
-        self, *, case_id, partition, document, mode, title, session_case_id=None
+        self,
+        *,
+        case_id,
+        partition,
+        document,
+        mode,
+        title,
+        session_case_id=None,
+        purpose="business",
     ):
+        if purpose not in ("business", "test", "evaluation"):
+            raise ValueError("Invalid investigation purpose")
         if mode not in ("simulation", "live"):
             raise ValueError("Mode must be simulation or live")
         if (
@@ -268,6 +288,7 @@ class Engine:
             "title": title[:160],
             "input": document,
             "mode": mode,
+            "purpose": purpose,
             "status": "queued",
             "created_at": now(),
             "updated_at": now(),

@@ -1,6 +1,13 @@
 export type Mode = "live" | "simulation";
 export type Partition = "train" | "validation" | "test";
-export type Page = "investigations" | "history" | "evaluation" | "registry";
+export type Page =
+  | "overview"
+  | "documents"
+  | "cases"
+  | "workbench"
+  | "history"
+  | "evaluation"
+  | "registry";
 export interface Workflow {
   id: string;
   name: string;
@@ -83,10 +90,12 @@ export interface Approval {
 export interface Run {
   id: string;
   case_id?: string;
+  document_fingerprint?: string;
   partition?: string;
   title: string;
   input?: string;
   mode: Mode | "replay";
+  purpose?: "business" | "test" | "evaluation";
   status: string;
   created_at: string;
   updated_at: string;

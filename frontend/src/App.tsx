@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import {
   Activity,
-  ArrowUpRight,
+  ArrowRight,
   Boxes,
   ChevronDown,
-  Command,
+  Code2,
+  FileText,
   FlaskConical,
-  GitBranch,
   History,
+  Inbox,
   LayoutDashboard,
   Menu,
-  PanelLeftClose,
-  Plus,
   Radio,
   ShieldCheck,
   Workflow,
@@ -23,56 +22,56 @@ import { ErrorNotice, useResource } from "./shared";
 import Investigation from "./Investigation";
 import RunView from "./RunView";
 import { Evaluations, Registry, RunHistory } from "./Screens";
-const nav: { id: Page; label: string; icon: typeof Activity }[] = [
-  { id: "investigations", label: "Investigations", icon: LayoutDashboard },
-  { id: "history", label: "Run history", icon: History },
+import { BusinessCasesView, DocumentInbox, FinanceOverview } from "./Workspace";
+import { workspaceRoute, type CaseView } from "./business";
+
+const businessNav: { id: Page; label: string; icon: typeof Activity }[] = [
+  { id: "overview", label: "Overview", icon: LayoutDashboard },
+  { id: "documents", label: "Documents", icon: Inbox },
+  { id: "cases", label: "Cases & findings", icon: FileText },
+];
+const developerNav: { id: Page; label: string; icon: typeof Activity }[] = [
+  { id: "workbench", label: "Test workbench", icon: Code2 },
+  { id: "history", label: "Execution history", icon: History },
   { id: "evaluation", label: "Evaluation", icon: FlaskConical },
   { id: "registry", label: "Tool registry", icon: Boxes },
 ];
-function decodeId(value: string) {
-  try {
-    return decodeURIComponent(value);
-  } catch {
-    return value;
-  }
-}
-function route() {
-  const hash = window.location.hash.slice(1);
-  if (hash.startsWith("run/"))
-    return { page: "investigations" as Page, runId: decodeId(hash.slice(4)) };
-  return {
-    page: nav.some((n) => n.id === hash)
-      ? (hash as Page)
-      : ("investigations" as Page),
-    runId: "",
-  };
-}
+
 export default function App() {
-  const [location, setLocation] = useState(route);
+  const developer =
+    new URLSearchParams(window.location.search).get("developer") === "true";
+  const [location, setLocation] = useState(() =>
+    workspaceRoute(window.location.hash, developer),
+  );
   const [mobileNav, setMobileNav] = useState(false);
   const [starting, setStarting] = useState(false);
-  const [launchMode, setLaunchMode] = useState<Mode>("simulation");
+  const [launchMode, setLaunchMode] = useState<Mode>("live");
   const [initialRun, setInitialRun] = useState<Run | null>(null);
   const [launchError, setLaunchError] = useState("");
+  const [caseView, setCaseView] = useState<{ view: CaseView; area: string }>({
+    view: "all",
+    area: "all",
+  });
   const config = useResource<Config>("/config");
   const health = useResource<{ status: string; name: string }>(
     "/health",
     () => true,
     15000,
   );
+  const activity = useResource<{ runs: Run[] }>("/runs", () => true, 5000);
   const [cases, setCases] = useState<InboxCase[]>([]);
   const [casesLoading, setCasesLoading] = useState(true);
   const [caseError, setCaseError] = useState("");
   const [caseVersion, setCaseVersion] = useState(0);
   useEffect(() => {
     const update = () => {
-      setLocation(route());
+      setLocation(workspaceRoute(window.location.hash, developer));
       setMobileNav(false);
       window.scrollTo(0, 0);
     };
     window.addEventListener("hashchange", update);
     return () => window.removeEventListener("hashchange", update);
-  }, []);
+  }, [developer]);
   useEffect(() => {
     const controller = new AbortController();
     setCasesLoading(true);
@@ -80,7 +79,7 @@ export default function App() {
     void Promise.allSettled(
       (["train", "validation", "test"] as const).map((partition) =>
         api<{ cases: InboxCase[]; total: number }>(
-          `/cases?partition=${partition}`,
+          "/cases?partition=" + partition,
           undefined,
           controller.signal,
         ),
@@ -90,12 +89,12 @@ export default function App() {
       setCases(
         results.flatMap((r) => (r.status === "fulfilled" ? r.value.cases : [])),
       );
-      const failures = results.flatMap((r, i) =>
-        r.status === "rejected"
-          ? [`${["Train", "Validation", "Test"][i]}: ${errorMessage(r.reason)}`]
-          : [],
+      const failures = results.filter((r) => r.status === "rejected");
+      setCaseError(
+        failures.length
+          ? "Some example documents could not be loaded. Please try again."
+          : "",
       );
-      setCaseError(failures.join(" "));
       setCasesLoading(false);
     });
     return () => controller.abort();
@@ -104,33 +103,77 @@ export default function App() {
     window.location.hash = page;
     setMobileNav(false);
   }
+  function viewCases(view: CaseView = "all", area = "all") {
+    setCaseView({ view, area });
+    navigate("cases");
+  }
   function openRun(run: Run) {
     setInitialRun(run);
-    window.location.hash = `run/${encodeURIComponent(run.id)}`;
+    window.location.hash = "run/" + encodeURIComponent(run.id);
+  }
+  function selectDocument(item: InboxCase) {
+    window.location.hash =
+      "document/" + item.partition + "/" + encodeURIComponent(item.case_id);
   }
   async function launch(body: object) {
     setLaunchMode((body as { mode: Mode }).mode);
     setLaunchError("");
     setStarting(true);
     try {
-      const run = await api<Run>("/runs", body);
-      openRun(run);
+      openRun(await api<Run>("/runs", body));
     } catch (e) {
       setLaunchError(errorMessage(e));
     } finally {
       setStarting(false);
     }
   }
+  function exitDeveloper() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("developer");
+    url.hash = "overview";
+    window.location.href = url.href;
+  }
   const connected = !!health.data && !health.error;
+  const nav = [...businessNav, ...(developer ? developerNav : [])];
   const activeTitle =
     starting || location.runId
-      ? "Investigation workspace"
-      : nav.find((n) => n.id === location.page)?.label;
+      ? "Case findings"
+      : (nav.find((n) => n.id === location.page)?.label ?? "Overview");
   useEffect(() => {
-    document.title = `${activeTitle ?? "Operations console"} · FlowPilot`;
+    document.title = activeTitle + " · FlowPilot";
   }, [activeTitle]);
+  const workspaceProps = {
+    runs: activity.data?.runs ?? [],
+    cases,
+    workflows: config.data?.workflows ?? [],
+    onOpen: openRun,
+    loading: activity.loading || casesLoading,
+    error: [activity.error, caseError].filter(Boolean).join(" "),
+    retry: activity.reload,
+  };
+  const navItem = (item: (typeof businessNav)[number]) => (
+    <a
+      key={item.id}
+      href={"#" + item.id}
+      aria-current={location.page === item.id ? "page" : undefined}
+      className={"nav-item " + (location.page === item.id ? "active" : "")}
+      onClick={() => {
+        setMobileNav(false);
+        if (item.id === "cases") setCaseView({ view: "all", area: "all" });
+      }}
+    >
+      <item.icon size={18} />
+      <span>{item.label}</span>
+      {location.page === item.id && <span className="nav-active-dot" />}
+    </a>
+  );
   return (
-    <div className="app-shell">
+    <div
+      className={
+        "app-shell " +
+        (developer ? "developer-workspace" : "business-workspace")
+      }
+    >
       <a
         href="#main-content"
         className="skip-link"
@@ -148,8 +191,8 @@ export default function App() {
           onClick={() => setMobileNav(false)}
         />
       )}
-      <aside className={`sidebar ${mobileNav ? "open" : ""}`}>
-        <a href="#investigations" className="brand" aria-label="FlowPilot home">
+      <aside className={"sidebar " + (mobileNav ? "open" : "")}>
+        <a href="#overview" className="brand" aria-label="FlowPilot home">
           <span className="brand-symbol">
             <Workflow size={25} />
           </span>
@@ -159,7 +202,7 @@ export default function App() {
         </a>
         <button
           className="workspace-switch"
-          onClick={() => navigate("investigations")}
+          onClick={() => navigate("overview")}
         >
           <span className="workspace-avatar">HM</span>
           <span>
@@ -169,49 +212,46 @@ export default function App() {
           <ChevronDown size={14} />
         </button>
         <div className="nav-caption">WORKSPACE</div>
-        <nav aria-label="Main navigation">
-          {nav.map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              aria-current={location.page === item.id ? "page" : undefined}
-              className={`nav-item ${location.page === item.id ? "active" : ""}`}
-              onClick={() => setMobileNav(false)}
-            >
-              <item.icon size={18} />
-              <span>{item.label}</span>
-              {location.page === item.id && <span className="nav-active-dot" />}
-            </a>
-          ))}
-        </nav>
-        <div className="sidebar-note">
+        <nav aria-label="Main navigation">{businessNav.map(navItem)}</nav>
+        {developer && (
+          <>
+            <div className="nav-caption">DEVELOPER TOOLS</div>
+            <nav aria-label="Developer navigation">
+              {developerNav.map(navItem)}
+            </nav>
+          </>
+        )}
+        <div className="sidebar-note business-sidebar-note">
           <span className="sidebar-note-icon">
-            <GitBranch size={19} />
+            <FileText size={19} />
           </span>
-          <h3>Every decision, connected.</h3>
-          <p>From incoming signal to evidence-backed outcome.</p>
-          <span>
-            Built for accountable automation <ArrowUpRight size={12} />
-          </span>
+          <h3>From document to decision</h3>
+          <p>
+            FlowPilot checks the records. You review the findings and approve
+            changes.
+          </p>
+          <a href="#documents">
+            Open the inbox
+            <ArrowRight size={13} />
+          </a>
         </div>
         <div className="sidebar-bottom">
           <div className="local-label">
-            <span className={`connection-dot ${connected ? "online" : ""}`} />
+            <span className={"connection-dot " + (connected ? "online" : "")} />
             {connected
-              ? "Local backend connected"
+              ? "Workspace connected"
               : health.loading
-                ? "Connecting to backend"
-                : "Backend unavailable"}
+                ? "Connecting…"
+                : "Connection unavailable"}
           </div>
           <div className="profile">
             <span className="profile-avatar">
-              <Command size={17} />
+              <ShieldCheck size={18} />
             </span>
             <span>
-              <strong>Local workspace</strong>
-              <small>Private by design</small>
+              <strong>Demonstration workspace</strong>
+              <small>Fictional business records</small>
             </span>
-            <PanelLeftClose size={16} />
           </div>
         </div>
       </aside>
@@ -230,9 +270,17 @@ export default function App() {
             <strong>{activeTitle}</strong>
           </div>
           <div className="topbar-right">
-            <span className="local-pill">
-              <Radio size={12} /> Local environment
-            </span>
+            {developer ? (
+              <button className="developer-exit" onClick={exitDeveloper}>
+                <Code2 size={13} />
+                Developer view · Exit
+              </button>
+            ) : (
+              <span className="local-pill">
+                <Radio size={12} />
+                Interview demonstration
+              </span>
+            )}
             <div className="topbar-divider" />
             <span className="topbar-avatar">HM</span>
           </div>
@@ -240,58 +288,95 @@ export default function App() {
         <main id="main-content" tabIndex={-1}>
           {config.error && (
             <ErrorNotice
-              message={`Configuration unavailable. ${config.error}`}
+              message={
+                "Workspace settings could not be loaded. " + config.error
+              }
               retry={config.reload}
             />
           )}
           {launchError && (
             <ErrorNotice
-              message={`Could not start investigation. ${launchError}`}
+              message={"The document could not be processed. " + launchError}
             />
           )}
-          {location.page === "investigations" && (
+          {location.runId || starting ? (
+            <RunView
+              key={location.runId || "starting"}
+              id={location.runId}
+              starting={starting}
+              startingMode={launchMode}
+              initial={initialRun?.id === location.runId ? initialRun : null}
+              workflows={config.data?.workflows ?? []}
+              onOpen={openRun}
+              onBack={() => viewCases()}
+            />
+          ) : (
             <>
-              {!location.runId && (
-                <div hidden={starting}>
-                  <Investigation
-                    cases={cases}
-                    loading={casesLoading}
-                    error={caseError}
-                    retry={() => setCaseVersion((v) => v + 1)}
-                    config={config.data}
-                    onLaunch={launch}
-                  />
-                </div>
-              )}
-              {(location.runId || starting) && (
-                <RunView
-                  key={location.runId || "starting"}
-                  id={location.runId}
-                  starting={starting}
-                  startingMode={launchMode}
-                  initial={
-                    initialRun?.id === location.runId ? initialRun : null
-                  }
-                  workflows={config.data?.workflows ?? []}
-                  onOpen={openRun}
-                  onBack={() => navigate("investigations")}
+              {location.page === "overview" && (
+                <FinanceOverview
+                  {...workspaceProps}
+                  onViewCases={viewCases}
+                  onInbox={() => navigate("documents")}
                 />
               )}
+              {location.page === "cases" && (
+                <BusinessCasesView
+                  {...workspaceProps}
+                  view={caseView.view}
+                  area={caseView.area}
+                  onFilter={viewCases}
+                  onInbox={() => navigate("documents")}
+                />
+              )}
+              {location.page === "documents" && (
+                <DocumentInbox
+                  runs={workspaceProps.runs}
+                  cases={cases}
+                  onOpen={openRun}
+                  loading={casesLoading}
+                  error={caseError}
+                  retry={() => setCaseVersion((v) => v + 1)}
+                  documentId={location.documentId}
+                  partition={location.partition}
+                  onSelect={selectDocument}
+                  onProcess={(item) =>
+                    void launch({
+                      case_id: item.case_id,
+                      partition: item.partition,
+                      mode: "live",
+                      purpose: "business",
+                    })
+                  }
+                />
+              )}
+              {developer && location.page === "workbench" && (
+                <Investigation
+                  cases={cases}
+                  loading={casesLoading}
+                  error={caseError}
+                  retry={() => setCaseVersion((v) => v + 1)}
+                  config={config.data}
+                  onLaunch={(body) => void launch({ ...body, purpose: "test" })}
+                />
+              )}
+              {developer && location.page === "history" && (
+                <RunHistory onOpen={openRun} />
+              )}
+              {developer && location.page === "evaluation" && (
+                <Evaluations config={config.data} onOpenRun={openRun} />
+              )}
+              {developer && location.page === "registry" && <Registry />}
             </>
           )}
-          {location.page === "history" && <RunHistory onOpen={openRun} />}
-          {location.page === "evaluation" && (
-            <Evaluations config={config.data} onOpenRun={openRun} />
-          )}
-          {location.page === "registry" && <Registry />}
           <footer className="page-footer">
             <span>
-              <Workflow size={13} /> FlowPilot{" "}
-              <span className="footer-separator">/</span> Intelligent Enterprise
-              Automation
+              <Workflow size={13} />
+              FlowPilot <span className="footer-separator">/</span>Intelligent
+              Enterprise Automation
             </span>
             <span>
-              <ShieldCheck size={13} /> Evidence before action
+              <ShieldCheck size={13} />
+              Fictional records · Simulated business changes
             </span>
           </footer>
         </main>
@@ -303,15 +388,6 @@ export default function App() {
           onClick={() => setMobileNav(false)}
         >
           <X />
-        </button>
-      )}
-      {location.page !== "investigations" && (
-        <button
-          className="new-investigation-fab"
-          onClick={() => navigate("investigations")}
-        >
-          <Plus size={18} />
-          <span>New investigation</span>
         </button>
       )}
     </div>
