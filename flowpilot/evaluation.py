@@ -140,6 +140,8 @@ class Evaluator:
                     "expected_outcome": truth["expected_outcome"]["action"],
                     "actual_outcome": (run.get("outcome") or {}).get("outcome_code"),
                     "expected_categories": truth["routing"]["labels"],
+                    "expected_abstention": truth["routing"]["abstain_expected"],
+                    "actual_abstention": pred["routing"]["abstained"],
                     "actual_categories": (run.get("classification") or {}).get(
                         "categories", []
                     ),
@@ -235,6 +237,10 @@ class Evaluator:
                         "expected_categories": truth_map[case["case_id"]]["routing"][
                             "labels"
                         ],
+                        "expected_abstention": truth_map[case["case_id"]]["routing"][
+                            "abstain_expected"
+                        ],
+                        "actual_abstention": pred["routing"]["abstained"],
                         "actual_categories": (run.get("classification") or {}).get(
                             "categories", []
                         ),

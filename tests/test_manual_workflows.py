@@ -242,6 +242,10 @@ def test_scoring_saved_ai_reviews_creates_analysis_without_rerunning_or_changing
             and row["actual_outcome"] == "block_pending_privacy_assessment"
         )
         assert row["models"] == [] and row["outcome_correct"] is False
+        assert (
+            isinstance(row["expected_abstention"], bool)
+            and row["actual_abstention"] is False
+        )
         assert row["ruleset_version"] == before["ruleset_version"]
         assert client.get("/api/runs/" + r["id"]).json() == before
         assert len(client.get("/api/runs").json()["runs"]) == 1

@@ -960,6 +960,14 @@ function QualityComparison() {
                           ? result.expected_categories.map(words).join(", ")
                           : "Not recorded"}
                       </small>
+                      {typeof result.expected_abstention === "boolean" && (
+                        <small>
+                          Initial screening:{" "}
+                          {result.expected_abstention
+                            ? "defer for human review"
+                            : "select a business area"}
+                        </small>
+                      )}
                     </td>
                     <td>
                       {words(result.actual_outcome ?? result.outcome_code)}
@@ -969,6 +977,14 @@ function QualityComparison() {
                           ? result.actual_categories.map(words).join(", ")
                           : "Not recorded"}
                       </small>
+                      {typeof result.actual_abstention === "boolean" && (
+                        <small>
+                          Initial screening:{" "}
+                          {result.actual_abstention
+                            ? "deferred for human review"
+                            : "selected a business area"}
+                        </small>
+                      )}
                       {typeof result.requires_approval === "boolean" && (
                         <small>
                           {result.requires_approval
@@ -990,7 +1006,8 @@ function QualityComparison() {
                         Finding: {resultLabel(result.outcome_correct)}
                       </span>
                       <small>
-                        Routing: {resultLabel(result.primary_correct)}
+                        Screening, including deferral:{" "}
+                        {resultLabel(result.primary_correct)}
                       </small>
                       <small>
                         Evidence-grounded result:{" "}

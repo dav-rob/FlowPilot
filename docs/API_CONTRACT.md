@@ -60,3 +60,8 @@ this analysis from a fresh live evaluation. Timings/models belong to the saved
 reviews, missing historical versions remain unknown, and original runs and
 previous evaluations are unchanged. Custom documents without expected answers
 are excluded. This selected development sample is not a held-out benchmark.
+
+New scored rows also expose expected_abstention and actual_abstention. The
+primary_correct score includes whether initial screening should defer; matching
+category labels alone does not imply that score should pass. Earlier rows without
+these fields retain their original values and show missing detail as unknown.
