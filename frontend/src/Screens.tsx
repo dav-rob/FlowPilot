@@ -50,13 +50,15 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
   const [mode, setMode] = useState("all");
   const [status, setStatus] = useState("all");
   const runs = resource.data?.runs ?? [];
-  const filtered = runs.filter(
+  const matching = runs.filter(
     (r) =>
       (mode === "all" || r.mode === mode) &&
-      (status === "all" || r.status === status) &&
       `${r.title} ${r.id} ${r.case_id ?? ""}`
         .toLowerCase()
         .includes(query.toLowerCase()),
+  );
+  const filtered = matching.filter(
+    (run) => status === "all" || run.status === status,
   );
   return (
     <div>
@@ -129,28 +131,42 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
             onChange={(e) => setMode(e.target.value)}
           >
             <option value="all">All modes</option>
-            <option value="live">AI Review</option>
+            <option value="live">Live API</option>
             <option value="simulation">Simulation</option>
+            <option value="replay">Recorded replay</option>
           </select>
-          <select
-            aria-label="Filter run status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="all">All statuses</option>
-            {[
-              "queued",
-              "running",
-              "completed",
-              "awaiting_approval",
-              "failed",
-              "cancelled",
-            ].map((s) => (
-              <option key={s} value={s}>
-                {readable(s)}
-              </option>
-            ))}
-          </select>
+        </div>
+        <div
+          className="case-view-tabs history-status-filters"
+          role="group"
+          aria-label="Filter run status"
+        >
+          {[
+            ["all", "All statuses"],
+            ["queued", "Queued"],
+            ["running", "Running"],
+            ["completed", "Completed"],
+            ["awaiting_approval", "Awaiting approval"],
+            ["failed", "Failed"],
+            ["cancelled", "Cancelled"],
+          ].map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              className={status === value ? "selected" : ""}
+              aria-pressed={status === value}
+              onClick={() => setStatus(value)}
+            >
+              {label}
+              <span>
+                {resource.data
+                  ? value === "all"
+                    ? matching.length
+                    : matching.filter((run) => run.status === value).length
+                  : "—"}
+              </span>
+            </button>
+          ))}
         </div>
         {resource.loading ? (
           <Loading text="Loading recorded runs…" />
@@ -560,7 +576,7 @@ export function Evaluations({
                     </strong>
                     <small>
                       {dateTime(e.created_at)} ·{" "}
-                      {e.mode === "live" ? "AI Review" : "Simulation"}
+                      {e.mode === "live" ? "Live API" : "Simulation"}
                     </small>
                   </span>
                   <Status status={e.status} />

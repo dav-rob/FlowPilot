@@ -104,7 +104,7 @@ export function ModeBadge({ mode }: { mode: Mode | "replay" }) {
         <FlaskConical size={12} />
       )}{" "}
       {mode === "live"
-        ? "AI Review"
+        ? "Live API"
         : mode === "replay"
           ? "Recorded replay"
           : "Simulation"}
@@ -176,7 +176,7 @@ export function ModePicker({
             )}
           </span>
           <span>
-            <strong>{mode === "live" ? "AI Review" : "Simulation"}</strong>
+            <strong>{mode === "live" ? "Live API" : "Simulation"}</strong>
             <small>
               {mode === "live"
                 ? "Your local AI subscriptions"

@@ -136,7 +136,7 @@ def create_app(root=ROOT, state_dir=None):
                 },
                 {
                     "id": "live",
-                    "name": "AI Review",
+                    "name": "Live API",
                     "description": "Real local subscription models select tools. JEV classifies when an API key is configured.",
                 },
             ],

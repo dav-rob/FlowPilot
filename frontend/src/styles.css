@@ -6914,3 +6914,15 @@ main .case-row small {
     padding-left: 0;
   }
 }
+
+/* Execution mode remains a dropdown; status filters stay visible and wrap. */
+.history-status-filters {
+  margin: 0;
+  padding: 16px 20px;
+  border-bottom: 1px solid #efecf3;
+}
+@media (max-width: 600px) {
+  .history-status-filters {
+    padding: 13px;
+  }
+}

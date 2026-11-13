@@ -416,9 +416,9 @@ export default function Evals({
             <FlaskConical size={18} />
             <p>
               Quality evaluations compare each document with its hidden expected
-              result. Use AI Review to measure model behaviour; simulation
-              checks the offline application path. Per-case results link to the
-              same execution trace used by the business workspace.
+              result. Use Live API to measure model behaviour; simulation checks
+              the offline application path. Per-case results link to the same
+              execution trace used by the business workspace.
             </p>
           </div>
           <QualityComparison />
@@ -874,7 +874,7 @@ function QualityComparison() {
             {evaluations.map((evaluation) => (
               <option key={evaluation.id} value={evaluation.id}>
                 {dateTime(evaluation.created_at)} ·{" "}
-                {evaluation.mode === "live" ? "AI Review" : "Simulation"} ·{" "}
+                {evaluation.mode === "live" ? "Live API" : "Simulation"} ·{" "}
                 {evaluation.partition} · {evaluation.completed}/
                 {evaluation.total} cases
               </option>
@@ -913,7 +913,7 @@ function QualityComparison() {
           <p className="evals-quality-mode">
             {detail.data.mode === "simulation"
               ? "Simulation: these scores exercise deterministic behaviour and do not measure an AI model."
-              : "AI Review: measured against hidden expected answers on synthetic documents."}{" "}
+              : "Live API: measured against hidden expected answers on synthetic documents."}{" "}
             Missing fields in older evaluations are shown as not recorded.
           </p>
           {detail.data.warning && (
