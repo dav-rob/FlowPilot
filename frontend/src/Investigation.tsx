@@ -100,7 +100,7 @@ export default function Investigation({
       source === "custom"
         ? {
             document: custom,
-            title: title.trim() || "Custom investigation",
+            title: title.trim() || "Custom review",
             mode,
           }
         : { case_id: selected!.case_id, partition: selected!.partition, mode },
@@ -118,7 +118,7 @@ export default function Investigation({
           </p>
           <div className="hero-tags">
             <span>
-              <Layers size={14} /> Multi-domain investigation
+              <Layers size={14} /> Multi-domain review
             </span>
             <span>
               <ShieldCheck size={14} /> Human oversight
@@ -150,7 +150,7 @@ export default function Investigation({
       <section className="showcase-section">
         <SectionHeading
           eyebrow="A STARTING POINT FOR EVERY TEAM"
-          title="Choose an investigation"
+          title="Choose a review"
         >
           <button
             className="text-button"
@@ -372,14 +372,14 @@ export default function Investigation({
             {source === "custom" ? (
               <>
                 <label className="field-label" htmlFor="custom-title">
-                  Investigation title <span className="muted">(optional)</span>
+                  Review title <span className="muted">(optional)</span>
                 </label>
                 <input
                   className="full-input"
                   id="custom-title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Give this investigation a name"
+                  placeholder="Give this review a name"
                   maxLength={160}
                 />
                 <label className="field-label" htmlFor="custom-document">
@@ -453,7 +453,7 @@ export default function Investigation({
           <div className="panel-header">
             <div className="panel-title">
               <Sparkles size={18} />
-              <h2>Launch investigation</h2>
+              <h2>Review document</h2>
             </div>
             <span className="subtle-label">02 / CONFIGURE</span>
           </div>
@@ -476,7 +476,7 @@ export default function Investigation({
               type="submit"
               disabled={!canLaunch}
             >
-              <Play size={16} fill="currentColor" /> Start investigation{" "}
+              <Play size={16} fill="currentColor" /> Review document{" "}
               <ArrowRight size={17} />
             </button>
             <div className="launch-footnote">

@@ -24,3 +24,39 @@ Approval = {request_id,tool,args,justification,status:"pending"|"approved"|"deni
 Evaluation = {id,status,mode,partition,created_at,completed:number,total:number,metrics:object,results:object[],error?:string}. Metrics from existing evaluator may be nested.
 
 Browser polling every 1s while active. Never invent events, scores, model usage or outcome data. Display unknown as unknown. Modes labeled at all times; errors visible. Render document and tool text as text, never raw HTML.
+
+## Human workflows, guardrails and versions
+
+GET /api/approvals -> {items:[ManualWorkItem]} (original live business reviews only)
+GET /api/approvals?include_tests=true -> includes test/evaluation and simulation originals
+POST /api/approvals/{run_id}/{request_id} body {decision:"approve"|"decline",note:string} -> {item,run}
+GET /api/assurance -> {ruleset_version,rules,history,suite,suites,limitations}
+POST /api/assurance/run body {} -> a new persisted deterministic GuardrailSuite
+
+ManualWorkItem = {id,run_id,request_id,kind:"action_approval"|"department_review",title,case_title,department,reason,hold_scope,next_step,status,created_at,can_decide,blocked_reason,decided_at?,decision_note?,tool?,args?,result?}
+
+Run additionally exposes manual_reviews, business_route:{path,label,detail},
+ruleset_version and application_revision (versions only when actually recorded).
+Department decisions emit manual_decision; workflow creation emits handoff.
+The legacy action approval endpoint also accepts an optional note.
+Decision notes are required by the separate workflow endpoint (1–2,000 chars).
+Department approval records a decision and executes no business tool. Dependent
+consequential actions require their own explicit approval. Failed/replay reviews
+cannot approve; runtime restrictions are rechecked on action execution.
+
+New evaluation result rows include expected_outcome, actual_outcome,
+expected_categories, actual_categories, models, requires_approval,
+ruleset_version and application_revision alongside existing scores and duration.
+Ground truth is still evaluator-only; it is never included in an agent payload.
+Guardrail results include rule snapshots, suite/rule versions, application
+revision, implementation digest, expected/actual, positive/negative test kind,
+per-rule coverage and duration. Every invocation creates a new immutable result
+identifier; reading the report performs no tests or model calls.
+
+POST /api/evaluations/recorded?partition=train -> a new completed evaluation of
+latest saved original AI attempts for labelled documents. No execution is rerun;
+source="saved_ai_reviews", new_model_calls=0 and an explicit warning distinguish
+this analysis from a fresh live evaluation. Timings/models belong to the saved
+reviews, missing historical versions remain unknown, and original runs and
+previous evaluations are unchanged. Custom documents without expected answers
+are excluded. This selected development sample is not a held-out benchmark.

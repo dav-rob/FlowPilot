@@ -6,6 +6,8 @@ from collections import Counter
 from flowpilot_data.evaluate import evaluate, score_case, load_truth
 from .store import now
 from .catalog import case_list
+from .assurance import RULESET_VERSION
+from .version import application_revision
 
 
 def prediction(run):
@@ -78,6 +80,8 @@ class Evaluator:
             "status": "queued",
             "mode": mode,
             "partition": partition,
+            "ruleset_version": RULESET_VERSION,
+            "application_revision": application_revision(),
             "created_at": now(),
             "completed": 0,
             "total": limit,
@@ -93,6 +97,86 @@ class Evaluator:
         task = asyncio.create_task(self.execute(obj))
         self.tasks[obj["id"]] = task
         task.add_done_callback(lambda _: self.tasks.pop(obj["id"], None))
+        return obj
+
+    def score_saved(self, partition="train"):
+        """New analysis of the latest saved AI attempt per labelled document.
+
+        Original executions and their versions remain unchanged; no model or tool
+        is invoked and the current expected answers are used only here.
+        """
+        truth_map = {t["case_id"]: t for t in load_truth(self.engine.root, partition)}
+        selected = {}
+        for run in self.store.list("run"):
+            if (
+                run.get("mode") == "live"
+                and run.get("partition") == partition
+                and run.get("status") not in ("queued", "running")
+                and run.get("purpose", "business") == "business"
+                and run.get("case_id") in truth_map
+            ):
+                selected.setdefault(run["case_id"], run)
+        if not selected:
+            raise ValueError(
+                "No saved AI reviews with expected answers are available in this partition"
+            )
+        runs = list(selected.values())
+        predictions = [prediction(run) for run in runs]
+        report = evaluate(
+            [truth_map[r["case_id"]] for r in runs], predictions, include_cases=False
+        )
+        results = []
+        for run, pred in zip(runs, predictions):
+            truth = truth_map[run["case_id"]]
+            scores = score_case(truth, pred)
+            results.append(
+                {
+                    "case_id": run["case_id"],
+                    "run_id": run["id"],
+                    "title": run["title"],
+                    "status": run["status"],
+                    "primary": (run.get("classification") or {}).get("primary"),
+                    "outcome_code": (run.get("outcome") or {}).get("outcome_code"),
+                    "expected_outcome": truth["expected_outcome"]["action"],
+                    "actual_outcome": (run.get("outcome") or {}).get("outcome_code"),
+                    "expected_categories": truth["routing"]["labels"],
+                    "actual_categories": (run.get("classification") or {}).get(
+                        "categories", []
+                    ),
+                    "models": run["metrics"].get("providers", []),
+                    "ruleset_version": run.get("ruleset_version"),
+                    "application_revision": run.get("application_revision"),
+                    "primary_correct": scores["primary_correct"],
+                    "outcome_correct": scores["outcome_correct"],
+                    "grounded_correct": scores["grounded_correct"],
+                    "tool_calls": scores["calls"],
+                    "required_groups_satisfied": scores["groups_satisfied"],
+                    "required_groups_total": scores["groups_total"],
+                    "duration_ms": run["duration_ms"],
+                    "review_created_at": run["created_at"],
+                    "error": run.get("error"),
+                }
+            )
+        obj = {
+            "id": uuid.uuid4().hex,
+            "created_at": now(),
+            "finished_at": now(),
+            "status": "completed",
+            "mode": "live",
+            "partition": partition,
+            "source": "saved_ai_reviews",
+            "new_model_calls": 0,
+            "completed": len(runs),
+            "total": len(runs),
+            "results": results,
+            "ruleset_version": RULESET_VERSION,
+            "application_revision": application_revision(),
+            "metrics": report["metrics"],
+            "coverage": report["coverage"],
+            "strata": report["strata"],
+            "warning": "Analysis of the latest saved AI attempt for each labelled document, using current expected answers. No new AI or business-tool calls. Timings and usage describe the original reviews; this selected development sample is not a held-out benchmark.",
+        }
+        self.store.put("evaluation", obj)
         return obj
 
     async def execute(self, obj):
@@ -142,6 +226,24 @@ class Evaluator:
                         "status": run["status"],
                         "primary": (run.get("classification") or {}).get("primary"),
                         "outcome_code": (run.get("outcome") or {}).get("outcome_code"),
+                        "expected_outcome": truth_map[case["case_id"]][
+                            "expected_outcome"
+                        ]["action"],
+                        "actual_outcome": (run.get("outcome") or {}).get(
+                            "outcome_code"
+                        ),
+                        "expected_categories": truth_map[case["case_id"]]["routing"][
+                            "labels"
+                        ],
+                        "actual_categories": (run.get("classification") or {}).get(
+                            "categories", []
+                        ),
+                        "models": run["metrics"].get("providers", []),
+                        "requires_approval": bool(
+                            (run.get("outcome") or {}).get("requires_approval")
+                        ),
+                        "ruleset_version": run.get("ruleset_version"),
+                        "application_revision": run.get("application_revision"),
                         "primary_correct": scores["primary_correct"],
                         "outcome_correct": scores["outcome_correct"],
                         "grounded_correct": scores["grounded_correct"],

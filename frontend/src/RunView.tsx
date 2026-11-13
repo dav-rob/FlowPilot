@@ -3,7 +3,6 @@ import {
   Activity,
   ArrowLeft,
   ArrowUpRight,
-  Check,
   CheckCircle2,
   ChevronDown,
   Clock3,
@@ -20,9 +19,8 @@ import {
   Sparkles,
   Square,
   Wrench,
-  X,
 } from "lucide-react";
-import type { Approval, Mode, Run, TraceEvent, Workflow } from "./types";
+import type { Mode, Run, TraceEvent, Workflow } from "./types";
 import {
   api,
   dateTime,
@@ -50,10 +48,10 @@ import {
   priorityLabel,
   referenceNames,
   resultSummary,
-  toolLabel,
   workflowDescription,
   type ReferenceNames,
 } from "./presentation";
+import { CaseRoute } from "./CaseRoute";
 export default function RunView({
   id,
   initial,
@@ -165,14 +163,13 @@ export default function RunView({
         <div className="starting-orb">
           <Sparkles size={31} />
         </div>
-        <div className="eyebrow">INVESTIGATION WORKSPACE</div>
-        <h1>Opening your investigation</h1>
+        <div className="eyebrow">AI REVIEW</div>
+        <h1>Opening your review</h1>
         <ModeBadge mode={startingMode} />
         <p>
-          Your document is being saved. The investigation will appear here
-          shortly.
+          Your document is being saved. The review will appear here shortly.
         </p>
-        <Loading text="Starting your investigation…" />
+        <Loading text="Starting your review…" />
       </section>
     );
   if (!run)
@@ -186,11 +183,11 @@ export default function RunView({
         )}
         <section className="panel">
           {loading ? (
-            <Loading text="Opening recorded investigation…" />
+            <Loading text="Opening recorded review…" />
           ) : (
             <Empty
-              title="Investigation unavailable"
-              detail="The run could not be loaded. Retry the request or return to investigations."
+              title="Review unavailable"
+              detail="The run could not be loaded. Retry the request or return to cases."
             />
           )}
         </section>
@@ -215,8 +212,8 @@ export default function RunView({
       </button>
       <div className="page-heading run-heading">
         <div>
-          <div className="eyebrow">INVESTIGATION RESULTS</div>
-          <h1>{run.title || "Untitled investigation"}</h1>
+          <div className="eyebrow">CASE FINDINGS</div>
+          <h1>{run.title || "Untitled review"}</h1>
           <div className="heading-meta">
             <ModeBadge mode={run.mode} />
             <Status status={finalStatus} />
@@ -239,7 +236,7 @@ export default function RunView({
                 )
               }
             >
-              <Square size={13} /> Stop investigation
+              <Square size={13} /> Stop review
             </button>
           )}
       </div>
@@ -247,6 +244,7 @@ export default function RunView({
         <ErrorNotice message={error} retry={() => setVersion((v) => v + 1)} />
       )}
       {actionError && <ErrorNotice message={actionError} />}
+      <CaseRoute run={run} />
       {(run.purpose === "test" || run.purpose === "evaluation") && (
         <div className="result-mode-note">
           <Code2 size={16} />
@@ -258,15 +256,15 @@ export default function RunView({
         <div className="result-mode-note">
           <Sparkles size={16} />
           Demonstration: these results follow simulated decisions, rather than a
-          live AI investigation. All business records are fictional.
+          AI Review. All business records are fictional.
         </div>
       )}
       {run.mode === "replay" && (
         <div className="result-mode-note">
           <FileText size={16} />
-          Saved investigation ·{" "}
+          Saved review ·{" "}
           {run.source_mode === "live"
-            ? "Originally investigated by live AI."
+            ? "Original AI Review."
             : run.source_mode === "simulation"
               ? "Originally a simulated demonstration."
               : "Original mode is recorded in the technical details."}{" "}
@@ -275,7 +273,7 @@ export default function RunView({
       )}
       {run.mode === "live" && (
         <p className="result-environment">
-          Investigating fictional business records. Any changes affect example
+          AI Review of fictional business records. Any changes affect example
           data only.
         </p>
       )}
@@ -287,7 +285,7 @@ export default function RunView({
           aria-live="polite"
         >
           <div className="result-section-label">
-            <ShieldCheck size={18} /> Business outcome
+            <ShieldCheck size={18} /> Findings, next steps
           </div>
           {outcome ? (
             <>
@@ -350,16 +348,16 @@ export default function RunView({
             <>
               <h2 id="business-outcome-title">
                 {active
-                  ? "Investigation in progress"
+                  ? "In progress"
                   : finalStatus === "cancelled"
-                    ? "Investigation stopped"
+                    ? "Review stopped"
                     : "No verified outcome available"}
               </h2>
               <p className="result-lede">
                 {active
-                  ? "The relevant records are being checked. Findings and recommended next steps will appear here when the investigation is complete."
+                  ? "The relevant records are being checked. Findings and recommended next steps will appear here when the review is complete."
                   : finalStatus === "cancelled"
-                    ? "This investigation was stopped. The checks completed so far are saved below."
+                    ? "This review was stopped. The checks completed so far are saved below."
                     : failureSummary(run.error)}
               </p>
               {active && (
@@ -396,7 +394,7 @@ export default function RunView({
               </ol>
             ) : (
               <p className="result-no-next">
-                No further steps were recommended in this investigation.
+                No further steps were recommended in this review.
               </p>
             )}
             {!!outcome.unresolved?.length && (
@@ -414,48 +412,14 @@ export default function RunView({
           </section>
         )}
       </div>
-      {!!run.approvals?.length && (
-        <section
-          className="panel result-approvals"
-          aria-labelledby="approvals-title"
-        >
-          <div className="result-section-label">
-            <LockKeyhole size={18} /> Your decision
-          </div>
-          <h2 id="approvals-title">
-            {pendingApprovals > 0
-              ? "Review the proposed changes"
-              : "Approval decisions"}
-          </h2>
-          <p>
-            These actions affect fictional business records only. Review each
-            request before approving a simulated change.
-          </p>
-          {run.approvals.map((approval) => (
-            <ApprovalCard
-              key={approval.request_id}
-              approval={approval}
-              names={names}
-              busy={!!action}
-              readOnly={
-                run.mode === "replay" ||
-                active ||
-                run.status === "cancelled" ||
-                run.status === "failed"
-              }
-              onDecide={(approve) =>
-                void mutate(
-                  `/runs/${encodeURIComponent(id)}/approvals/${encodeURIComponent(approval.request_id)}`,
-                  { approve },
-                  approval.request_id,
-                )
-              }
-            />
-          ))}
-        </section>
-      )}
 
       <div className="result-explanation-label">Explore the details</div>
+      <a
+        className="button secondary"
+        href={"#trace/" + encodeURIComponent(run.id)}
+      >
+        <Activity size={16} /> Open trace <ArrowUpRight size={14} />
+      </a>
       {outcome && (
         <Disclosure
           title="Supporting evidence"
@@ -506,18 +470,18 @@ export default function RunView({
                 <dd>{priorityLabel(classification.urgency)}</dd>
               </div>
               <div>
-                <dt>Level of investigation</dt>
+                <dt>Review depth</dt>
                 <dd>
                   {classification.escalate ||
                   events.some((e) => e.kind === "escalation")
-                    ? "A more detailed investigation was requested"
-                    : "Standard investigation"}
+                    ? "A more detailed review was requested"
+                    : "Standard review"}
                 </dd>
               </div>
             </dl>
             <p className="result-detail-intro">
               This is the initial assessment of the request. The business
-              outcome above reflects what the investigation found.
+              outcome above reflects what the review found.
             </p>
           </>
         ) : (
@@ -530,7 +494,7 @@ export default function RunView({
       </Disclosure>
 
       <Disclosure
-        title="Investigation steps"
+        title="Checks performed"
         description={`${run.metrics?.tool_calls ?? 0} business check${run.metrics?.tool_calls === 1 ? " or action" : "s and actions"} · ${duration(run.duration_ms)}`}
         icon={<Activity size={18} />}
       >
@@ -541,7 +505,7 @@ export default function RunView({
         </p>
         <div
           className="result-event-filters"
-          aria-label="Filter investigation steps"
+          aria-label="Filter checks performed"
         >
           {[
             ["all", "All steps"],
@@ -582,7 +546,7 @@ export default function RunView({
               title="No steps to show yet"
               detail={
                 active
-                  ? "This section updates as the investigation progresses."
+                  ? "This section updates as the review progresses."
                   : "No recorded steps match this filter."
               }
             />
@@ -592,7 +556,7 @@ export default function RunView({
 
       <Disclosure
         title="Original document"
-        description="The information that started this investigation"
+        description="The information that started this review"
         icon={<FileText size={18} />}
       >
         <pre tabIndex={0} className="input-document expanded">
@@ -693,107 +657,16 @@ function Disclosure({
   );
 }
 
-function ApprovalCard({
-  approval,
-  names,
-  busy,
-  readOnly,
-  onDecide,
-}: {
-  approval: Approval;
-  names: ReferenceNames;
-  busy: boolean;
-  readOnly: boolean;
-  onDecide: (approve: boolean) => void;
-}) {
-  const fields: Record<string, string> = {
-    invoice_id: "Invoice",
-    supplier_id: "Supplier",
-    customer_id: "Customer",
-    asset_id: "Asset",
-    grant_id: "Access permission",
-    contract_id: "Contract",
-    reason: "Reason",
-    justification: "Reason",
-    system_id: "System",
-    policy_id: "Policy",
-    account_number: "Account number",
-    sort_code: "Sort code",
-    fields: "Details to correct",
-  };
-  return (
-    <div className="approval-card">
-      <div className="approval-card-head">
-        <h3>{toolLabel(approval.tool)}</h3>
-        <Status status={approval.status} />
-      </div>
-      <p>
-        {businessText(approval.justification, names) ||
-          "No reason was recorded for this request."}
-      </p>
-      <dl className="result-approval-fields">
-        {Object.entries(approval.args).map(([key, value]) => (
-          <div key={key}>
-            <dt>{fields[key] ?? readable(key)}</dt>
-            <dd>
-              {typeof value === "string" ? (
-                businessText(value, names)
-              ) : typeof value === "object" ? (
-                <Json value={value} />
-              ) : (
-                String(value)
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
-      <details>
-        <summary>Exact change details</summary>
-        <Json value={{ tool: approval.tool, arguments: approval.args }} />
-      </details>
-      {approval.result !== undefined && (
-        <details>
-          <summary>Recorded action result</summary>
-          <Json value={approval.result} />
-        </details>
-      )}
-      {approval.status === "pending" && !readOnly && (
-        <div className="approval-actions">
-          <button
-            disabled={busy}
-            className="button approve"
-            onClick={() => onDecide(true)}
-          >
-            <Check size={14} /> Approve simulated change
-          </button>
-          <button
-            disabled={busy}
-            className="button danger-outline"
-            onClick={() => onDecide(false)}
-          >
-            <X size={14} /> Decline
-          </button>
-        </div>
-      )}
-      {approval.status === "pending" && readOnly && (
-        <p className="result-approval-readonly">
-          This request is read-only until the investigation has finished
-          successfully, and cannot be approved from a saved replay.
-        </p>
-      )}
-    </div>
-  );
-}
-
-function EventCard({
+export function EventCard({
   event,
   names,
 }: {
   event: TraceEvent;
   names: ReferenceNames;
 }) {
-  const automatic =
-    event.kind === "orchestration" || event.kind === "validation";
+  const automatic = ["orchestration", "validation", "handoff"].includes(
+    event.kind,
+  );
   const detail =
     event.kind === "tool_result"
       ? resultSummary(event)
@@ -804,7 +677,7 @@ function EventCard({
           : event.kind === "model"
             ? "The AI reviewed the available information before selecting its next action."
             : event.kind === "orchestration"
-              ? "The application prepared this step and enforced the investigation’s limits and permissions."
+              ? "The application prepared this step and enforced the review’s limits and permissions."
               : event.kind === "error"
                 ? failureSummary(event.detail)
                 : businessText(event.detail, names);
@@ -826,11 +699,15 @@ function EventCard({
       <div className="event-body">
         <div className="event-topline">
           <span className="event-kind">
-            {automatic
-              ? "Automatic step"
-              : event.tool
-                ? "Business record check"
-                : "Investigation decision"}
+            {event.kind === "manual_decision"
+              ? "Human decision"
+              : event.kind === "approval"
+                ? "Approval workflow"
+                : automatic
+                  ? "Automatic step"
+                  : event.tool
+                    ? "Business record check"
+                    : "Review decision"}
           </span>
           <span className="event-time">
             Step {event.sequence}
@@ -856,7 +733,7 @@ function EventCard({
           )}
           {event.arguments !== undefined && (
             <>
-              <h4>Validated arguments</h4>
+              <h4>Submitted arguments</h4>
               <Json value={event.arguments} />
             </>
           )}

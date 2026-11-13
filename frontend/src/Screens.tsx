@@ -118,7 +118,7 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
             <Search size={16} />
             <input
               aria-label="Search run history"
-              placeholder="Search investigations or run IDs…"
+              placeholder="Search reviews or run IDs…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -129,7 +129,7 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
             onChange={(e) => setMode(e.target.value)}
           >
             <option value="all">All modes</option>
-            <option value="live">Live AI</option>
+            <option value="live">AI Review</option>
             <option value="simulation">Simulation</option>
           </select>
           <select
@@ -158,13 +158,13 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
           <Empty
             title={
               runs.length
-                ? "No matching investigations"
-                : "Your investigation history starts here"
+                ? "No matching reviews"
+                : "Your review history starts here"
             }
             detail={
               runs.length
                 ? "Try a different search or filter."
-                : "Start an investigation to build a durable record of decisions and evidence."
+                : "Start a review to build a durable record of decisions and evidence."
             }
           />
         ) : (
@@ -172,7 +172,7 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
             <table className="data-table history-table">
               <thead>
                 <tr>
-                  <th scope="col">Investigation</th>
+                  <th scope="col">Review</th>
                   <th scope="col">Mode</th>
                   <th scope="col">Status</th>
                   <th scope="col">Created</th>
@@ -190,7 +190,7 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
                         className="table-title"
                         onClick={() => onOpen(run)}
                       >
-                        {run.title || "Untitled investigation"}
+                        {run.title || "Untitled review"}
                       </button>
                       <span className="table-subtitle mono">
                         {run.case_id || run.id}
@@ -513,7 +513,7 @@ export function Evaluations({
             />
             <p className="field-hint">
               Sequential, bounded execution. Each case produces an inspectable
-              investigation.
+              review.
             </p>
             <ModePicker value={mode} onChange={setMode} disabled={starting} />
             <div className="eval-notice">
@@ -560,7 +560,7 @@ export function Evaluations({
                     </strong>
                     <small>
                       {dateTime(e.created_at)} ·{" "}
-                      {e.mode === "live" ? "Live AI" : "Simulation"}
+                      {e.mode === "live" ? "AI Review" : "Simulation"}
                     </small>
                   </span>
                   <Status status={e.status} />
@@ -754,7 +754,7 @@ export function Evaluations({
                             ) : (
                               <ArrowUpRight size={14} />
                             )}{" "}
-                            Open investigation trace
+                            Open review trace
                           </button>
                         )}
                       </div>

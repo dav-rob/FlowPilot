@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import {
   Activity,
   ArrowRight,
-  Boxes,
   ChevronDown,
   Code2,
   FileText,
   FlaskConical,
-  History,
   Inbox,
   LayoutDashboard,
   Menu,
@@ -19,9 +17,11 @@ import {
 import type { Config, InboxCase, Mode, Page, Run } from "./types";
 import { api, errorMessage } from "./api";
 import { ErrorNotice, useResource } from "./shared";
-import Investigation from "./Investigation";
+import Evals from "./Evals";
+import Approvals from "./Approvals";
+import TraceView from "./TraceView";
 import RunView from "./RunView";
-import { Evaluations, Registry, RunHistory } from "./Screens";
+
 import { BusinessCasesView, DocumentInbox, FinanceOverview } from "./Workspace";
 import { workspaceRoute, type CaseView } from "./business";
 
@@ -29,12 +29,8 @@ const businessNav: { id: Page; label: string; icon: typeof Activity }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "documents", label: "Documents", icon: Inbox },
   { id: "cases", label: "Cases & findings", icon: FileText },
-];
-const developerNav: { id: Page; label: string; icon: typeof Activity }[] = [
-  { id: "workbench", label: "Test workbench", icon: Code2 },
-  { id: "history", label: "Execution history", icon: History },
-  { id: "evaluation", label: "Evaluation", icon: FlaskConical },
-  { id: "registry", label: "Tool registry", icon: Boxes },
+  { id: "approvals", label: "Approvals", icon: ShieldCheck },
+  { id: "evals", label: "Evals", icon: FlaskConical },
 ];
 
 export default function App() {
@@ -134,9 +130,10 @@ export default function App() {
     window.location.href = url.href;
   }
   const connected = !!health.data && !health.error;
-  const nav = [...businessNav, ...(developer ? developerNav : [])];
-  const activeTitle =
-    starting || location.runId
+  const nav = businessNav;
+  const activeTitle = location.traceId
+    ? "Execution trace"
+    : starting || location.runId
       ? "Case findings"
       : (nav.find((n) => n.id === location.page)?.label ?? "Overview");
   useEffect(() => {
@@ -213,14 +210,6 @@ export default function App() {
         </button>
         <div className="nav-caption">WORKSPACE</div>
         <nav aria-label="Main navigation">{businessNav.map(navItem)}</nav>
-        {developer && (
-          <>
-            <div className="nav-caption">DEVELOPER TOOLS</div>
-            <nav aria-label="Developer navigation">
-              {developerNav.map(navItem)}
-            </nav>
-          </>
-        )}
         <div className="sidebar-note business-sidebar-note">
           <span className="sidebar-note-icon">
             <FileText size={19} />
@@ -273,7 +262,7 @@ export default function App() {
             {developer ? (
               <button className="developer-exit" onClick={exitDeveloper}>
                 <Code2 size={13} />
-                Developer view · Exit
+                Evals access · Exit
               </button>
             ) : (
               <span className="local-pill">
@@ -299,7 +288,15 @@ export default function App() {
               message={"The document could not be processed. " + launchError}
             />
           )}
-          {location.runId || starting ? (
+          {location.traceId ? (
+            <TraceView
+              id={location.traceId}
+              onBack={() => {
+                window.location.hash =
+                  "run/" + encodeURIComponent(location.traceId);
+              }}
+            />
+          ) : location.runId || starting ? (
             <RunView
               key={location.runId || "starting"}
               id={location.runId}
@@ -349,23 +346,23 @@ export default function App() {
                   }
                 />
               )}
-              {developer && location.page === "workbench" && (
-                <Investigation
-                  cases={cases}
-                  loading={casesLoading}
-                  error={caseError}
-                  retry={() => setCaseVersion((v) => v + 1)}
-                  config={config.data}
-                  onLaunch={(body) => void launch({ ...body, purpose: "test" })}
+              {location.page === "approvals" && (
+                <Approvals
+                  onOpen={openRun}
+                  selectedId={location.approvalId}
+                  onChanged={activity.reload}
                 />
               )}
-              {developer && location.page === "history" && (
-                <RunHistory onOpen={openRun} />
+              {location.page === "evals" && (
+                <Evals
+                  runs={workspaceProps.runs}
+                  config={config.data}
+                  starting={starting}
+                  onLaunch={(body) => void launch({ ...body, purpose: "test" })}
+                  onOpen={openRun}
+                  initialTab={location.evalTab}
+                />
               )}
-              {developer && location.page === "evaluation" && (
-                <Evaluations config={config.data} onOpenRun={openRun} />
-              )}
-              {developer && location.page === "registry" && <Registry />}
             </>
           )}
           <footer className="page-footer">

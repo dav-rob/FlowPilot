@@ -21,6 +21,7 @@ import {
 import type { InboxCase, Run, Workflow } from "./types";
 import { dateTime, isActive } from "./api";
 import { Empty, ErrorNotice, Loading } from "./shared";
+import { ProcessingRoutes } from "./CaseRoute";
 import { toolLabel } from "./presentation";
 import {
   businessCases,
@@ -165,10 +166,12 @@ export function FinanceOverview({
     {
       label: "Waiting for your decision",
       value: decisions.length,
-      detail: "Proposed changes to review",
+      detail: "Manual approval workflows",
       icon: ShieldCheck,
       tone: "violet",
-      action: () => onViewCases("decisions"),
+      action: () => {
+        window.location.hash = "approvals";
+      },
     },
     {
       label: "Cases needing follow-up",
@@ -229,6 +232,19 @@ export function FinanceOverview({
           </button>
         ))}
       </div>
+      <ProcessingRoutes
+        standard={
+          entries.filter((c) => c.run.business_route?.path === "default").length
+        }
+        human={
+          entries.filter((c) =>
+            ["human_review", "human_complete", "declined", "blocked"].includes(
+              c.run.business_route?.path ?? "",
+            ),
+          ).length
+        }
+        active={active.length}
+      />
       <section
         className="workspace-section"
         aria-labelledby="decisions-heading"
@@ -243,7 +259,9 @@ export function FinanceOverview({
           {!!decisions.length && (
             <button
               className="text-button"
-              onClick={() => onViewCases("decisions")}
+              onClick={() => {
+                window.location.hash = "approvals";
+              }}
             >
               View all
               <ArrowRight size={14} />
@@ -272,7 +290,11 @@ export function FinanceOverview({
                         : "Review needed"}
                   </span>
                 </div>
-                <h3>{toolLabel(approval.tool)}</h3>
+                <h3>
+                  {"tool" in approval
+                    ? toolLabel(approval.tool)
+                    : approval.title}
+                </h3>
                 <p className="decision-document">{entry.run.title}</p>
                 <p className="decision-finding">{shortFinding(run)}</p>
                 <div className="decision-footer">
@@ -281,7 +303,10 @@ export function FinanceOverview({
                   </span>
                   <button
                     className="button secondary"
-                    onClick={() => onOpen(run)}
+                    onClick={() => {
+                      window.location.hash =
+                        "approvals/" + encodeURIComponent(approval.request_id);
+                    }}
                   >
                     Review decision
                     <ArrowRight size={14} />
@@ -378,12 +403,11 @@ export function FinanceOverview({
           <ChevronDown size={13} />
         </summary>
         <p>
-          This workspace uses fictional example documents and recorded
-          investigations. There is no connected mailbox or automatic document
-          feed yet. Processing a document uses the live AI investigation
-          service. Test runs and duplicate replays are kept out of the business
-          totals; a saved example is shown only when its original investigation
-          is unavailable.
+          This workspace uses fictional example documents and recorded reviews.
+          There is no connected mailbox or automatic document feed yet.
+          Processing a document uses the AI Review service. Test runs and
+          duplicate replays are kept out of the business totals; a saved example
+          is shown only when its original review is unavailable.
         </p>
       </details>
     </div>
@@ -743,8 +767,8 @@ export function DocumentInbox({
                           : "Ready for FlowPilot to check"}
                     </strong>
                     <p>
-                      The request determines which records to investigate. No
-                      business area needs to be selected.
+                      The request determines which records to check. No business
+                      area needs to be selected.
                     </p>
                   </div>
                   <button
@@ -761,7 +785,7 @@ export function DocumentInbox({
                       ? "Checks in progress"
                       : existing
                         ? "Check again"
-                        : "Process document"}
+                        : "Review document"}
                   </button>
                 </div>
                 <small>

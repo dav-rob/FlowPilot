@@ -1,4 +1,4 @@
-import type { Approval, InboxCase, Page, Run } from "./types";
+import type { Approval, InboxCase, ManualReview, Page, Run } from "./types";
 import { businessText, outcomeTitle } from "./presentation";
 
 export type CaseView = "all" | "decisions" | "followup" | "active" | "complete";
@@ -6,7 +6,7 @@ export interface BusinessCase {
   key: string;
   run: Run;
   attempts: number;
-  decisions: { run: Run; approval: Approval }[];
+  decisions: { run: Run; approval: Approval | ManualReview }[];
 }
 export const documentKey = (c: {
   case_id?: string;
@@ -37,7 +37,10 @@ export function businessCases(runs: Run[]): BusinessCase[] {
     }
     entry.attempts++;
     if (run.status === "awaiting_approval") {
-      for (const approval of run.approvals ?? []) {
+      for (const approval of [
+        ...(run.approvals ?? []),
+        ...(run.manual_reviews ?? []),
+      ]) {
         if (approval.status === "pending")
           entry.decisions.push({ run, approval });
       }
@@ -146,6 +149,9 @@ export function workspaceRoute(hash: string, developer: boolean) {
     runId: "",
     documentId: "",
     partition: "",
+    traceId: "",
+    approvalId: "",
+    evalTab: "",
   };
   const decode = (s: string) => {
     try {
@@ -154,6 +160,16 @@ export function workspaceRoute(hash: string, developer: boolean) {
       return s;
     }
   };
+  if (path.startsWith("trace/"))
+    return { ...base, page: "cases" as Page, traceId: decode(path.slice(6)) };
+  if (path.startsWith("approvals/"))
+    return {
+      ...base,
+      page: "approvals" as Page,
+      approvalId: decode(path.slice(10)),
+    };
+  if (path.startsWith("evals/"))
+    return { ...base, page: "evals" as Page, evalTab: path.slice(6) };
   if (path.startsWith("run/"))
     return { ...base, page: "cases" as Page, runId: decode(path.slice(4)) };
   if (path.startsWith("document/")) {
@@ -165,7 +181,7 @@ export function workspaceRoute(hash: string, developer: boolean) {
       partition,
     };
   }
-  if (["overview", "documents", "cases"].includes(path))
+  if (["overview", "documents", "cases", "approvals", "evals"].includes(path))
     return { ...base, page: path as Page };
   if (path === "history" && !developer)
     return { ...base, page: "cases" as Page };
@@ -173,7 +189,18 @@ export function workspaceRoute(hash: string, developer: boolean) {
     developer &&
     ["workbench", "history", "evaluation", "registry"].includes(path)
   )
-    return { ...base, page: path as Page };
+    return {
+      ...base,
+      page: "evals" as Page,
+      evalTab: (
+        {
+          workbench: "workbench",
+          history: "history",
+          evaluation: "quality",
+          registry: "registry",
+        } as Record<string, string>
+      )[path],
+    };
   return base;
 }
 

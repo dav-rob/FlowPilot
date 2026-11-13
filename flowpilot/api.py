@@ -17,6 +17,8 @@ from .store import Store
 from .engine import Engine, public_run
 from .evaluation import Evaluator
 from .registry import catalogue
+from .manual import work_items
+from .assurance import assurance_report, run_guardrail_suite
 from flowpilot_data.tools import open_session
 
 
@@ -33,6 +35,13 @@ class NewRun(BaseModel):
 class Approval(BaseModel):
     model_config = ConfigDict(extra="forbid")
     approve: bool
+    note: str = Field(default="", max_length=2000)
+
+
+class ManualDecision(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    decision: Literal["approve", "decline"]
+    note: str = Field(min_length=1, max_length=2000)
 
 
 class NewEvaluation(BaseModel):
@@ -54,6 +63,7 @@ def create_app(root=ROOT, state_dir=None):
     @asynccontextmanager
     async def lifespan(app):
         store.recover()
+        engine.enroll_saved_reviews()
         yield
         tasks = list(evaluator.tasks.values()) + list(engine.tasks.values())
         for task in tasks:
@@ -126,7 +136,7 @@ def create_app(root=ROOT, state_dir=None):
                 },
                 {
                     "id": "live",
-                    "name": "Live AI",
+                    "name": "AI Review",
                     "description": "Real local subscription models select tools. JEV classifies when an API key is configured.",
                 },
             ],
@@ -172,7 +182,7 @@ def create_app(root=ROOT, state_dir=None):
         if len(engine.tasks) >= 3:
             raise HTTPException(
                 429,
-                "Three investigations are already active. Wait for one to complete.",
+                "Three reviews are already active. Wait for one to complete.",
             )
         c = get_case(body.case_id, body.partition, root) if body.case_id else None
         if body.case_id and not c:
@@ -228,11 +238,51 @@ def create_app(root=ROOT, state_dir=None):
     async def approval(rid: str, request_id: str, body: Approval):
         require_run(rid)
         try:
-            return await engine.approve(rid, request_id, body.approve)
+            return await engine.approve(rid, request_id, body.approve, body.note)
         except KeyError as e:
             raise HTTPException(404, "Approval request not found") from e
         except ValueError as e:
             raise HTTPException(409, str(e)) from e
+
+    @app.get("/api/approvals")
+    async def approval_workflows(include_tests: bool = False):
+        items = []
+        for r in store.list("run"):
+            if not include_tests and (
+                r.get("purpose", "business") != "business" or r.get("mode") != "live"
+            ):
+                continue
+            items.extend(work_items(r, busy=r["id"] in engine.tasks))
+        return {"items": sorted(items, key=lambda x: x["created_at"], reverse=True)}
+
+    @app.post("/api/approvals/{rid}/{request_id}")
+    async def decide_workflow(rid: str, request_id: str, body: ManualDecision):
+        r = require_run(rid)
+        try:
+            if any(x["request_id"] == request_id for x in r.get("manual_reviews", [])):
+                result = await engine.decide_review(
+                    rid, request_id, body.decision == "approve", body.note
+                )
+            else:
+                if not body.note.strip():
+                    raise ValueError("Add a decision note")
+                result = await engine.approve(
+                    rid, request_id, body.decision == "approve", body.note
+                )
+        except KeyError as e:
+            raise HTTPException(404, "Review request not found") from e
+        except ValueError as e:
+            raise HTTPException(409, str(e)) from e
+        item = next(x for x in work_items(result) if x["request_id"] == request_id)
+        return {"item": item, "run": result}
+
+    @app.get("/api/assurance")
+    async def assurance():
+        return assurance_report(store)
+
+    @app.post("/api/assurance/run")
+    async def guardrail_checks():
+        return await run_guardrail_suite(store)
 
     @app.get("/api/evaluations")
     async def evaluations():
@@ -243,6 +293,15 @@ def create_app(root=ROOT, state_dir=None):
         if evaluator.tasks:
             raise HTTPException(409, "An evaluation is already running")
         return evaluator.create(body.partition, body.limit, body.mode)
+
+    @app.post("/api/evaluations/recorded", status_code=201)
+    async def score_recorded(
+        partition: Literal["train", "validation", "test"] = "train",
+    ):
+        try:
+            return evaluator.score_saved(partition)
+        except ValueError as e:
+            raise HTTPException(409, str(e)) from e
 
     @app.get("/api/evaluations/{eid}")
     async def evaluation(eid: str):

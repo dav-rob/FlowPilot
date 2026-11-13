@@ -48,7 +48,7 @@ test("all five reports put the business result before collapsible evidence and e
   for (const run of traces) {
     const html = render(run);
     assert.ok(
-      html.indexOf("Business outcome") < html.indexOf("What to do next"),
+      html.indexOf("Findings, next steps") < html.indexOf("What to do next"),
     );
     assert.ok(
       html.indexOf("What to do next") < html.indexOf("Supporting evidence"),
@@ -63,7 +63,7 @@ test("all five reports put the business result before collapsible evidence and e
     );
     const requestSection = html.slice(
       html.indexOf("About this request"),
-      html.indexOf("Investigation steps"),
+      html.indexOf("Checks performed"),
     );
     assert.doesNotMatch(
       requestSection,
@@ -160,7 +160,9 @@ test("replayed, running, failed and cancelled investigations keep approval contr
     assert.doesNotMatch(render(run), />Approve simulated change</);
   }
   run.status = "awaiting_approval";
-  assert.match(render(run), /Approve simulated change/);
+  assert.doesNotMatch(render(run), />Approve simulated change</);
+  assert.match(render(run), /Open approvals/);
+  assert.match(render(run), /#approvals\/test/);
   run.mode = "replay";
   run.source_status = "failed";
   const html = render(run);
@@ -356,7 +358,7 @@ test("document readers preserve business fields and duplicate attachments withou
   assert.equal(email.body, "Please check the amount.");
 });
 
-test("normal routes lead to business pages; developer screens require explicit opt-in", () => {
+test("business routes include Evals and retain legacy developer deep links", () => {
   assert.equal(business.workspaceRoute("", false).page, "overview");
   assert.equal(
     business.workspaceRoute("#investigations", false).page,
@@ -365,7 +367,7 @@ test("normal routes lead to business pages; developer screens require explicit o
   assert.equal(business.workspaceRoute("#history", false).page, "cases");
   for (const page of ["workbench", "evaluation", "registry"]) {
     assert.equal(business.workspaceRoute("#" + page, false).page, "overview");
-    assert.equal(business.workspaceRoute("#" + page, true).page, page);
+    assert.equal(business.workspaceRoute("#" + page, true).page, "evals");
   }
   assert.equal(business.workspaceRoute("#run/abc", false).runId, "abc");
   assert.equal(
@@ -421,7 +423,7 @@ test("the inbox renders correspondence as text and does not ask the reader to ch
       onOpen: () => {},
     }),
   );
-  assert.match(html, /Process document/);
+  assert.match(html, /Review document/);
   assert.match(html, /SI-12345/);
   assert.match(html, /&lt;script&gt;/);
   assert.doesNotMatch(
@@ -447,4 +449,100 @@ test("identical custom submissions are one case, while different documents remai
   const entries = business.businessCases([run, retry, different]);
   assert.equal(entries.length, 2);
   assert.equal(entries.find((c) => c.key.endsWith("same-content")).attempts, 2);
+});
+
+test("manual reviews count as business decisions and trace/evals have distinct routes", () => {
+  const run = structuredClone(traces[4]);
+  run.mode = "live";
+  run.status = "awaiting_approval";
+  run.approvals = [];
+  run.manual_reviews = [
+    {
+      request_id: "privacy-review",
+      title: "Privacy assessment",
+      department: "Privacy",
+      status: "pending",
+      reason: "Overseas hosting",
+      hold_scope: "Hosting change",
+      next_step: "Record decision",
+    },
+  ];
+  run.business_route = {
+    path: "human_review",
+    label: "Held for human review",
+    detail: "The hosting change is paused.",
+  };
+  const entry = business.businessCases([run])[0];
+  assert.equal(entry.decisions.length, 1);
+  assert.equal(business.caseState(entry), "decisions");
+  const html = render(run);
+  assert.match(html, /Held for human review/);
+  assert.match(html, /#approvals\/privacy-review/);
+  assert.match(html, /#trace\//);
+  assert.doesNotMatch(html, />Approve simulated change</);
+  assert.equal(business.workspaceRoute("#trace/abc", false).traceId, "abc");
+  assert.equal(
+    business.workspaceRoute("#approvals/privacy-review", false).approvalId,
+    "privacy-review",
+  );
+  assert.equal(
+    business.workspaceRoute("#evals/guardrails", false).evalTab,
+    "guardrails",
+  );
+  assert.equal(business.workspaceRoute("#evals", false).page, "evals");
+});
+
+test("Evals explains actual attempts before the workbench and separates controls from quality", async () => {
+  const { default: Evals } = await server.ssrLoadModule("/src/Evals.tsx");
+  const runs = [
+    structuredClone(traces[0]),
+    structuredClone(traces[0]),
+    { ...structuredClone(traces[1]), mode: "replay" },
+    { ...structuredClone(traces[2]), mode: "simulation" },
+  ];
+  runs[1].id = "second-attempt";
+  runs[1].status = "failed";
+  const html = renderToStaticMarkup(
+    createElement(Evals, {
+      runs,
+      config: null,
+      starting: false,
+      onLaunch: () => {},
+      onOpen: () => {},
+      initialTab: "overview",
+    }),
+  );
+  assert.ok(
+    html.indexOf("Reviews, recordings and tests") <
+      html.indexOf("<h2>Test workbench</h2>"),
+  );
+  assert.match(html, /2<\/span><h3>AI reviews/);
+  assert.match(
+    html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " "),
+    /1 distinct document/,
+  );
+  assert.match(html, /Only scored evaluation batches compare results/);
+  assert.match(html, /Guardrail tests/);
+  assert.match(html, /Evolution history/);
+  for (const tab of [
+    "quality",
+    "guardrails",
+    "evolution",
+    "workbench",
+    "history",
+    "registry",
+  ]) {
+    assert.doesNotThrow(() =>
+      renderToStaticMarkup(
+        createElement(Evals, {
+          runs,
+          config: null,
+          starting: false,
+          onLaunch: () => {},
+          onOpen: () => {},
+          initialTab: tab,
+        }),
+      ),
+    );
+  }
 });

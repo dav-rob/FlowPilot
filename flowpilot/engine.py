@@ -25,6 +25,9 @@ from .registry import Registry
 from .simulation import simulation_step
 from .workflows import outcome_codes, WORKFLOW_OUTCOMES, COMMON_OUTCOMES
 from .store import now
+from .manual import create_reviews, pending as pending_reviews, route as business_route
+from .version import application_revision
+from .assurance import RULESET_VERSION
 
 ID_PATTERN = re.compile(
     r"\b(?:[A-Z]{1,4}-[0-9A-F]{6,}(?:-[A-Z0-9]{2,})*|SIM-TKT-\d{3,})\b"
@@ -197,6 +200,7 @@ def public_run(run):
         result["document_fingerprint"] = hashlib.sha256(
             run["input"].encode("utf-8")
         ).hexdigest()
+    result["business_route"] = business_route(run)
     return result
 
 
@@ -212,6 +216,38 @@ class Engine:
         self.tasks = {}
         self.sessions = {}
         self.approval_locks = {}
+
+    def enroll_saved_reviews(self):
+        """Append current handoffs to latest saved business findings, not past AI calls."""
+        seen = set()
+        for run in self.store.list("run"):
+            if (
+                run.get("mode") != "live"
+                or run.get("purpose", "business") != "business"
+            ):
+                continue
+            pub = public_run(run)
+            key = (
+                run.get("partition"),
+                pub.get("document_fingerprint") or run.get("case_id"),
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            if "manual_reviews" in run:
+                continue
+            old_status = run.get("status")
+            if create_reviews(run, migrated=True):
+                run["review_execution_status"] = old_status
+                self.emit(
+                    run,
+                    "handoff",
+                    "Saved findings enrolled for human review",
+                    "The current workflow opened this handoff from saved findings. No AI call was repeated and no historical rule-version claim was added.",
+                    result={"requests": run["manual_reviews"]},
+                )
+            if "manual_reviews" in run:
+                self.store.put("run", run)
 
     def session(self, run, authority=None):
         cid = run["_session_case_id"]
@@ -289,6 +325,8 @@ class Engine:
             "input": document,
             "mode": mode,
             "purpose": purpose,
+            "ruleset_version": RULESET_VERSION,
+            "application_revision": application_revision(),
             "status": "queued",
             "created_at": now(),
             "updated_at": now(),
@@ -846,6 +884,7 @@ class Engine:
             "args": args,
             "justification": justification[:1200],
             "status": "pending",
+            "created_at": now(),
         }
         run["approvals"].append(proposal)
         self.emit(
@@ -886,15 +925,25 @@ class Engine:
             f"{len(outcome['evidence'])} cited record(s) were observed in successful tool responses. This validates provenance, not correctness of interpretation.",
             evidence_ids=[e["record_id"] for e in outcome["evidence"]],
         )
+        if create_reviews(run):
+            self.emit(
+                run,
+                "handoff",
+                "Departmental review opened",
+                "The proposed next step is held for the named reviewers. No business change has been executed.",
+                result={"requests": run["manual_reviews"]},
+            )
         self.emit(
             run,
             "outcome",
-            "Investigation concluded",
+            "Review complete",
             outcome["summary"],
             result=outcome,
         )
 
-    async def approve(self, run_id, request_id, approve):
+    async def approve(self, run_id, request_id, approve, note=""):
+        if not isinstance(note, str) or len(note) > 2000:
+            raise ValueError("Decision note must contain at most 2,000 characters")
         lock = self.approval_locks.setdefault(run_id, asyncio.Lock())
         async with lock:
             if run_id in self.tasks:
@@ -919,6 +968,17 @@ class Engine:
                 raise ValueError(
                     "The investigation must conclude with validated evidence before actions can be approved"
                 )
+            if approve and any(
+                x["status"] != "approved" for x in run.get("manual_reviews", [])
+            ):
+                raise ValueError(
+                    "Required departmental reviews must be approved before applying this change"
+                )
+            p["decision_note"] = note.strip()
+            p["decided_at"] = now()
+            p["reviewer"] = "Local demo reviewer"
+            p["decision_ruleset_version"] = RULESET_VERSION
+            p["decision_application_revision"] = application_revision()
             if not approve:
                 p["status"] = "denied"
                 self.emit(
@@ -982,11 +1042,78 @@ class Engine:
                     arguments=p["args"],
                     result=result,
                 )
-            pending = any(a["status"] == "pending" for a in run["approvals"])
+            pending = pending_reviews(run)
             if run["status"] == "awaiting_approval":
                 run["status"] = "awaiting_approval" if pending else "completed"
             if run.get("outcome"):
                 run["outcome"]["requires_approval"] = pending
+            self.store.put("run", run)
+            return public_run(run)
+
+    async def decide_review(self, run_id, request_id, approve, note):
+        if not isinstance(note, str) or not note.strip() or len(note) > 2000:
+            raise ValueError("Add a decision note of 1–2,000 characters")
+        lock = self.approval_locks.setdefault(run_id, asyncio.Lock())
+        async with lock:
+            run = self.store.get("run", run_id)
+            if not run:
+                raise KeyError(run_id)
+            if (
+                run.get("mode") == "replay"
+                or run_id in self.tasks
+                or run.get("status") not in ("completed", "awaiting_approval")
+            ):
+                raise ValueError(
+                    "Decisions require a successfully completed original AI Review"
+                )
+            review = next(
+                (
+                    r
+                    for r in run.get("manual_reviews", [])
+                    if r["request_id"] == request_id
+                ),
+                None,
+            )
+            if not review:
+                raise KeyError(request_id)
+            if review["status"] != "pending":
+                raise ValueError("This review has already been decided")
+            review.update(
+                status="approved" if approve else "denied",
+                decision_note=note.strip(),
+                decided_at=now(),
+                reviewer="Local demo reviewer",
+                decision_ruleset_version=RULESET_VERSION,
+                decision_application_revision=application_revision(),
+            )
+            if not approve:
+                for proposal in run.get("approvals", []):
+                    if proposal["status"] == "pending":
+                        proposal.update(
+                            status="denied",
+                            decided_at=now(),
+                            reviewer="Local demo reviewer",
+                            decision_note="Required departmental approval declined: "
+                            + note.strip(),
+                        )
+            self.emit(
+                run,
+                "manual_decision",
+                (
+                    "Departmental review approved"
+                    if approve
+                    else "Departmental review declined"
+                ),
+                note.strip(),
+                result={
+                    "request_id": request_id,
+                    "department": review["department"],
+                    "decision": review["status"],
+                    "business_change_executed": False,
+                },
+            )
+            run["status"] = "awaiting_approval" if pending_reviews(run) else "completed"
+            run["outcome"]["requires_approval"] = pending_reviews(run)
             self.store.put("run", run)
             return public_run(run)
 
@@ -1000,11 +1127,13 @@ class Engine:
                 pass
         run = self.store.get("run", run_id)
         if run and run["status"] == "awaiting_approval":
-            for proposal in run["approvals"]:
+            for proposal in run["approvals"] + run.get("manual_reviews", []):
                 if proposal["status"] == "pending":
                     proposal.update(
                         status="denied",
-                        decision_reason="Run cancelled by human operator.",
+                        decision_reason="Review cancelled by human operator.",
+                        decision_note="Review cancelled by human operator.",
+                        decided_at=now(),
                     )
             if run.get("outcome"):
                 run["outcome"]["requires_approval"] = False

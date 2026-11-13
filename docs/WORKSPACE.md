@@ -1,54 +1,68 @@
 # Finance workspace
 
-The landing page is a business dashboard built from recorded investigations.
-It shows pending decisions, cases requiring follow-up, documents being checked,
-and documents available in the example inbox. Business-area cards filter cases;
-they never choose the agent's tools or determine how JSON is parsed.
+The home page presents business cases grouped by document, with the standard
+route and the human review route visible side by side. The inbox uses the supplied
+250 example documents; opening a page never initiates model calls.
 
-## Normal document flow
+## Document and decision flow
 
-1. Open **Documents** to read an example email or event and its attachments.
-2. Select **Process document**. The original input is sent unchanged to the shared
-   live investigation engine, which classifies the request and selects its checks.
-3. Read the findings and recommendations in **Cases & findings**.
-4. Open a pending decision to review its evidence and approve or decline a
-   simulated change.
+1. Open **Documents**, read the correspondence and attachments, and select
+   **Review document**. Original input goes unchanged to the shared AI engine.
+2. Read **Findings, next steps** in **Cases & findings**. Routine reviews finish
+   without opening unrelated approval workflows.
+3. Explicit handoff outcomes open named departmental work items in **Approvals**.
+   For example, `block_pending_privacy_assessment` holds the proposed contract or
+   processing change for Privacy; other mentioned departments are not all added.
+4. Reviewers enter a decision note and approve or decline. Departmental approval
+   records a decision only. It does not amend a contract, change customer data,
+   grant retrospective approval or execute a consequential action.
+5. A consequential action is a separate proposal. Required departmental decisions
+   must be approved before that proposal can execute. A declined departmental
+   review also denies dependent pending action proposals. Identity, legal holds,
+   retention, tool scope and exact action approval remain independently enforced.
+6. **Open trace** from a business result opens its observability page: model and
+   tool calls, timing, usage where reported, validation, handoffs, decisions and
+   raw recorded data. No private model reasoning is claimed.
 
-The inbox uses the supplied 250 example documents. No mailbox, watched folder or
-webhook feed is connected. Processing is explicitly initiated from a document;
-opening the dashboard or inbox never starts model calls.
+Approvals concern fictional state and are attributed to the local demo reviewer.
+The app does not authenticate bank roles or implement production separation of
+ duties. Decisions, notes, timestamps and results persist in SQLite. Cancelling
+an awaiting review denies its pending action and departmental requests. Saved
+replays cannot make decisions.
 
-JSON, line-delimited JSON, email, Markdown and text inputs are presented as readable
-correspondence. This presentation parser has no role in classification or routing.
-Original inputs remain available in each investigation's document and technical record.
+## Case counts and earlier findings
 
-## Case counts
+Repeated checks are grouped by partition and case ID; identical custom inputs
+use a content fingerprint. Latest findings supply the headline; earlier pending
+action requests retain their exact execution links. Tests, scored evaluations and
+simulations do not inflate business totals. Read-only recordings are a fallback
+when an original review is absent.
 
-Repeated checks of the same document are grouped into one case. Known documents
-use their partition and case ID; identical custom inputs use a content fingerprint.
-The most recent investigation supplies the headline finding. Pending approvals
-from earlier investigations remain visible and link to their exact requests.
+At startup, the latest successful original business findings can be enrolled in
+the current manual workflow. A new, timestamped handoff explicitly identifies
+this origin. Historical trace events, timings and unknown rule versions are not
+rewritten or credited as new AI execution. `review_execution_status` preserves
+the previous completed state when enrolment creates a pending decision.
 
-Developer tests, evaluations and deterministic simulations are excluded from
-business totals. Saved live examples are displayed only when the original
-investigation is unavailable, labelled read-only, and never counted as actionable
-approvals. Findings with unresolved questions or recommended follow-up remain
-visible; completing an AI investigation does not establish that its business
-issues have been resolved.
+## Evals
 
-## Developer view
+**Evals** is available in normal navigation. Its first section explains actual AI
+attempts, saved recordings, simulations, repeated documents and failures. The
+Test Workbench follows that explanation. Subsections provide:
 
-Append `?developer=true` before the hash to reveal the test workbench, complete
-execution history, evaluation and tool registry:
+- Quality: scored evaluations, expected versus actual outcomes, evidence and tool
+  coverage, models, durations and versions when recorded.
+- Guardrails: readable rule/check/response/exception definitions and repeatable
+  isolated runtime tests, including permitted actions as positive controls.
+- Evolution: sourced development observations and append-only measured guardrail
+  results, with test/rule versions and implementation fingerprints.
+- Test workbench, execution history and tool registry for technical exploration.
 
-- Local: `http://127.0.0.1:8766/?developer=true#workbench`
-- Shared: append `?developer=true#workbench` to the existing `/flowpilot/` URL.
+New reviews and evaluations record application and ruleset versions. Earlier
+versions remain unknown. Deterministic tests do not measure live AI performance
+or comprehensive prompt-injection resistance. See [ASSURANCE.md](ASSURANCE.md).
 
-The workbench retains the sample selector, original JSON/input inspector and
-Live AI/Simulation settings. It creates runs with `purpose: "test"`; evaluations
-create `purpose: "evaluation"`. Normal document processing uses `"business"`.
-Historical unlabelled live runs retain their business classification.
-
-This query parameter controls navigation visibility, not authentication or API
-permissions. Choose **Developer view · Exit** to return to the normal workspace.
-Old `#investigations` links open Overview; normal `#history` links open Cases & findings.
+Direct links include `#evals/guardrails`, `#evals/evolution`, `#evals/workbench`,
+`#approvals` and `#trace/<execution-id>`. Old developer-opt-in links are preserved
+as redirects into Evals. `?developer=true` remains a navigation preference, not
+an authentication boundary. There is no connected mailbox, folder or webhook.

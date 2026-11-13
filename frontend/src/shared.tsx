@@ -104,7 +104,7 @@ export function ModeBadge({ mode }: { mode: Mode | "replay" }) {
         <FlaskConical size={12} />
       )}{" "}
       {mode === "live"
-        ? "Live AI"
+        ? "AI Review"
         : mode === "replay"
           ? "Recorded replay"
           : "Simulation"}
@@ -176,7 +176,7 @@ export function ModePicker({
             )}
           </span>
           <span>
-            <strong>{mode === "live" ? "Live AI" : "Simulation"}</strong>
+            <strong>{mode === "live" ? "AI Review" : "Simulation"}</strong>
             <small>
               {mode === "live"
                 ? "Your local AI subscriptions"
@@ -193,9 +193,9 @@ export function WorkflowPath({ stage = 0 }: { stage?: number }) {
   return (
     <div
       className="workflow-path"
-      aria-label={`Workflow: ${["Intake", "Classify", "Investigate", "Review"][stage] ?? "Intake"}`}
+      aria-label={`Workflow: ${["Intake", "Classify", "Check records", "Findings"][stage] ?? "Intake"}`}
     >
-      {["Intake", "Classify", "Investigate", "Review"].map((label, i) => (
+      {["Intake", "Classify", "Check records", "Findings"].map((label, i) => (
         <div
           className={`path-stage ${i <= stage ? "reached" : ""} ${i === stage ? "current" : ""}`}
           key={label}

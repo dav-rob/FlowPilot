@@ -1,6 +1,8 @@
 export type Mode = "live" | "simulation";
 export type Partition = "train" | "validation" | "test";
 export type Page =
+  | "approvals"
+  | "evals"
   | "overview"
   | "documents"
   | "cases"
@@ -86,6 +88,22 @@ export interface Approval {
   justification: string;
   status: string;
   result?: object;
+  created_at?: string;
+  decided_at?: string;
+  decision_note?: string;
+  department?: string;
+}
+export interface ManualReview {
+  request_id: string;
+  department: string;
+  title: string;
+  hold_scope: string;
+  next_step: string;
+  reason: string;
+  status: string;
+  created_at: string;
+  decision_note?: string;
+  decided_at?: string;
 }
 export interface Run {
   id: string;
@@ -104,6 +122,10 @@ export interface Run {
   outcome: Outcome | null;
   events?: TraceEvent[];
   approvals?: Approval[];
+  manual_reviews?: ManualReview[];
+  business_route?: { path: string; label: string; detail: string };
+  ruleset_version?: string;
+  application_revision?: string;
   metrics: {
     tool_calls?: number;
     iterations?: number;

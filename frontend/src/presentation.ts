@@ -139,6 +139,8 @@ export function businessText(
   for (const [name, label] of Object.entries(toolLabels))
     text = text.replace(new RegExp(`\\b${name}\\b`, "g"), label.toLowerCase());
   const phrases: [RegExp, string][] = [
+    [/\bInvestigation into\b/g, "Review of"],
+    [/\binvestigation into\b/g, "review of"],
     [/\bBusiness Email Compromise \(BEC\)/gi, "email impersonation fraud"],
     [/\bBEC\b/g, "email impersonation fraud"],
     [/\bMAC address\b/gi, "device hardware address"],
@@ -255,8 +257,7 @@ export function outcomeTitle(run: Run): string {
     }
   }
   return (
-    outcomeLabels[run.outcome?.outcome_code ?? ""] ??
-    "Review the investigation findings"
+    outcomeLabels[run.outcome?.outcome_code ?? ""] ?? "Review the findings"
   );
 }
 
@@ -266,11 +267,10 @@ const workflowDescriptions: Record<string, string> = {
     "Check whether business systems meet a policy requirement.",
   gdpr_data:
     "Check a request to access, correct or delete personal information.",
-  it_asset: "Investigate an unexpected asset or conflicting inventory records.",
+  it_asset: "Review an unexpected asset or conflicting inventory records.",
   contract_risk:
     "Check which teams need to review a contract or its changed terms.",
-  out_of_scope:
-    "The request does not identify a supported business investigation.",
+  out_of_scope: "The request does not identify a supported business review.",
 };
 export const workflowDescription = (name: string) =>
   workflowDescriptions[name] ??
@@ -301,28 +301,33 @@ export function failureSummary(error?: string): string {
   if (/rate.?limit|usage limit|quota/i.test(error ?? ""))
     return "The AI service has reached a usage limit. The completed checks are saved below; try again when access is available.";
   if (/sign.?in|auth|credential|logged in/i.test(error ?? ""))
-    return "The AI connection needs attention before the investigation can continue. The completed checks are saved below.";
+    return "The AI connection needs attention before the review can continue. The completed checks are saved below.";
   if (/time.*limit|time.*budget|timed out|timeout/i.test(error ?? ""))
-    return "The investigation took longer than the allowed time. The checks completed so far are saved below.";
-  return "The investigation stopped before a verified result was available. Review the completed checks or start a new investigation.";
+    return "The review took longer than the allowed time. The checks completed so far are saved below.";
+  return "The review stopped before a verified result was available. Review the completed checks or start a new review.";
 }
 export function eventTitle(event: TraceEvent): string {
   if (event.tool) return toolLabel(event.tool);
   if (event.kind === "classification") return "Identified the type of request";
-  if (event.kind === "escalation")
-    return "Requested a more detailed investigation";
+  if (event.kind === "escalation") return "Requested a more detailed review";
   if (event.kind === "decision") return "Chose what to check next";
   if (event.kind === "outcome") return "Recorded the business outcome";
-  if (event.kind === "approval") return "Recorded an approval decision";
+  if (event.kind === "handoff") return "Opened a human review workflow";
+  if (event.kind === "manual_decision")
+    return "Recorded a departmental decision";
+  if (event.kind === "approval")
+    return /requested/i.test(event.title)
+      ? "Opened an approval request"
+      : "Recorded an approval decision";
   if (event.kind === "validation")
     return event.status === "blocked" || event.status === "failed"
       ? "A safeguard stopped this step"
       : "Checked the supporting evidence";
-  if (event.kind === "error") return "The investigation stopped";
+  if (event.kind === "error") return "The review stopped";
   if (event.kind === "model")
     return event.status === "running"
       ? "Deciding what to check next"
-      : "Recorded an investigation decision";
+      : "Recorded a review decision";
   return "Prepared the next checks";
 }
 export function resultSummary(event: TraceEvent): string {
@@ -368,7 +373,7 @@ export function resultSummary(event: TraceEvent): string {
     if (Array.isArray(data[key]))
       return `${data[key].length} relevant record${data[key].length === 1 ? "" : "s"} returned.`;
   }
-  return "The findings were saved for this investigation.";
+  return "The findings were saved for this review.";
 }
 
 export function completedWork(run: Run): {

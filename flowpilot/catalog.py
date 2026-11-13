@@ -31,7 +31,7 @@ WORKFLOWS = [
     },
     {
         "id": "it_asset",
-        "name": "IT asset investigation",
+        "name": "IT asset review",
         "description": "Resolve inventory anomalies and security concerns.",
         "icon": "Server",
         "color": "orange",
