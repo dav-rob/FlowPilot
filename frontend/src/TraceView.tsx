@@ -128,20 +128,34 @@ export default function TraceView({
           cost data is unknown, not zero.
         </p>
         <Metrics value={(run.metrics.usage ?? {}) as Record<string, unknown>} />
+        <p>
+          Total call time includes routing and CLI overhead. Provider run time
+          is the duration reported by the CLI. Provider API time is shown only
+          when independently measured or explicitly reported; it can include
+          network time, retries or multiple requests. Older recordings cannot
+          supply missing timings.
+        </p>
         <table>
-          <caption>Recorded model response timings</caption>
+          <caption>Recorded AI call timings</caption>
           <thead>
             <tr>
               <th>Step</th>
               <th>Provider / model</th>
-              <th>Duration</th>
+              <th>Total call time</th>
+              <th>Provider run time</th>
+              <th>Provider API time</th>
             </tr>
           </thead>
           <tbody>
             {events
               .filter(
                 (e) =>
-                  (e.provider || e.model) && e.duration_ms != null && !e.tool,
+                  (e.kind === "classification" ||
+                    (e.kind === "model" &&
+                      e.title === "Model response received")) &&
+                  (e.provider || e.model) &&
+                  e.duration_ms != null &&
+                  !e.tool,
               )
               .map((e) => (
                 <tr key={e.id}>
@@ -150,6 +164,21 @@ export default function TraceView({
                     {e.provider} / {e.model}
                   </td>
                   <td>{duration(e.duration_ms)}</td>
+                  <td>
+                    {e.timing?.provider_run_duration_ms != null
+                      ? duration(e.timing.provider_run_duration_ms)
+                      : "Not reported"}
+                  </td>
+                  <td
+                    title={
+                      e.timing?.api_timing_scope ??
+                      "API-only timing was not recorded"
+                    }
+                  >
+                    {e.timing?.provider_api_duration_ms != null
+                      ? duration(e.timing.provider_api_duration_ms)
+                      : "Not reported"}
+                  </td>
                 </tr>
               ))}
           </tbody>

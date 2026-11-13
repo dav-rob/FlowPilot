@@ -65,3 +65,28 @@ New scored rows also expose expected_abstention and actual_abstention. The
 primary_correct score includes whether initial screening should defer; matching
 category labels alone does not imply that score should pass. Earlier rows without
 these fields retain their original values and show missing detail as unknown.
+
+## AI call timing
+
+New successful model-response and classification events carry `duration_ms` for
+the total application call, plus a `timing` object with independently identified
+measurements. This metadata is outside model-generated business output:
+
+- `adapter_duration_ms`: measured CLI adapter elapsed time, including process
+  startup/execution/exit. Total event time may also include routing or fallback.
+- `provider_run_duration_ms`: the run duration reported by the provider CLI.
+  AGY supplies `result.duration_seconds`; Claude can supply `result.duration_ms`.
+- `provider_api_duration_ms`: API time only when reported explicitly (Claude's
+  `duration_api_ms`) or measured at the HTTP boundary (JEV). Claude's figure can
+  span multiple API requests/retries; JEV's includes network round-trip time.
+- `api_timing_source`, `run_timing_source`, `api_timing_scope`: describe origins and
+  scope. Unavailable timings are null, never derived by subtracting guessed CLI
+  overhead. AGY/Codex API-only timing is currently unavailable.
+
+Recorded earlier executions retain their original fields and do not receive
+invented API measurements. The legacy usage `latency_ms` includes CLI elapsed time
+and is not API-only inference latency. The trace table labels each timing scope.
+
+Sources: [AGY headless output](https://antigravity.google/docs/cli/headless/) defines
+run wall-clock duration; [Claude Agent SDK example](https://platform.claude.com/cookbook/claude-agent-sdk-07-hosting-the-agent)
+shows separate `duration_ms` and `duration_api_ms` fields.

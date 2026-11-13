@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import os
 import re
+import time
 from typing import Any
 
 import httpx
@@ -971,6 +972,7 @@ async def _classify_live_jev(
 
     try:
         async with httpx.AsyncClient(timeout=DEFAULT_JEV_TIMEOUT_SECONDS) as client:
+            request_started = time.monotonic()
             response = await client.post(
                 endpoint,
                 headers={
@@ -980,6 +982,7 @@ async def _classify_live_jev(
                 },
                 json=body,
             )
+            api_duration_ms = round((time.monotonic() - request_started) * 1000, 3)
     except httpx.TimeoutException as exc:
         raise AIError(
             "timeout",
@@ -1015,7 +1018,16 @@ async def _classify_live_jev(
             "invalid_output", "TypeSafe System One JEV returned non-JSON response body."
         ) from exc
 
-    return _parse_jev_response(data, requested_model=model_name, threshold=threshold)
+    classification = _parse_jev_response(
+        data, requested_model=model_name, threshold=threshold
+    )
+    classification["usage"]["timing"] = {
+        "transport": "http",
+        "provider_api_duration_ms": api_duration_ms,
+        "api_timing_source": "measured_http_round_trip",
+        "api_timing_scope": "HTTP request to response, including network and provider processing; not server-only inference time.",
+    }
+    return classification
 
 
 async def _classify_live_cli(
@@ -1098,6 +1110,8 @@ async def _classify_live_cli(
     ).strip()
 
     usage = dict(response.usage or {})
+    if getattr(response, "timing", None):
+        usage["timing"] = dict(response.timing)
     if response.events:
         usage["routing_events"] = list(response.events)
 

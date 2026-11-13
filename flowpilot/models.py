@@ -29,6 +29,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from jsonschema import Draft202012Validator
+from .timing import cli_timing
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -133,6 +134,7 @@ class ModelResponse:
     usage: dict = field(default_factory=dict)
     session_id: str | None = None
     events: list[dict] = field(default_factory=list)
+    timing: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -144,6 +146,7 @@ class AIResult:
     usage: dict = field(default_factory=dict)
     session_id: str | None = None
     transcript: dict = field(default_factory=dict)
+    timing: dict = field(default_factory=dict)
 
 
 def redact(text: Any, limit: int = 240) -> str:
@@ -1050,6 +1053,7 @@ class ClaudeProvider:
             usage=_normalize_usage(info.get("usage"), duration),
             session_id=info.get("session_id"),
             transcript=transcript,
+            timing=cli_timing("claude", duration, result),
         )
 
 
@@ -1154,6 +1158,7 @@ def interpret_agy(stdout: str, *, cwd: Path, before: set[str]) -> tuple[dict, di
         "denied_actions": (result or {}).get("denied_actions"),
         "steps": steps,
         "usage": (result or {}).get("usage"),
+        "duration_seconds": (result or {}).get("duration_seconds"),
         "num_turns": (result or {}).get("num_turns"),
         "status": (result or {}).get("status"),
         "finished_reason": (result or {}).get("finished_reason"),
@@ -1391,6 +1396,7 @@ class AgyProvider:
             usage=_normalize_usage(info.get("usage"), duration),
             session_id=info.get("conversation_id"),
             transcript=transcript,
+            timing=cli_timing("agy", duration, info),
         )
 
 
@@ -2254,6 +2260,7 @@ class CodexProvider:
             usage=_normalize_usage(info.get("usage"), duration),
             session_id=info.get("thread_id"),
             transcript=transcript,
+            timing=cli_timing("codex", duration, {}),
         )
 
 
@@ -2514,6 +2521,7 @@ class ModelRouter:
                 usage=usage,
                 session_id=session_id,
                 events=events,
+                timing=dict(getattr(result, "timing", None) or {}),
             )
 
         msg, earliest = self._all_cooling_message(policy, role)

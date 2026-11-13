@@ -716,3 +716,34 @@ async def test_injected_tool_text_cannot_make_nonexistent_record_valid_evidence(
     assert result["status"] == "failed"
     assert "not present" in result["error"]
     assert result["outcome"] is None
+
+
+@pytest.mark.asyncio
+async def test_model_call_timing_survives_router_response_and_durable_trace(store):
+    class TimedModel(ObservationModel):
+        async def complete(self, *args):
+            result = await super().complete(*args)
+            result.timing = {
+                "transport": "cli",
+                "provider_api_duration_ms": 123,
+                "api_timing_source": "test-only reported API duration",
+                "adapter_duration_ms": 500,
+            }
+            return result
+
+    model = TimedModel()
+    engine = Engine(
+        store, router_factory=lambda: model, classify_fn=supplier_classifier
+    )
+    run = make(engine)
+    result = await engine.execute(run["id"])
+    assert result["status"] == "completed"
+    events = [
+        e
+        for e in store.get("run", run["id"])["events"]
+        if e["title"] == "Model response received"
+    ]
+    assert events and all(
+        e["timing"]["provider_api_duration_ms"] == 123 for e in events
+    )
+    assert all("duration_ms" in e for e in events)

@@ -731,6 +731,15 @@ export function EventCard({
               Model: {event.provider} / {event.model}
             </p>
           )}
+          {event.duration_ms != null && (
+            <p>Total step time: {duration(event.duration_ms)}</p>
+          )}
+          {event.timing && (
+            <>
+              <h4>Call timing and measurement sources</h4>
+              <Json value={event.timing} />
+            </>
+          )}
           {event.arguments !== undefined && (
             <>
               <h4>Submitted arguments</h4>

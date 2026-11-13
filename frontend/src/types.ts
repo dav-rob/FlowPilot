@@ -50,6 +50,15 @@ export interface Classification {
   rationale: string;
   usage?: object;
 }
+export interface CallTiming {
+  transport?: "cli" | "http";
+  adapter_duration_ms?: number | null;
+  provider_run_duration_ms?: number | null;
+  provider_api_duration_ms?: number | null;
+  api_timing_source?: string | null;
+  run_timing_source?: string | null;
+  api_timing_scope?: string | null;
+}
 export interface TraceEvent {
   id: string;
   sequence: number;
@@ -64,6 +73,7 @@ export interface TraceEvent {
   provider?: string;
   model?: string;
   duration_ms?: number;
+  timing?: CallTiming;
   batch_id?: string;
   evidence_ids?: string[];
   [key: string]: unknown;

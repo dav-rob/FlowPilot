@@ -449,7 +449,11 @@ class Engine:
         if run["mode"] == "live":
             run["metrics"]["model_calls"] += 1
             self.store.put("run", run)
+        classification_started = time.monotonic()
         cls = await classifier(run["input"], mode=run["mode"], router=router)
+        classification_duration_ms = round(
+            (time.monotonic() - classification_started) * 1000, 3
+        )
         run["classification"] = cls
         if run["mode"] == "live":
             run["metrics"]["providers"].append(
@@ -476,6 +480,8 @@ class Engine:
             provider=cls.get("provider"),
             model=cls.get("model"),
             result=cls,
+            duration_ms=classification_duration_ms,
+            timing=cls.get("usage", {}).get("timing", {}),
         )
         categories = [c for c in cls["categories"] if c in WORKFLOW_GUIDANCE]
         if not categories:
@@ -603,6 +609,7 @@ class Engine:
                     provider=provider,
                     model=model,
                     duration_ms=round((time.monotonic() - t) * 1000, 2),
+                    timing=getattr(response, "timing", {}) or {},
                 )
             validate(step, step_schema)
             semantic_error = step_semantic_error(step)

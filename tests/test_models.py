@@ -362,6 +362,7 @@ print(json.dumps({
     "event": "result",
     "result": {
         "conversation_id": "conv-123",
+        "duration_seconds": 2.5,
         "status": "SUCCESS",
         "finished_reason": "",
         "denied_actions": [],
@@ -378,6 +379,8 @@ print(json.dumps({
     assert res.data == {"verdict": "hold"}
     assert res.provider == "agy"
     assert res.model == "gemini-3.8-flash-low"
+    assert res.timing["provider_run_duration_ms"] == 2500
+    assert res.timing["provider_api_duration_ms"] is None
 
 
 @pytest.mark.asyncio
@@ -518,6 +521,9 @@ async def test_live_jev_payload_contract_threshold_and_fail_closed(
     for d in DOMAINS:
         assert body["questions"][f"domain_{d}"]["type"] == "noul"
 
+    assert res["usage"]["timing"]["transport"] == "http"
+    assert res["usage"]["timing"]["provider_api_duration_ms"] >= 0
+    assert res["usage"]["timing"]["api_timing_source"] == "measured_http_round_trip"
     assert res["provider"] == "typesafe"
     assert res["model"] == "jev-2026-03"
     assert res["primary"] == "supplier_fraud"
@@ -683,3 +689,36 @@ async def test_cancellation_during_cli_preflight_never_launches_inference(tmp_pa
     release.set()
     assert await asyncio.to_thread(finished.wait, 2)
     assert not marker.exists()
+
+
+@pytest.mark.asyncio
+async def test_router_preserves_timing_outside_token_usage(tmp_path):
+    cfg = tmp_path / "ai-models.toml"
+    cfg.write_text(_test_policy_toml())
+    timing = {
+        "transport": "cli",
+        "adapter_duration_ms": 900,
+        "provider_run_duration_ms": 400,
+        "provider_api_duration_ms": None,
+    }
+
+    class Adapter:
+        def complete(self, **kwargs):
+            return AIResult(
+                data={"verdict": "ok"},
+                provider="agy",
+                model="gemini-3.8-flash-low",
+                usage={"input_tokens": 5},
+                timing=timing,
+            )
+
+    router = ModelRouter(
+        cfg,
+        adapter_factory=lambda route: Adapter(),
+        cooldowns=Cooldowns(tmp_path / "cooldown.json"),
+    )
+    response = await router.complete(
+        "screening", "sys", {"doc": "check"}, SAMPLE_SCHEMA
+    )
+    assert response.timing == timing
+    assert response.usage == {"input_tokens": 5}
