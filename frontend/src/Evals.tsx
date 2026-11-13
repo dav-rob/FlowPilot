@@ -94,7 +94,7 @@ const tabs: { id: Tab; label: string; icon: typeof Activity }[] = [
   { id: "overview", label: "Overview", icon: Activity },
   { id: "quality", label: "Quality", icon: FlaskConical },
   { id: "guardrails", label: "Guardrails", icon: ShieldCheck },
-  { id: "evolution", label: "Evolution", icon: GitBranch },
+  { id: "evolution", label: "Change history", icon: GitBranch },
   { id: "workbench", label: "Test workbench", icon: Code2 },
   { id: "history", label: "Execution history", icon: History },
   { id: "registry", label: "Tool registry", icon: Wrench },
@@ -373,7 +373,7 @@ export default function Evals({
                 supports it.
               </p>
               <span>
-                Evolution history <ArrowRight size={15} />
+                Change history <ArrowRight size={15} />
               </span>
             </button>
           </div>
@@ -407,14 +407,6 @@ export default function Evals({
               trace view; missing cost or token data is not estimated.
             </p>
           </section>
-          <div className="evals-workbench-intro">
-            <h2>Test workbench</h2>
-            <p>
-              Choose an example or supply a document. Test activity is kept
-              separate from the business dashboard.
-            </p>
-          </div>
-          {workbench}
         </>
       )}
       {tab === "workbench" && workbench}
@@ -672,7 +664,7 @@ export default function Evals({
             <ErrorNotice message={assurance.error} retry={assurance.reload} />
           )}
           {assurance.loading && !assurance.data ? (
-            <Loading text="Loading evolution history…" />
+            <Loading text="Loading change history…" />
           ) : (
             <>
               {suites.length > 0 && (
@@ -818,7 +810,7 @@ export default function Evals({
               </div>
               {!changes.length && (
                 <Empty
-                  title="No evolution entries recorded"
+                  title="No change history recorded"
                   detail="Document a discovered edge case, the reviewed change and its regression evidence to start the history."
                 />
               )}

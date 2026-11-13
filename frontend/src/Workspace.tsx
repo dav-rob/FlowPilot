@@ -192,7 +192,7 @@ export function FinanceOverview({
     {
       label: "Ready to process",
       value: ready.length,
-      detail: "Documents in the example inbox",
+      detail: "Available examples · review on demand",
       icon: Inbox,
       tone: "teal",
       action: onInbox,
@@ -404,7 +404,8 @@ export function FinanceOverview({
         </summary>
         <p>
           This workspace uses fictional example documents and recorded reviews.
-          There is no connected mailbox or automatic document feed yet.
+          Inbox examples are reviewed on demand when you select Review document.
+          There is no automatic processing queue or connected mailbox.
           Processing a document uses the AI Review service. Test runs and
           duplicate replays are kept out of the business totals; a saved example
           is shown only when its original review is unavailable.

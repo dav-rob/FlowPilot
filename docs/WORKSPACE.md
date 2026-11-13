@@ -48,13 +48,13 @@ the previous completed state when enrolment creates a pending decision.
 
 **Evals** is available in normal navigation. Its first section explains actual AI
 attempts, saved recordings, simulations, repeated documents and failures. The
-Test Workbench follows that explanation. Subsections provide:
+Test Workbench is available only in its own tab. Subsections provide:
 
 - Quality: scored evaluations, expected versus actual outcomes, evidence and tool
   coverage, models, durations and versions when recorded.
 - Guardrails: readable rule/check/response/exception definitions and repeatable
   isolated runtime tests, including permitted actions as positive controls.
-- Evolution: sourced development observations and append-only measured guardrail
+- Change history: sourced development observations and append-only measured guardrail
   results, with test/rule versions and implementation fingerprints.
 - Test workbench, execution history and tool registry for technical exploration.
 

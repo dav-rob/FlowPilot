@@ -492,7 +492,7 @@ test("manual reviews count as business decisions and trace/evals have distinct r
   assert.equal(business.workspaceRoute("#evals", false).page, "evals");
 });
 
-test("Evals explains actual attempts before the workbench and separates controls from quality", async () => {
+test("Evals overview explains attempts and keeps the workbench in its own tab", async () => {
   const { default: Evals } = await server.ssrLoadModule("/src/Evals.tsx");
   const runs = [
     structuredClone(traces[0]),
@@ -512,10 +512,21 @@ test("Evals explains actual attempts before the workbench and separates controls
       initialTab: "overview",
     }),
   );
-  assert.ok(
-    html.indexOf("Reviews, recordings and tests") <
-      html.indexOf("<h2>Test workbench</h2>"),
+  assert.match(html, /Reviews, recordings and tests/);
+  assert.doesNotMatch(html, /Choose a review|Input inspector|Execution mode/);
+  assert.doesNotMatch(html, /<h2>Test workbench<\/h2>/);
+  const workbenchHtml = renderToStaticMarkup(
+    createElement(Evals, {
+      runs,
+      config: null,
+      starting: false,
+      onLaunch: () => {},
+      onOpen: () => {},
+      initialTab: "workbench",
+    }),
   );
+  assert.match(workbenchHtml, /Choose a review/);
+  assert.match(workbenchHtml, /Input inspector/);
   assert.match(html, /2<\/span><h3>AI reviews/);
   assert.match(
     html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " "),
@@ -523,7 +534,7 @@ test("Evals explains actual attempts before the workbench and separates controls
   );
   assert.match(html, /Only scored evaluation batches compare results/);
   assert.match(html, /Guardrail tests/);
-  assert.match(html, /Evolution history/);
+  assert.match(html, /Change history/);
   for (const tab of [
     "quality",
     "guardrails",
