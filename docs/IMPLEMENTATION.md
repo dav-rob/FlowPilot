@@ -39,3 +39,18 @@ The supplied 250-case dataset, generator and mock enterprise APIs were retained.
 ## Remaining work
 
 No required implementation work remains for the local demonstration. Verified limits and further evaluation work are documented in `docs/VALIDATION.md`: live JEV authentication and classification are verified; confidence thresholds need broader calibration, and stronger cross-domain conclusions can still fail evidence validation. Production integrations, deployment and multiuser operation are outside scope.
+
+## Business decision routes and assurance — 13 November 2026
+
+Delivered the next UI/backend slice requested by the owner: explicit standard and
+human review routes; a separate durable Approvals queue; selective departmental
+handoffs; independent consequential-action decisions; decision notes/history;
+per-case Open trace; Evals history explanation, quality comparisons, workbench,
+guardrails and evolution. New review/evaluation versions are recorded; saved
+findings can open a current handoff through an explicit append-only event.
+
+A reproducible isolated control suite and immutable measurements support the
+readable evolution history. Real-model adversarial coverage is still a documented
+gap, not reported as passing. See WORKSPACE.md, ASSURANCE.md and the dated
+VALIDATION.md update for behaviour and verification. The agreed UI terminology is
+AI Review, In progress, Checks performed, Review document, and Findings, next steps.

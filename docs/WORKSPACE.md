@@ -26,7 +26,7 @@ route and the human review route visible side by side. The inbox uses the suppli
 
 Approvals concern fictional state and are attributed to the local demo reviewer.
 The app does not authenticate bank roles or implement production separation of
- duties. Decisions, notes, timestamps and results persist in SQLite. Cancelling
+duties. Decisions, notes, timestamps and results persist in SQLite. Cancelling
 an awaiting review denies its pending action and departmental requests. Saved
 replays cannot make decisions.
 

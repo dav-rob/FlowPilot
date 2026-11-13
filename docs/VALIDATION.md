@@ -59,3 +59,26 @@ The native browser confirmed a simulated approval recorded an executed result. I
 - Cross-domain model reliability needs further evaluation. The runtime supports multiple permitted workflows and per-workflow outcomes, and rejects unsupported citations rather than manufacturing success.
 - This is a single-operator loopback application over synthetic records, without production integrations, multiuser authentication or distributed execution. Restarted active jobs are marked failed rather than automatically resumed.
 - Public repository: [dav-rob/FlowPilot](https://github.com/dav-rob/FlowPilot). Full-history and publishable-file secret checks passed before publication; see [publication review](PUBLICATION_REVIEW.md).
+
+## Human review and Evals update — 13 November 2026
+
+- Backend: **81 passed, 1 opt-in live test skipped**. Frontend: **16 passed**;
+  production build succeeds. The separate isolated guardrail suite records
+  **23 passed, 0 failed** (16 boundary cases and 7 permitted-action controls).
+  Nine of ten catalogue rules are exercised by that suite; live prompt-injection
+  recognition remains unmeasured.
+- Native-browser checks verified the dashboard's two process routes, separate
+  approval queue, saved departmental decision/note/timestamp, read-only evidence,
+  case **Open trace**, Evals overview, guardrail results and evolution history.
+  Approval interaction testing used a copy of the demo database, leaving the
+  original pending decisions for the owner to demonstrate.
+- A new analysis scores the latest saved AI attempts for five labelled documents
+  against current expected answers, without new AI/business-tool calls. Historical
+  executions and previous evaluations remain intact. Custom inputs without labels
+  are excluded. Models/timings belong to original executions; old rule versions
+  remain unknown. Screening scores include expected abstention/deferral, so matching
+  category names do not by themselves establish a correct first-pass decision.
+- The public Tailscale prefix serves the same app without a new sign-in. No
+  upstream service routes, production integration or dataset records were changed.
+- The complete staged source tree passed Gitleaks with the JEV credential rule.
+  Credentials, runtime databases, backups and screenshots remain ignored.
