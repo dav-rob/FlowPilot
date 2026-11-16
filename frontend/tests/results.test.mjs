@@ -12,6 +12,7 @@ const server = await createServer({
 });
 const presentation = await server.ssrLoadModule("/src/presentation.ts");
 const { default: RunView } = await server.ssrLoadModule("/src/RunView.tsx");
+const screens = await server.ssrLoadModule("/src/Screens.tsx");
 const { api } = await server.ssrLoadModule("/src/api.ts");
 const business = await server.ssrLoadModule("/src/business.ts");
 const workspaceUI = await server.ssrLoadModule("/src/Workspace.tsx");
@@ -556,4 +557,371 @@ test("Evals overview explains attempts and keeps the workbench in its own tab", 
       ),
     );
   }
+});
+
+test("successful reports never render the failure panel", () => {
+  for (const run of traces) {
+    const html = render(run);
+    assert.doesNotMatch(html, /class="panel failure-panel"/);
+    assert.doesNotMatch(html, /Failure summary/);
+  }
+  const completedReplay = {
+    ...structuredClone(traces[0]),
+    mode: "replay",
+    status: "completed",
+    source_mode: "live",
+    source_status: "completed",
+  };
+  assert.doesNotMatch(render(completedReplay), /class="panel failure-panel"/);
+});
+
+test("exact cited-unconfirmed Live API error is prominent without opening technical JSON and avoids false claims", () => {
+  const failedRun = {
+    ...structuredClone(traces[0]),
+    id: "d04405e9a9ea48ec8ca2ad0b89f59645",
+    case_id: "CASE-PROC-01",
+    title: "Procurement review · invoice and signed contract",
+    mode: "live",
+    status: "failed",
+    source_run_id: undefined,
+    outcome: null,
+    error:
+      "ValueError: Conclusion cited records not present in observed tool results: SUP-E8E17955",
+    approvals: [
+      {
+        request_id: "APR-123456",
+        tool: "place_payment_hold",
+        args: {},
+        justification: "Hold payment pending verification",
+        status: "pending",
+      },
+    ],
+    events: [
+      {
+        id: "ev-review",
+        sequence: 1,
+        kind: "tool_result",
+        tool: "create_review_case",
+        status: "completed",
+        title: "create_review_case returned evidence",
+        detail: "Business tool response · synthetic enterprise",
+        timestamp: "2026-11-09T10:00:00Z",
+        result: { ok: true, data: { review_case_id: "REV-001" } },
+      },
+    ],
+  };
+
+  const html = render(failedRun);
+  const failureIndex = html.indexOf("failure-panel");
+  const detailsIndex = html.indexOf("Explore the details");
+  assert.ok(failureIndex > -1);
+  assert.ok(detailsIndex > failureIndex);
+
+  assert.match(html, /Review stopped: unconfirmed evidence/);
+  assert.match(html, /Unconfirmed evidence/);
+  assert.match(html, /SUP-E8E17955/);
+  assert.match(html, /Live API failure/);
+  assert.match(html, /How this review ran/);
+  assert.doesNotMatch(html, />Provenance</);
+  assert.match(html, /evidence check rejected the final report/i);
+  assert.doesNotMatch(html, /not an AI provider outage/i);
+  assert.match(html, /no final conclusion was accepted/i);
+  assert.match(html, /No verified outcome available/);
+  assert.match(html, /confirming lookup or retry/i);
+  assert.match(html, /Raw technical error/);
+  assert.match(html, /1 review case opened/);
+  assert.match(
+    html,
+    /1 proposed change cannot be approved because this run failed/,
+  );
+  assert.doesNotMatch(html, />Approve simulated change</);
+  assert.doesNotMatch(
+    html,
+    /invented|never appeared anywhere|record does not exist|doesn&#x27;t exist/i,
+  );
+  assert.doesNotMatch(html, /<details[^>]*class="failure-technical-details"[^>]*open/);
+});
+
+test("live vs simulation vs failed-source replay provenance is distinct and replays do not claim AI ran", () => {
+  const baseFailed = {
+    ...structuredClone(traces[0]),
+    outcome: null,
+    events: [],
+    error: "RuntimeError: Tool call budget exhausted; no further actions executed.",
+  };
+
+  const liveHtml = render({ ...baseFailed, mode: "live", status: "failed" });
+  assert.match(liveHtml, /Live API failure/);
+  assert.match(liveHtml, /not a scripted simulation/i);
+
+  const simHtml = render({
+    ...baseFailed,
+    mode: "simulation",
+    status: "failed",
+  });
+  assert.match(simHtml, /Simulation failure/);
+  assert.match(simHtml, /no Live AI calls were made/i);
+
+  const replayLiveHtml = render({
+    ...baseFailed,
+    mode: "replay",
+    status: "completed",
+    source_run_id: "orig-1",
+    source_mode: "live",
+    source_status: "failed",
+  });
+  assert.match(replayLiveHtml, /Recorded replay of failed Live API run/);
+  assert.match(replayLiveHtml, /Replaying did not run AI/);
+  assert.match(replayLiveHtml, /Nothing is running or being changed/);
+
+  const replaySimHtml = render({
+    ...baseFailed,
+    mode: "replay",
+    status: "completed",
+    source_run_id: "orig-2",
+    source_mode: "simulation",
+    source_status: "failed",
+  });
+  assert.match(replaySimHtml, /Recorded replay of failed simulation/);
+  assert.match(replaySimHtml, /Replaying did not run AI/);
+});
+
+test("execution history displays concise failure reason directly on failed and failed-replay rows", () => {
+  const liveFailed = {
+    ...structuredClone(traces[0]),
+    id: "d04405e9a9ea48ec8ca2ad0b89f59645",
+    case_id: "CASE-LIVE-FAIL",
+    title: "Procurement review · invoice and signed contract",
+    mode: "live",
+    status: "failed",
+    outcome: null,
+    error:
+      "ValueError: Conclusion cited records not present in observed tool results: SUP-E8E17955",
+  };
+  const replayFailed = {
+    ...structuredClone(traces[0]),
+    id: "replay-failed-1",
+    case_id: "CASE-REPLAY-FAIL",
+    title: "Procurement replay",
+    mode: "replay",
+    status: "completed",
+    source_run_id: "d04405e9a9ea48ec8ca2ad0b89f59645",
+    source_mode: "live",
+    source_status: "failed",
+    outcome: null,
+    error: liveFailed.error,
+  };
+  const unknownFailed = {
+    ...structuredClone(traces[0]),
+    id: "unknown-failed-1",
+    case_id: "CASE-UNK-FAIL",
+    title: "Unknown failure case",
+    mode: "simulation",
+    status: "failed",
+    outcome: null,
+    error: "RuntimeError: Upstream ledger lock contention on shard-4",
+  };
+  const okRun = {
+    ...structuredClone(traces[0]),
+    id: "ok-run-1",
+    case_id: "CASE-OK",
+    title: "Successful case",
+    mode: "live",
+    status: "completed",
+  };
+
+  const html = renderToStaticMarkup(
+    createElement(screens.RunHistoryTable, {
+      runs: [liveFailed, replayFailed, unknownFailed, okRun],
+      onOpen: () => {},
+    }),
+  );
+
+  const livePresentation = presentation.describeFailure(liveFailed);
+  const replayPresentation = presentation.describeFailure(replayFailed);
+  const unknownPresentation = presentation.describeFailure(unknownFailed);
+
+  assert.ok(html.includes(livePresentation.historySummary));
+  assert.match(html, /Unconfirmed evidence reference \(SUP-E8E17955\)/);
+  assert.ok(html.includes(replayPresentation.historySummary));
+  assert.match(html, /Source Live API run failed \(replay ran no AI\)/);
+  assert.ok(html.includes(unknownPresentation.historySummary));
+  assert.match(html, /Upstream ledger lock contention on shard-4/);
+  // Successful row does not display a failure reason line.
+  assert.equal((html.match(/history-failure-reason/g) ?? []).length, 3);
+  // Persisted status badges remain intact for both failed and completed replay rows.
+  assert.match(html, /status-failed/);
+  assert.match(html, /status-completed/);
+});
+
+test("failure classification handles all categories, avoids incidental evidence misclassification, redacts secrets, and escapes HTML", () => {
+  const schemaWithEvidence = presentation.describeFailure({
+    mode: "live",
+    error: "ValidationError: 'evidence' is a required property",
+  });
+  assert.equal(schemaWithEvidence.category, "validation");
+
+  const valueSchemaWithEvidence = presentation.describeFailure({
+    mode: "live",
+    error:
+      "ValueError: agy returned JSON that failed schema validation at outcome.evidence",
+  });
+  assert.equal(valueSchemaWithEvidence.category, "validation");
+
+  const pydanticSchemaWithEvidence = presentation.describeFailure({
+    mode: "live",
+    error: "1 validation error for Outcome\nevidence\n  Field required",
+  });
+  assert.equal(pydanticSchemaWithEvidence.category, "validation");
+
+  const schemaUnobservedMention = presentation.describeFailure({
+    mode: "live",
+    error: "Schema error at outcome.evidence: cited field not observed in schema",
+  });
+  assert.equal(schemaUnobservedMention.category, "validation");
+
+  assert.equal(
+    presentation.describeFailure({
+      mode: "live",
+      error: "AIError: agy reported a quota or rate limit (429 RESOURCE_EXHAUSTED)",
+    }).category,
+    "quota",
+  );
+  assert.equal(
+    presentation.describeFailure({
+      mode: "live",
+      error: "AIError: agy is not signed in. Sign in and retry.",
+    }).category,
+    "auth",
+  );
+  for (const budgetError of [
+    "Investigation reached its configured wall-clock limit.",
+    "RuntimeError: Iteration budget exhausted.",
+    "RuntimeError: Tool call budget exhausted; no further actions executed.",
+    "RuntimeError: Model call budget exhausted; no unverified conclusion was generated.",
+  ]) {
+    assert.equal(
+      presentation.describeFailure({ mode: "live", error: budgetError })
+        .category,
+      "budget",
+    );
+  }
+  assert.equal(
+    presentation.describeFailure({
+      mode: "live",
+      error: "TOOL_FAILURE: KeyError: 'supplier_id'",
+    }).category,
+    "tool",
+  );
+  assert.equal(
+    presentation.describeFailure({
+      mode: "live",
+      error: "AIError: Claude's service was overloaded (503).",
+    }).category,
+    "provider",
+  );
+
+  const absent = presentation.describeFailure({
+    mode: "live",
+    error: undefined,
+  });
+  assert.equal(absent.category, "missing");
+  assert.match(absent.explanation, /no error message was recorded/i);
+  assert.match(absent.historySummary, /No failure reason was recorded/i);
+
+  const unknown = presentation.describeFailure({
+    mode: "live",
+    error: "CustomError: Unexpected store write conflict on partition-9",
+  });
+  assert.equal(unknown.category, "unknown");
+  assert.match(
+    unknown.explanation,
+    /Unexpected store write conflict on partition-9/,
+  );
+  assert.match(
+    unknown.historySummary,
+    /Unexpected store write conflict on partition-9/,
+  );
+
+  const unknownNotRequested = presentation.describeFailure({
+    mode: "live",
+    error: "ValueError: Returned vendor was not the requested entity",
+  });
+  assert.equal(unknownNotRequested.category, "unknown");
+  assert.match(
+    unknownNotRequested.explanation,
+    /Returned vendor was not the requested entity/,
+  );
+
+  // Construct JEV-shaped credential at runtime so no key-shaped literal appears in source.
+  const jevKeyPrefix = ["api", "key"].join("");
+  const jevKeyShort = [
+    jevKeyPrefix,
+    "0123456789abcdef",
+    "fedcba9876543210".repeat(2),
+  ].join("_");
+  const jevKeyMid = [
+    jevKeyPrefix,
+    "a1b2c3d4e5f60718".repeat(2),
+    "9988776655443322".repeat(4),
+  ].join("_");
+  const jevKeyMax = [
+    jevKeyPrefix,
+    "A1B2C3D4E5F60718".repeat(4),
+    "0011223344556677".repeat(8),
+  ].join("_");
+  const nonSecretToken = `${jevKeyPrefix}_short_nothex`;
+
+  assert.equal(
+    presentation.sanitizeErrorText(`Bad token ${jevKeyShort} and ${jevKeyMax}`),
+    "Bad token [redacted] and [redacted]",
+  );
+  assert.equal(
+    presentation.sanitizeErrorText(`Kept ${nonSecretToken} in message`),
+    `Kept ${nonSecretToken} in message`,
+  );
+
+  const unknownWithJevKey = presentation.describeFailure({
+    mode: "live",
+    error: `CustomError: Upstream webhook rejected ${jevKeyMid} for invoice check`,
+  });
+  assert.equal(unknownWithJevKey.category, "unknown");
+  assert.equal(unknownWithJevKey.rawError.includes(jevKeyMid), false);
+  assert.match(
+    unknownWithJevKey.explanation,
+    /Upstream webhook rejected \[redacted\] for invoice check/,
+  );
+
+  const fakeSkToken = ["sk", ["secret", "1234567890"].join("")].join("-");
+  const fakeBearerHeader = ["Bearer", ["topSecret", "Token", "999"].join("")].join(" ");
+  const fakeApiKeyAssignment = `${["api", "key"].join("_")}="${["myPrivate", "Key", "123"].join("")}"`;
+
+  const untrustedRun = {
+    ...structuredClone(traces[0]),
+    mode: "live",
+    status: "failed",
+    outcome: null,
+    error: `Error with ${fakeSkToken} ${fakeBearerHeader} ${fakeApiKeyAssignment} ${jevKeyMid} <script>alert("xss")</script>`,
+    events: [
+      {
+        id: "ev-err",
+        sequence: 1,
+        kind: "error",
+        status: "failed",
+        title: "Step failed",
+        detail: `Worker failed with ${jevKeyShort}`,
+        timestamp: "2026-11-09T10:00:00Z",
+      },
+    ],
+  };
+  const untrustedHtml = render(untrustedRun);
+  assert.doesNotMatch(untrustedHtml, /sk-secret1234567890/);
+  assert.doesNotMatch(untrustedHtml, /topSecretToken999/);
+  assert.doesNotMatch(untrustedHtml, /myPrivateKey123/);
+  assert.equal(untrustedHtml.includes(jevKeyMid), false);
+  assert.equal(untrustedHtml.includes(jevKeyShort), false);
+  assert.doesNotMatch(untrustedHtml, /apikey_/);
+  assert.match(untrustedHtml, /\[redacted\]/);
+  assert.doesNotMatch(untrustedHtml, /<script>alert/);
+  assert.match(untrustedHtml, /&lt;script&gt;alert/);
 });

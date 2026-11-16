@@ -291,20 +291,361 @@ export function priorityLabel(value?: string | number): string {
     )[String(value)] ?? "Not recorded"
   );
 }
-export function failureSummary(error?: string): string {
+export type FailureCategory =
+  | "evidence"
+  | "validation"
+  | "quota"
+  | "auth"
+  | "budget"
+  | "provider"
+  | "tool"
+  | "unknown"
+  | "missing";
+
+export interface FailurePresentation {
+  category: FailureCategory;
+  categoryLabel: string;
+  title: string;
+  explanation: string;
+  historyReason: string;
+  historySummary: string;
+  nextStep: string;
+  provenanceLabel: string;
+  provenanceDetail: string;
+  isReplay: boolean;
+  hasRecordedError: boolean;
+  rawError: string;
+  recordIds: string[];
+  runtimeBlocked: boolean;
+}
+
+const credentialPatterns: [RegExp, string][] = [
+  [/\bBearer\s+[A-Za-z0-9._~+/=-]{8,}/gi, "Bearer [redacted]"],
+  [/\bBasic\s+[A-Za-z0-9+/=]{8,}/gi, "Basic [redacted]"],
+  [/\bapikey_[0-9a-f]{16,64}_[0-9a-f]{32,128}\b/gi, "[redacted]"],
+  [/\bsk-(?:ant-)?[A-Za-z0-9_-]{8,}/g, "[redacted]"],
+  [/\bAIza[A-Za-z0-9_-]{12,}/g, "[redacted]"],
+  [/\bgh[pousr]_[A-Za-z0-9]{12,}/g, "[redacted]"],
+  [/\bxox[baprs]-[A-Za-z0-9-]{10,}/g, "[redacted]"],
+  [/\bAKIA[0-9A-Z]{16}\b/g, "[redacted]"],
+  [/\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_.-]+(?:\.[A-Za-z0-9_-]+)?/g, "[redacted]"],
+  [
+    /\b((?:api[_-]?key|access[_-]?token|auth[_-]?token|refresh[_-]?token|secret[_-]?key|client[_-]?secret|password|passwd|secret|token)\s*[:=]\s*)(?:"[^"]*"|'[^']*'|[^\s,;}{]{6,})/gi,
+    "$1[redacted]",
+  ],
+];
+
+export function sanitizeErrorText(error?: string): string {
+  if (typeof error !== "string") return "";
+  let cleaned = error
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!cleaned) return "";
+  for (const [pattern, replacement] of credentialPatterns)
+    cleaned = cleaned.replace(pattern, replacement);
+  return cleaned.length > 1200 ? cleaned.slice(0, 1197) + "…" : cleaned;
+}
+
+function truncateText(text: string, max = 110): string {
+  return text.length > max
+    ? text.slice(0, max - 1).replace(/\s+\S*$/, "") + "…"
+    : text;
+}
+
+function extractRecordIds(text: string): string[] {
+  const matches = text.match(
+    /\b(?:[A-Z]{1,4}-[0-9A-F]{6,}(?:-[A-Z0-9]{2,})*|SIM-TKT-\d{3,})\b/g,
+  );
+  return matches ? [...new Set(matches)] : [];
+}
+
+function describeFailureMessage(error?: string): Omit<
+  FailurePresentation,
+  "provenanceLabel" | "provenanceDetail" | "isReplay" | "historySummary"
+> {
+  const rawError = sanitizeErrorText(error);
+  if (!rawError) {
+    return {
+      category: "missing",
+      categoryLabel: "No error recorded",
+      title: "Review stopped without a recorded error",
+      explanation:
+        "The review stopped before a verified outcome was ready, and no error message was recorded in the saved trace.",
+      historyReason: "No failure reason was recorded",
+      nextStep:
+        "Check the steps or trace below to see where the review stopped, then start a new review if needed.",
+      hasRecordedError: false,
+      rawError: "",
+      recordIds: [],
+      runtimeBlocked: false,
+    };
+  }
+
+  const looksLikeSchemaValidation =
+    /schema validation|ValidationError|validation error for|jsonschema|schema error|invalid schema|schema mismatch|contract violation|additionalProperties|is a required property|missing required (?:field|property)|field required|is not of type|is not valid under any of the given schemas|not a JSON object|structured JSON|JSONDecodeError|invalid JSON|malformed JSON/i.test(
+      rawError,
+    );
+
+  const isEvidenceCitation =
+    !looksLikeSchemaValidation &&
+    (/Conclusion cited records not present in observed tool results/i.test(
+      rawError,
+    ) ||
+      /A business conclusion requires supporting evidence/i.test(rawError) ||
+      /\bINVALID_EVIDENCE\b/.test(rawError) ||
+      /(?:cited|citation|proposed action|review evidence)[^.\n]{0,80}(?:not observed|not yet observed|not present in observed|must have been observed|unobserved|unconfirmed)/i.test(
+        rawError,
+      ) ||
+      /citation not observed/i.test(rawError));
+
+  if (isEvidenceCitation) {
+    const recordIds = extractRecordIds(rawError);
+    if (recordIds.length > 0) {
+      const idList = recordIds.join(", ");
+      return {
+        category: "evidence",
+        categoryLabel: "Unconfirmed evidence",
+        title: "Review stopped: unconfirmed evidence",
+        explanation: `The evidence check rejected the final report because it cited ${idList}, which was not confirmed by a successful record lookup (it may only have appeared in an ambiguous or failed search). No final conclusion was accepted.`,
+        historyReason: `Unconfirmed evidence reference (${idList})`,
+        nextStep: `Inspect the checks below to see why ${idList} was not confirmed, run a confirming lookup or retry the review, and resolve any ambiguity before concluding.`,
+        hasRecordedError: true,
+        rawError,
+        recordIds,
+        runtimeBlocked: true,
+      };
+    }
+    return {
+      category: "evidence",
+      categoryLabel: "Unconfirmed evidence",
+      title: "Review stopped: unconfirmed evidence",
+      explanation:
+        "The evidence check rejected the final report because its supporting records were not confirmed by successful lookups, so no final conclusion was accepted.",
+      historyReason: "Unconfirmed or missing supporting evidence",
+      nextStep:
+        "Inspect the checks below to see which records were not confirmed, then retry the review.",
+      hasRecordedError: true,
+      rawError,
+      recordIds: [],
+      runtimeBlocked: true,
+    };
+  }
+
   if (
-    /not present|not.*observed|citation|supporting evidence|INVALID_EVIDENCE/i.test(
-      error ?? "",
+    looksLikeSchemaValidation ||
+    /kind=calls requires|finish response cannot|finish response requires|Escalation cannot|requires a recorded handoff|omitted its outcome|must select at least one action|tool_activity|unexpected tool activity|unsafe setup/i.test(
+      rawError,
     )
-  )
-    return "Some evidence could not be verified, so no final conclusion was accepted. The completed checks are saved below for review.";
-  if (/rate.?limit|usage limit|quota/i.test(error ?? ""))
-    return "The AI service has reached a usage limit. The completed checks are saved below; try again when access is available.";
-  if (/sign.?in|auth|credential|logged in/i.test(error ?? ""))
-    return "The AI connection needs attention before the review can continue. The completed checks are saved below.";
-  if (/time.*limit|time.*budget|timed out|timeout/i.test(error ?? ""))
-    return "The review took longer than the allowed time. The checks completed so far are saved below.";
-  return "The review stopped before a verified result was available. Review the completed checks or start a new review.";
+  ) {
+    return {
+      category: "validation",
+      categoryLabel: "Invalid step response",
+      title: "Review stopped: invalid step response",
+      explanation:
+        "A review step returned data that failed format or workflow checks, so no final conclusion was accepted.",
+      historyReason: `Validation error: ${truncateText(rawError, 90)}`,
+      nextStep:
+        "Open Raw technical error or the trace below to see which step failed validation, then retry the review.",
+      hasRecordedError: true,
+      rawError,
+      recordIds: [],
+      runtimeBlocked: true,
+    };
+  }
+
+  if (
+    /\brate[ _-]?limit\b|\busage[ _-]?limit\b|\bquota\b|\b429\b|too many requests|resource[_ ]exhausted|credits? (?:is |are |has been )?exhausted|cooling down|cooldown|hit your [\w -]{0,30}limit|\d+-hour limit|(?:weekly|daily|monthly) limit/i.test(
+      rawError,
+    )
+  ) {
+    return {
+      category: "quota",
+      categoryLabel: "Quota or rate limit",
+      title: "Review stopped: AI usage limit reached",
+      explanation:
+        "The AI service hit a usage or rate limit before the review finished, so no final conclusion was accepted. Checks completed so far are saved below.",
+      historyReason: "AI quota or rate limit reached",
+      nextStep:
+        "Wait for the quota or cooldown window to reset (or switch routes), then retry the review.",
+      hasRecordedError: true,
+      rawError,
+      recordIds: [],
+      runtimeBlocked: false,
+    };
+  }
+
+  if (
+    /not signed in|not logged in|sign[ -]?in|log ?in again|\/login|authentication|unauthori[sz]ed|\b40[13]\b|token (?:has )?expired|api[_ -]?key|ai-models\.toml|model policy is unavailable|PolicyError/i.test(
+      rawError,
+    )
+  ) {
+    return {
+      category: "auth",
+      categoryLabel: "Sign-in or setup error",
+      title: "Review stopped: AI setup needs attention",
+      explanation:
+        "The AI connection or model settings rejected access before the review finished, so no final conclusion was accepted. Checks completed so far are saved below.",
+      historyReason: "Authentication or model setup error",
+      nextStep:
+        "Make sure the local AI CLI is signed in and the model settings are valid, then retry the review.",
+      hasRecordedError: true,
+      rawError,
+      recordIds: [],
+      runtimeBlocked: false,
+    };
+  }
+
+  if (
+    /wall-?clock limit|time\s*budget|time\s*limit|timed out|\btimeout\b|did not finish (?:in time|within \d+ seconds)|iteration budget|tool call budget|parallel call budget|model call budget|context budget|context (?:window|length)|prompt is too long|input is too long|max_tokens|output space|more output than the allowed limit/i.test(
+      rawError,
+    )
+  ) {
+    const budgetKind = /model call budget/i.test(rawError)
+      ? "Model call limit reached"
+      : /tool call budget|parallel call budget/i.test(rawError)
+        ? "Tool call limit reached"
+        : /iteration budget/i.test(rawError)
+          ? "Step limit reached"
+          : /context budget|context (?:window|length)|prompt is too long|input is too long|max_tokens|output space|more output than the allowed limit/i.test(
+                rawError,
+              )
+            ? "Context or output limit reached"
+            : "Time limit exceeded";
+    return {
+      category: "budget",
+      categoryLabel: budgetKind,
+      title: `Review stopped: ${budgetKind.toLowerCase()}`,
+      explanation: `The review hit its configured limit (${budgetKind.toLowerCase()}) before finishing, so no final conclusion was accepted. Checks completed so far are saved below.`,
+      historyReason: budgetKind,
+      nextStep:
+        "Check the completed steps below. If you need to continue, narrow the document scope or start a new review.",
+      hasRecordedError: true,
+      rawError,
+      recordIds: [],
+      runtimeBlocked: true,
+    };
+  }
+
+  if (
+    /\bTOOL_FAILURE\b|\bSERVICE_UNAVAILABLE\b|business tool|tool (?:call|execution) failed/i.test(
+      rawError,
+    )
+  ) {
+    return {
+      category: "tool",
+      categoryLabel: "Record check failed",
+      title: "Review stopped: a record check failed",
+      explanation:
+        "A business record check hit an unexpected error, so no final conclusion was accepted. Checks completed so far are saved below.",
+      historyReason: `Record check failed: ${truncateText(rawError, 85)}`,
+      nextStep:
+        "Inspect the failed step in Checks performed below, then retry the review.",
+      hasRecordedError: true,
+      rawError,
+      recordIds: [],
+      runtimeBlocked: false,
+    };
+  }
+
+  if (
+    /\bAIError\b|CLI was not found|could not be started|overloaded|service unavailable|bad gateway|\b50[0234]\b|\b529\b|model_not_found|model not found|model catalog|not the requested (?:model|provider)|incomplete output|finished without a result|exited with status|escalation unavailable|ConnectionError|ConnectError|RemoteDisconnected/i.test(
+      rawError,
+    )
+  ) {
+    return {
+      category: "provider",
+      categoryLabel: "AI service error",
+      title: "Review stopped: AI service error",
+      explanation:
+        "The AI service failed or returned an incomplete reply before finishing, so no final conclusion was accepted. Checks completed so far are saved below.",
+      historyReason: `AI service error: ${truncateText(rawError, 85)}`,
+      nextStep:
+        "Check local AI service availability and model routing, then retry the review.",
+      hasRecordedError: true,
+      rawError,
+      recordIds: [],
+      runtimeBlocked: false,
+    };
+  }
+
+  return {
+    category: "unknown",
+    categoryLabel: "Execution error",
+    title: "Review stopped with an unexpected error",
+    explanation: `No final conclusion was accepted. Recorded reason: ${rawError}`,
+    historyReason: truncateText(rawError, 110),
+    nextStep:
+      "Check the recorded error and completed steps below, then retry the review if needed.",
+    hasRecordedError: true,
+    rawError,
+    recordIds: [],
+    runtimeBlocked: false,
+  };
+}
+
+export function describeFailure(
+  run: Pick<Run, "error" | "mode" | "source_mode" | "source_status" | "events">,
+): FailurePresentation {
+  const eventError = (run.events ?? [])
+    .filter((event) => event.kind === "error" && typeof event.detail === "string" && event.detail.trim())
+    .at(-1)?.detail;
+  const base = describeFailureMessage(
+    typeof run.error === "string" && run.error.trim() ? run.error : eventError,
+  );
+  const isReplay = run.mode === "replay";
+  let provenanceLabel: string;
+  let provenanceDetail: string;
+  let historySummary: string;
+
+  if (isReplay) {
+    const sourceText =
+      run.source_mode === "live"
+        ? "Live API"
+        : run.source_mode === "simulation"
+          ? "simulation"
+          : "recorded";
+    provenanceLabel =
+      run.source_mode === "live"
+        ? "Recorded replay of failed Live API run"
+        : run.source_mode === "simulation"
+          ? "Recorded replay of failed simulation"
+          : "Recorded replay of failed source run";
+    provenanceDetail = `Read-only replay of an earlier failed ${sourceText} run. Replaying did not run AI or change any records.`;
+    historySummary = `Source ${sourceText} run failed (replay ran no AI): ${base.historyReason}`;
+  } else if (run.mode === "simulation") {
+    provenanceLabel = "Simulation failure";
+    provenanceDetail =
+      "Offline simulation against synthetic business records (no Live AI calls were made).";
+    historySummary =
+      base.category === "missing"
+        ? base.historyReason
+        : base.category === "unknown"
+          ? `${base.categoryLabel}: ${base.historyReason}`
+          : base.historyReason;
+  } else {
+    provenanceLabel = "Live API failure";
+    provenanceDetail =
+      "Ran against the Live API using synthetic business records (not a scripted simulation).";
+    historySummary =
+      base.category === "missing"
+        ? base.historyReason
+        : base.category === "unknown"
+          ? `${base.categoryLabel}: ${base.historyReason}`
+          : base.historyReason;
+  }
+
+  return {
+    ...base,
+    provenanceLabel,
+    provenanceDetail,
+    isReplay,
+    historySummary,
+  };
+}
+
+export function failureSummary(error?: string): string {
+  return describeFailureMessage(error).explanation;
 }
 export function eventTitle(event: TraceEvent): string {
   if (event.tool) return toolLabel(event.tool);

@@ -40,6 +40,7 @@ import {
   Status,
   useResource,
 } from "./shared";
+import { describeFailure } from "./presentation";
 export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
   const resource = useResource<{ runs: Run[] }>("/runs", (data) =>
     data.runs.some(
@@ -184,61 +185,82 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
             }
           />
         ) : (
-          <div className="table-scroll">
-            <table className="data-table history-table">
-              <thead>
-                <tr>
-                  <th scope="col">Review</th>
-                  <th scope="col">Mode</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Created</th>
-                  <th scope="col">Duration</th>
-                  <th scope="col">
-                    <span className="sr-only">Open run</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((run) => (
-                  <tr key={run.id}>
-                    <td>
-                      <button
-                        className="table-title"
-                        onClick={() => onOpen(run)}
-                      >
-                        {run.title || "Untitled review"}
-                      </button>
-                      <span className="table-subtitle mono">
-                        {run.case_id || run.id}
-                        {run.source_run_id ? " · Recorded replay" : ""}
-                      </span>
-                    </td>
-                    <td>
-                      <ModeBadge mode={run.mode} />
-                    </td>
-                    <td>
-                      <Status status={run.status} />
-                    </td>
-                    <td className="nowrap muted">{dateTime(run.created_at)}</td>
-                    <td className="nowrap muted">
-                      {duration(run.duration_ms)}
-                    </td>
-                    <td>
-                      <button
-                        className="icon-button"
-                        aria-label={`Open ${run.title || run.id}`}
-                        onClick={() => onOpen(run)}
-                      >
-                        <ArrowUpRight size={17} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <RunHistoryTable runs={filtered} onOpen={onOpen} />
         )}
       </section>
+    </div>
+  );
+}
+
+export function RunHistoryTable({
+  runs,
+  onOpen,
+}: {
+  runs: Run[];
+  onOpen: (run: Run) => void;
+}) {
+  return (
+    <div className="table-scroll">
+      <table className="data-table history-table">
+        <thead>
+          <tr>
+            <th scope="col">Review</th>
+            <th scope="col">Mode</th>
+            <th scope="col">Status</th>
+            <th scope="col">Created</th>
+            <th scope="col">Duration</th>
+            <th scope="col">
+              <span className="sr-only">Open run</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {runs.map((run) => {
+            const isFailed = run.status === "failed";
+            const isFailedReplay =
+              run.mode === "replay" && run.source_status === "failed";
+            const failure =
+              isFailed || isFailedReplay ? describeFailure(run) : null;
+            return (
+              <tr key={run.id}>
+                <td>
+                  <button className="table-title" onClick={() => onOpen(run)}>
+                    {run.title || "Untitled review"}
+                  </button>
+                  <span className="table-subtitle mono">
+                    {run.case_id || run.id}
+                    {run.source_run_id ? " · Recorded replay" : ""}
+                  </span>
+                  {failure && (
+                    <p
+                      className={`history-failure-reason ${isFailedReplay ? "is-replay" : ""}`}
+                    >
+                      {failure.historySummary}
+                    </p>
+                  )}
+                </td>
+                <td>
+                  <ModeBadge mode={run.mode} />
+                </td>
+                <td>
+                  <Status status={run.status} />
+                </td>
+                <td className="nowrap muted">{dateTime(run.created_at)}</td>
+                <td className="nowrap muted">{duration(run.duration_ms)}</td>
+                <td>
+                  <button
+                    className="icon-button"
+                    aria-label={`Open ${run.title || run.id}`}
+                    onClick={() => onOpen(run)}
+                  >
+                    <ArrowUpRight size={17} />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }

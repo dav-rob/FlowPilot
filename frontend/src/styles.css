@@ -6926,3 +6926,159 @@ main .case-row small {
     padding: 13px;
   }
 }
+
+/* Prominent failure visibility on run details and execution history rows. */
+.failure-panel {
+  padding: 26px 30px;
+  margin-bottom: 18px;
+  border-top: 3px solid #c14b5d;
+  background: linear-gradient(125deg, #fff8f9, #fff 65%);
+}
+.failure-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.failure-panel-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ae4652;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.failure-panel-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.failure-category-badge {
+  color: #ae4652;
+  background: #fcecf0;
+  border-color: #f3d5dc;
+}
+.failure-provenance-badge {
+  color: #4f5468;
+  background: #f2f3f8;
+  border-color: #e2e4ee;
+}
+.failure-panel h2 {
+  font-size: clamp(22px, 2.5vw, 28px);
+  line-height: 1.25;
+  color: #362229;
+}
+.failure-outcome-status {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8c4f58;
+}
+.failure-record-ids {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+  font-size: 12px;
+  color: #5c5360;
+}
+.failure-record-ids code {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #fcecf0;
+  border: 1px solid #f2d5dd;
+  color: #9b3544;
+  font-size: 12px;
+  font-weight: 600;
+}
+.failure-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.failure-meta-grid > div {
+  background: #faf9fc;
+  border: 1px solid #ebe8f0;
+  border-radius: 7px;
+  padding: 14px 16px;
+}
+.failure-meta-grid h3 {
+  font-size: 12px;
+  font-weight: 650;
+  color: #554c61;
+  margin-bottom: 6px;
+}
+.failure-meta-grid p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #474e63;
+}
+.failure-activity-note {
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: 6px;
+  background: #fff8eb;
+  border: 1px solid #efe0bd;
+  color: #7e5a20;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.failure-activity-note p + p {
+  margin-top: 4px;
+}
+.failure-technical-details {
+  margin-top: 16px;
+  border-top: 1px solid #f0e6e9;
+  padding-top: 12px;
+}
+.failure-technical-details summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 550;
+  color: #67586c;
+  width: fit-content;
+}
+.failure-raw-error {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: #fbf8fa;
+  border: 1px solid #eedde2;
+  color: #5b3b42;
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.failure-raw-empty {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6f6675;
+}
+.history-failure-reason {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #9c414d;
+  max-width: 440px;
+  overflow-wrap: anywhere;
+}
+.history-failure-reason.is-replay {
+  color: #7c5660;
+}
+@media (max-width: 700px) {
+  .failure-panel {
+    padding: 22px 19px;
+  }
+  .failure-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

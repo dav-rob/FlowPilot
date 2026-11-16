@@ -42,12 +42,14 @@ import {
 import {
   businessText,
   completedWork,
+  describeFailure,
   eventTitle,
   failureSummary,
   outcomeTitle,
   priorityLabel,
   referenceNames,
   resultSummary,
+  sanitizeErrorText,
   workflowDescription,
   type ReferenceNames,
 } from "./presentation";
@@ -200,6 +202,27 @@ export default function RunView({
   const finalStatus =
     run.mode === "replay" ? (run.source_status ?? run.status) : run.status;
   const work = completedWork(run);
+  const failure = finalStatus === "failed" ? describeFailure(run) : null;
+  const sanitizedRunError = sanitizeErrorText(run.error);
+  const hasErrorEvents = !!run.events?.some(
+    (e) => e.kind === "error" && typeof e.detail === "string",
+  );
+  const sanitizedTrace =
+    run.error || (hasErrorEvents && run.events)
+      ? {
+          ...run,
+          ...(run.error ? { error: sanitizedRunError } : {}),
+          ...(hasErrorEvents && run.events
+            ? {
+                events: run.events.map((e) =>
+                  e.kind === "error" && typeof e.detail === "string"
+                    ? { ...e, detail: sanitizeErrorText(e.detail) }
+                    : e,
+                ),
+              }
+            : {}),
+        }
+      : run;
   const pendingApprovals =
     run.approvals?.filter((a) => a.status === "pending").length ?? 0;
   const latestCheck = [...events]
@@ -278,140 +301,233 @@ export default function RunView({
         </p>
       )}
 
-      <div className={`result-overview ${outcome ? "has-result" : ""}`}>
+      {failure && (
         <section
-          className={`panel result-hero ${!outcome ? "result-incomplete" : ""}`}
-          aria-labelledby="business-outcome-title"
+          className="panel failure-panel"
+          aria-labelledby="failure-panel-title"
           aria-live="polite"
         >
-          <div className="result-section-label">
-            <ShieldCheck size={18} /> Findings, next steps
+          <div className="failure-panel-header">
+            <div className="failure-panel-label">
+              <ShieldAlert size={18} />
+              <span>Failure summary</span>
+            </div>
+            <div className="failure-panel-badges">
+              <span className="badge failure-category-badge">
+                {failure.categoryLabel}
+              </span>
+              <span className="badge failure-provenance-badge">
+                {failure.provenanceLabel}
+              </span>
+            </div>
           </div>
-          {outcome ? (
-            <>
-              <div className="result-headline">
-                <h2 id="business-outcome-title">{outcomeTitle(run)}</h2>
-                <span className={`badge risk-${outcome.risk}`}>
-                  {readable(outcome.risk)} risk
-                </span>
-              </div>
-              <p className="result-lede">
-                {text(outcome.conclusion || outcome.summary)}
-              </p>
-              {outcome.summary && outcome.summary !== outcome.conclusion && (
-                <details className="result-summary-note">
-                  <summary>More about this finding</summary>
-                  <p>{text(outcome.summary)}</p>
-                </details>
-              )}
-              {!!outcome.departments?.length && (
-                <div className="result-owner">
-                  <span>Teams to involve</span>
-                  {outcome.departments.map((d) => (
-                    <span className="tag" key={d}>
-                      {readable(d)}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {(work.reviews > 0 || work.tasks > 0 || work.applied > 0) && (
-                <div className="result-done">
-                  <CheckCircle2 size={16} />
-                  <span>
-                    {[
-                      work.reviews > 0
-                        ? `${work.reviews} review case${work.reviews === 1 ? "" : "s"} opened`
-                        : "",
-                      work.tasks > 0
-                        ? `${work.tasks} follow-up task${work.tasks === 1 ? "" : "s"} created`
-                        : "",
-                      work.applied > 0
-                        ? `${work.applied} approved change${work.applied === 1 ? "" : "s"} applied to example data`
-                        : "",
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </span>
-                </div>
-              )}
-              {(pendingApprovals > 0 ||
-                (outcome.requires_approval && !work.applied)) && (
-                <div className="result-approval-note">
-                  <LockKeyhole size={16} />
-                  {pendingApprovals > 0
-                    ? `${pendingApprovals} proposed change${pendingApprovals === 1 ? " needs" : "s need"} your approval below.`
-                    : "Approval is required before the proposed changes can be made."}
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              <h2 id="business-outcome-title">
-                {active
-                  ? "In progress"
-                  : finalStatus === "cancelled"
-                    ? "Review stopped"
-                    : "No verified outcome available"}
-              </h2>
-              <p className="result-lede">
-                {active
-                  ? "The relevant records are being checked. Findings and recommended next steps will appear here when the review is complete."
-                  : finalStatus === "cancelled"
-                    ? "This review was stopped. The checks completed so far are saved below."
-                    : failureSummary(run.error)}
-              </p>
-              {active && (
-                <div className="result-progress">
-                  <LoaderCircle className="spin" size={16} />
-                  {latestCheck
-                    ? text(latestCheck.detail) || eventTitle(latestCheck)
-                    : "Reading the request and deciding which records to check…"}
-                </div>
-              )}
-            </>
+          <h2 id="failure-panel-title">{failure.title}</h2>
+          <p className="failure-outcome-status">
+            No verified outcome available
+          </p>
+          <p className="result-lede failure-explanation">
+            {failure.explanation}
+          </p>
+          {failure.recordIds.length > 0 && (
+            <div className="failure-record-ids">
+              <span>
+                Unconfirmed record reference
+                {failure.recordIds.length === 1 ? "" : "s"}:
+              </span>
+              {failure.recordIds.map((recordId) => (
+                <code key={recordId}>{recordId}</code>
+              ))}
+            </div>
           )}
+          <div className="failure-meta-grid">
+            <div>
+              <h3>How this review ran</h3>
+              <p>{failure.provenanceDetail}</p>
+            </div>
+            <div>
+              <h3>Next step</h3>
+              <p>{failure.nextStep}</p>
+            </div>
+          </div>
+          {(work.reviews > 0 || work.tasks > 0 || pendingApprovals > 0) && (
+            <div className="failure-activity-note">
+              {(work.reviews > 0 || work.tasks > 0) && (
+                <p>
+                  Earlier checks recorded:{" "}
+                  {[
+                    work.reviews > 0
+                      ? `${work.reviews} review case${work.reviews === 1 ? "" : "s"} opened`
+                      : "",
+                    work.tasks > 0
+                      ? `${work.tasks} follow-up task${work.tasks === 1 ? "" : "s"} created`
+                      : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                  .
+                </p>
+              )}
+              {pendingApprovals > 0 && (
+                <p>
+                  {pendingApprovals} proposed change
+                  {pendingApprovals === 1 ? "" : "s"} cannot be approved because
+                  this run failed without an accepted finding.
+                </p>
+              )}
+            </div>
+          )}
+          <details className="failure-technical-details">
+            <summary>Raw technical error</summary>
+            {failure.rawError ? (
+              <pre className="failure-raw-error" tabIndex={0}>
+                {failure.rawError}
+              </pre>
+            ) : (
+              <p className="failure-raw-empty">
+                No raw technical error message was recorded for this run.
+              </p>
+            )}
+          </details>
         </section>
+      )}
 
-        {outcome && (
+      {(outcome || finalStatus !== "failed") && (
+        <div className={`result-overview ${outcome ? "has-result" : ""}`}>
           <section
-            className="panel result-next"
-            aria-labelledby="recommendations-title"
+            className={`panel result-hero ${!outcome ? "result-incomplete" : ""}`}
+            aria-labelledby="business-outcome-title"
+            aria-live="polite"
           >
             <div className="result-section-label">
-              <ArrowUpRight size={18} /> Recommendations
+              <ShieldCheck size={18} /> Findings, next steps
             </div>
-            <h2 id="recommendations-title">What to do next</h2>
-            {outcome.recommendations?.length ? (
-              <ol className="result-steps">
-                {outcome.recommendations.map((item, i) => (
-                  <li key={i}>
-                    <span className="result-step-number" aria-hidden="true">
-                      {i + 1}
+            {outcome ? (
+              <>
+                <div className="result-headline">
+                  <h2 id="business-outcome-title">{outcomeTitle(run)}</h2>
+                  <span className={`badge risk-${outcome.risk}`}>
+                    {readable(outcome.risk)} risk
+                  </span>
+                </div>
+                <p className="result-lede">
+                  {text(outcome.conclusion || outcome.summary)}
+                </p>
+                {outcome.summary && outcome.summary !== outcome.conclusion && (
+                  <details className="result-summary-note">
+                    <summary>More about this finding</summary>
+                    <p>{text(outcome.summary)}</p>
+                  </details>
+                )}
+                {!!outcome.departments?.length && (
+                  <div className="result-owner">
+                    <span>Teams to involve</span>
+                    {outcome.departments.map((d) => (
+                      <span className="tag" key={d}>
+                        {readable(d)}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {(work.reviews > 0 || work.tasks > 0 || work.applied > 0) && (
+                  <div className="result-done">
+                    <CheckCircle2 size={16} />
+                    <span>
+                      {[
+                        work.reviews > 0
+                          ? `${work.reviews} review case${work.reviews === 1 ? "" : "s"} opened`
+                          : "",
+                        work.tasks > 0
+                          ? `${work.tasks} follow-up task${work.tasks === 1 ? "" : "s"} created`
+                          : "",
+                        work.applied > 0
+                          ? `${work.applied} approved change${work.applied === 1 ? "" : "s"} applied to example data`
+                          : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </span>
-                    <p>{text(item)}</p>
-                  </li>
-                ))}
-              </ol>
+                  </div>
+                )}
+                {finalStatus !== "failed" &&
+                  (pendingApprovals > 0 ||
+                    (outcome.requires_approval && !work.applied)) && (
+                    <div className="result-approval-note">
+                      <LockKeyhole size={16} />
+                      {pendingApprovals > 0
+                        ? `${pendingApprovals} proposed change${pendingApprovals === 1 ? " needs" : "s need"} your approval below.`
+                        : "Approval is required before the proposed changes can be made."}
+                    </div>
+                  )}
+              </>
             ) : (
-              <p className="result-no-next">
-                No further steps were recommended in this review.
-              </p>
-            )}
-            {!!outcome.unresolved?.length && (
-              <div className="result-questions">
-                <h3>
-                  <MessageSquare size={17} /> Questions still to resolve
-                </h3>
-                <ul>
-                  {outcome.unresolved.map((item, i) => (
-                    <li key={i}>{text(item)}</li>
-                  ))}
-                </ul>
-              </div>
+              <>
+                <h2 id="business-outcome-title">
+                  {active
+                    ? "In progress"
+                    : finalStatus === "cancelled"
+                      ? "Review stopped"
+                      : "No verified outcome available"}
+                </h2>
+                <p className="result-lede">
+                  {active
+                    ? "The relevant records are being checked. Findings and recommended next steps will appear here when the review is complete."
+                    : finalStatus === "cancelled"
+                      ? "This review was stopped. The checks completed so far are saved below."
+                      : failureSummary(run.error)}
+                </p>
+                {active && (
+                  <div className="result-progress">
+                    <LoaderCircle className="spin" size={16} />
+                    {latestCheck
+                      ? text(latestCheck.detail) || eventTitle(latestCheck)
+                      : "Reading the request and deciding which records to check…"}
+                  </div>
+                )}
+              </>
             )}
           </section>
-        )}
-      </div>
+
+          {outcome && (
+            <section
+              className="panel result-next"
+              aria-labelledby="recommendations-title"
+            >
+              <div className="result-section-label">
+                <ArrowUpRight size={18} /> Recommendations
+              </div>
+              <h2 id="recommendations-title">What to do next</h2>
+              {outcome.recommendations?.length ? (
+                <ol className="result-steps">
+                  {outcome.recommendations.map((item, i) => (
+                    <li key={i}>
+                      <span className="result-step-number" aria-hidden="true">
+                        {i + 1}
+                      </span>
+                      <p>{text(item)}</p>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p className="result-no-next">
+                  No further steps were recommended in this review.
+                </p>
+              )}
+              {!!outcome.unresolved?.length && (
+                <div className="result-questions">
+                  <h3>
+                    <MessageSquare size={17} /> Questions still to resolve
+                  </h3>
+                  <ul>
+                    {outcome.unresolved.map((item, i) => (
+                      <li key={i}>{text(item)}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </section>
+          )}
+        </div>
+      )}
 
       <div className="result-explanation-label">Explore the details</div>
       <a
@@ -592,10 +708,10 @@ export default function RunView({
             </button>
           )}
         </div>
-        {run.error && (
+        {sanitizedRunError && (
           <div className="error-notice">
             <ShieldAlert size={17} />
-            <span>{run.error}</span>
+            <span>{sanitizedRunError}</span>
           </div>
         )}
         <h3>Execution details</h3>
@@ -624,7 +740,7 @@ export default function RunView({
         </details>
         <details>
           <summary>Complete execution trace (JSON)</summary>
-          <Json value={run} />
+          <Json value={sanitizedTrace} />
         </details>
       </Disclosure>
     </div>
@@ -721,6 +837,11 @@ export function EventCard({
         {detail && <p className="event-detail">{detail}</p>}
         <details className="result-event-technical">
           <summary>Technical details</summary>
+          {event.kind === "error" && event.detail && (
+            <p>
+              Recorded error: <code>{sanitizeErrorText(event.detail)}</code>
+            </p>
+          )}
           {event.tool && (
             <p>
               Tool: <code>{event.tool}</code>
@@ -754,7 +875,13 @@ export function EventCard({
           )}
           <details>
             <summary>Full event record</summary>
-            <Json value={event} />
+            <Json
+              value={
+                event.kind === "error" && typeof event.detail === "string"
+                  ? { ...event, detail: sanitizeErrorText(event.detail) }
+                  : event
+              }
+            />
           </details>
         </details>
       </div>
