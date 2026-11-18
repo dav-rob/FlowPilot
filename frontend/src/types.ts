@@ -6,6 +6,7 @@ export type Page =
   | "overview"
   | "documents"
   | "cases"
+  | "about"
   | "workbench"
   | "history"
   | "evaluation"

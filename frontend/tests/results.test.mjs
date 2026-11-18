@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { createServer } from "vite";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -87,6 +87,42 @@ test("presentation expands jargon without losing negations, amounts, dates or un
   assert.match(text, /SYS-ABC12345/);
   assert.match(text, /£25,000/);
   assert.match(text, /8 October 2026/);
+  assert.equal(
+    presentation.suppressProvenanceProse(
+      "Fetch policy version status. Synthetic fixture content.",
+    ),
+    "Fetch policy version status.",
+  );
+  assert.equal(
+    presentation.suppressProvenanceProse(
+      "Check retention and synthetic-identity fraud rules (synthetic fixture rules).",
+    ),
+    "Check retention and synthetic-identity fraud rules.",
+  );
+  assert.equal(
+    presentation.suppressProvenanceProse(
+      "Investigate synthetic identity fraud while this selected development sample is not a held-out benchmark.",
+    ),
+    "Investigate synthetic identity fraud while this selected development sample is not a held-out benchmark.",
+  );
+  assert.equal(
+    presentation.suppressProvenanceProse(
+      "Business tool response · synthetic enterprise",
+    ),
+    "Business tool response",
+  );
+  assert.equal(
+    presentation.suppressProvenanceProse(
+      "Enterprise tools are synthetic; consequential actions require human approval.",
+    ),
+    "consequential actions require human approval.",
+  );
+  assert.equal(
+    presentation.suppressProvenanceProse(
+      "No approval override is available in this demo.",
+    ),
+    "No approval override is available in this workspace.",
+  );
 });
 
 test("names come only from successful observations and presentation does not modify the saved trace", () => {
@@ -141,7 +177,7 @@ test("recommended and pending actions never appear as completed changes", () => 
   assert.equal(presentation.completedWork(run).applied, 1);
   assert.match(
     presentation.outcomeTitle(run),
-    /applied to the example records/,
+    /Payment hold was simulated/,
   );
 });
 
@@ -361,6 +397,7 @@ test("document readers preserve business fields and duplicate attachments withou
 
 test("business routes include Evals and retain legacy developer deep links", () => {
   assert.equal(business.workspaceRoute("", false).page, "overview");
+  assert.equal(business.workspaceRoute("#about", false).page, "about");
   assert.equal(
     business.workspaceRoute("#investigations", false).page,
     "overview",
@@ -375,6 +412,21 @@ test("business routes include Evals and retain legacy developer deep links", () 
     business.workspaceRoute("#document/train/doc-invoice", false).documentId,
     "doc-invoice",
   );
+  const aboutHtml = renderToStaticMarkup(createElement(workspaceUI.AboutPage));
+  assert.match(aboutHtml, /About FlowPilot/);
+  assert.match(
+    aboutHtml,
+    /20 years of experience in financial services and operations/i,
+  );
+  assert.match(aboutHtml, /simulated business systems and records/i);
+  assert.match(aboutHtml, /operate within the simulation/i);
+  assert.doesNotMatch(
+    aboutHtml,
+    /synthetic, fictional|demo data|demo state|demo records/i,
+  );
+  assert.match(aboutHtml, /Live API/);
+  assert.match(aboutHtml, /Simulation/);
+  assert.match(aboutHtml, /Recorded replay/);
 });
 
 test("the home page presents findings and decisions without launch or JSON controls", () => {
@@ -651,18 +703,40 @@ test("live vs simulation vs failed-source replay provenance is distinct and repl
     error: "RuntimeError: Tool call budget exhausted; no further actions executed.",
   };
 
+  const liveFailure = presentation.describeFailure({
+    ...baseFailed,
+    mode: "live",
+    status: "failed",
+  });
+  assert.equal(liveFailure.provenanceDetail, "Live API");
   const liveHtml = render({ ...baseFailed, mode: "live", status: "failed" });
   assert.match(liveHtml, /Live API failure/);
-  assert.match(liveHtml, /not a scripted simulation/i);
+  assert.match(liveHtml, /<h3>How this review ran<\/h3><p>Live API<\/p>/);
 
+  const simFailure = presentation.describeFailure({
+    ...baseFailed,
+    mode: "simulation",
+    status: "failed",
+  });
+  assert.equal(simFailure.provenanceDetail, "Simulation");
   const simHtml = render({
     ...baseFailed,
     mode: "simulation",
     status: "failed",
   });
   assert.match(simHtml, /Simulation failure/);
-  assert.match(simHtml, /no Live AI calls were made/i);
+  assert.match(simHtml, /<h3>How this review ran<\/h3><p>Simulation<\/p>/);
 
+  const replayLiveFailure = presentation.describeFailure({
+    ...baseFailed,
+    mode: "replay",
+    status: "completed",
+    source_run_id: "orig-1",
+    source_mode: "live",
+    source_status: "failed",
+  });
+  assert.equal(replayLiveFailure.provenanceDetail, "Recorded replay");
+  assert.match(replayLiveFailure.historySummary, /replay ran no AI/);
   const replayLiveHtml = render({
     ...baseFailed,
     mode: "replay",
@@ -672,7 +746,11 @@ test("live vs simulation vs failed-source replay provenance is distinct and repl
     source_status: "failed",
   });
   assert.match(replayLiveHtml, /Recorded replay of failed Live API run/);
-  assert.match(replayLiveHtml, /Replaying did not run AI/);
+  assert.match(
+    replayLiveHtml,
+    /<h3>How this review ran<\/h3><p>Recorded replay<\/p>/,
+  );
+  assert.match(replayLiveHtml, /Originally a Live API review/);
   assert.match(replayLiveHtml, /Nothing is running or being changed/);
 
   const replaySimHtml = render({
@@ -684,7 +762,15 @@ test("live vs simulation vs failed-source replay provenance is distinct and repl
     source_status: "failed",
   });
   assert.match(replaySimHtml, /Recorded replay of failed simulation/);
-  assert.match(replaySimHtml, /Replaying did not run AI/);
+  assert.match(
+    replaySimHtml,
+    /<h3>How this review ran<\/h3><p>Recorded replay<\/p>/,
+  );
+  assert.match(replaySimHtml, /Originally a simulation/);
+  assert.doesNotMatch(
+    liveHtml + simHtml + replayLiveHtml + replaySimHtml,
+    /synthetic business records|fictional business records|not a scripted simulation/i,
+  );
 });
 
 test("execution history displays concise failure reason directly on failed and failed-replay rows", () => {
@@ -925,4 +1011,109 @@ test("failure classification handles all categories, avoids incidental evidence 
   assert.match(untrustedHtml, /\[redacted\]/);
   assert.doesNotMatch(untrustedHtml, /<script>alert/);
   assert.match(untrustedHtml, /&lt;script&gt;alert/);
+});
+
+test("ordinary UI source excludes recurring demo/sample provenance disclaimers while preserving AboutPage and domain terms", () => {
+  const srcDir = new URL("../src/", import.meta.url);
+  const files = readdirSync(srcDir)
+    .filter((name) => name.endsWith(".ts") || name.endsWith(".tsx"))
+    .sort();
+
+  const narrowProvenanceLabel =
+    /\b(?:demo|demonstration|sample|mock)\s+(?:profile|user|workspace|(?:business\s+)?records|data|state)\b/i;
+
+  for (const label of [
+    "Demo user",
+    "Sample user",
+    "Sample profile",
+    "Demonstration workspace",
+    "Mock business records",
+  ]) {
+    assert.match(label, narrowProvenanceLabel);
+  }
+  for (const allowed of [
+    "sample size",
+    "development sample",
+    "synthetic identity fraud",
+  ]) {
+    assert.doesNotMatch(allowed, narrowProvenanceLabel);
+  }
+
+  const bannedPhrases = [
+    narrowProvenanceLabel,
+    /\bDemo profile\b/i,
+    /\bSample workspace profile\b/i,
+    /\bSample\s*\/\s*demo user\b/i,
+    /\bThis demo profile is for display\b/i,
+    /\bfor display only\b/i,
+    /\bdisplay-only\b/i,
+    /\bsynthetic,\s*fictional\b/i,
+    /\bfictional data\b/i,
+    /\bfictional example\b/i,
+    /\bfictional business records\b/i,
+    /\bfictional records\b/i,
+    /\bsynthetic business records\b/i,
+    /\bsynthetic enterprise\b/i,
+    /\bAbout this demonstration\b/i,
+    /\bcreated for demonstrating\b/i,
+    /\bLocal demo reviewer\b/i,
+  ];
+
+  for (const file of files) {
+    let source = readFileSync(new URL(file, srcDir), "utf8");
+    if (file === "Workspace.tsx") {
+      const aboutStart = source.indexOf("export function AboutPage()");
+      assert.ok(aboutStart > -1, "AboutPage should exist in Workspace.tsx");
+      source = source.slice(0, aboutStart);
+    }
+    if (file === "presentation.ts") {
+      const fnStart = source.indexOf("export function suppressProvenanceProse(");
+      const fnEnd = source.indexOf("export function eventTitle(");
+      assert.ok(fnStart > -1 && fnEnd > fnStart);
+      source = source.slice(0, fnStart) + source.slice(fnEnd);
+    }
+    // Strip single-line and block comments so non-UI code comments aren't flagged.
+    source = source
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/^\s*\/\/.*$/gm, "");
+
+    for (const pattern of bannedPhrases) {
+      assert.doesNotMatch(
+        source,
+        pattern,
+        `${file} should not reintroduce ordinary-UI provenance phrase matching ${pattern}`,
+      );
+    }
+  }
+});
+
+test("RunView preserves factual evidence notes, EventCard original details, and synthetic identity fraud phrasing", () => {
+  const run = structuredClone(traces[0]);
+  const evidenceNote =
+    "Recorded note citing synthetic retention schedule and synthetic identity fraud check.";
+  const eventDetail =
+    "Checked synthetic enterprise retention schedule for synthetic identity fraud.";
+  run.outcome = {
+    ...run.outcome,
+    evidence: [{ record_id: "REC-001", note: evidenceNote }],
+  };
+  run.events = [
+    {
+      id: "ev-detail-1",
+      sequence: 1,
+      kind: "tool_call",
+      tool: "check_legal_holds",
+      status: "completed",
+      title: "Checked legal holds",
+      detail: eventDetail,
+      timestamp: "2026-11-09T10:00:00Z",
+    },
+  ];
+  const snapshot = JSON.stringify(run);
+  const html = render(run);
+
+  assert.equal(html.includes(evidenceNote), true);
+  assert.equal(html.includes(eventDetail), true);
+  assert.match(html, /synthetic identity fraud/);
+  assert.equal(JSON.stringify(run), snapshot);
 });

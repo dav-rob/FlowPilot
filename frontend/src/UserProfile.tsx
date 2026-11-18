@@ -237,7 +237,6 @@ export default function UserProfile() {
             <span className="up-menu-summary-meta">
               Operations · Case review
             </span>
-            <span className="up-sample-badge">Demo profile</span>
           </div>
         </div>
         <hr className="up-menu-divider" />
@@ -330,7 +329,7 @@ export default function UserProfile() {
                     </h2>
                     <p className="up-dialog-subtitle">
                       {activeDetail === "profile"
-                        ? "Operations reviewer · Demo profile"
+                        ? "Operations reviewer"
                         : "Approval requirements and restrictions"}
                     </p>
                   </div>
@@ -389,10 +388,7 @@ export default function UserProfile() {
                         className="up-callout-icon"
                         aria-hidden="true"
                       />
-                      <p>
-                        This demo profile is for display; approval rules apply
-                        to every request.
-                      </p>
+                      <p>Approval rules apply to every request.</p>
                     </div>
 
                     <div className="up-section">

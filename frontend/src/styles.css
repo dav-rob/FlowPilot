@@ -7082,3 +7082,62 @@ main .case-row small {
     grid-template-columns: 1fr;
   }
 }
+.footer-about-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+}
+.footer-about-link:hover,
+.footer-about-link[aria-current="page"] {
+  color: var(--violet, #6955dc);
+  text-decoration: underline;
+}
+.about-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.about-card {
+  padding: 24px 26px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+.about-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--violet, #6955dc);
+}
+.about-card-head h2 {
+  font-size: 16px;
+  margin: 0;
+  color: var(--ink);
+}
+.about-card p {
+  margin: 0;
+  color: #5b6377;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.about-modes-list {
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+.about-modes-list dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.about-modes-list dd {
+  margin: 4px 0 0;
+  color: #5b6377;
+  font-size: 13px;
+  line-height: 1.6;
+}

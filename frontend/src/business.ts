@@ -181,7 +181,11 @@ export function workspaceRoute(hash: string, developer: boolean) {
       partition,
     };
   }
-  if (["overview", "documents", "cases", "approvals", "evals"].includes(path))
+  if (
+    ["overview", "documents", "cases", "approvals", "evals", "about"].includes(
+      path,
+    )
+  )
     return { ...base, page: path as Page };
   if (path === "history" && !developer)
     return { ...base, page: "cases" as Page };

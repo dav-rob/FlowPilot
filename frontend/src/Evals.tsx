@@ -22,6 +22,7 @@ import { Empty, ErrorNotice, Loading, useResource } from "./shared";
 import { Evaluations, Registry, RunHistory } from "./Screens";
 import Investigation from "./Investigation";
 import { documentKey } from "./business";
+import { suppressProvenanceProse } from "./presentation";
 import "./evals.css";
 
 type Tab =
@@ -105,7 +106,7 @@ function tabFromUrl(fallback?: string): Tab {
   return tabs.some((t) => t.id === value) ? (value as Tab) : "overview";
 }
 function description(value: unknown): string {
-  if (typeof value === "string") return value;
+  if (typeof value === "string") return suppressProvenanceProse(value);
   if (Array.isArray(value))
     return value.map(description).filter(Boolean).join(" · ");
   if (value && typeof value === "object")
@@ -167,7 +168,7 @@ export default function Evals({
         results.flatMap((r) => (r.status === "fulfilled" ? r.value.cases : [])),
       );
       if (results.some((r) => r.status === "rejected"))
-        setCaseError("Some example documents could not be loaded.");
+        setCaseError("Some documents could not be loaded.");
       setLoadingCases(false);
     });
     return () => controller.abort();
@@ -248,7 +249,7 @@ export default function Evals({
           </p>
         </div>
         <span className="evals-environment">
-          <FlaskConical size={16} /> Synthetic enterprise environment
+          <FlaskConical size={16} /> Quality &amp; guardrails
         </span>
       </header>
       <nav className="evals-tabs" aria-label="Evals sections">
@@ -279,17 +280,17 @@ export default function Evals({
               <Layers size={21} />
             </div>
             <p>
-              These records explain the activity behind the demo. A document may
-              appear more than once because it was reviewed again, tested, or
-              saved as a replay. They are execution attempts—not a count of
-              distinct business cases.
+              These records track every execution attempt across the workspace.
+              A document may appear more than once because it was reviewed
+              again, tested, or saved as a replay. They are execution
+              attempts—not a count of distinct business cases.
             </p>
             <div className="evals-record-grid">
               <article>
                 <span className="evals-record-number">{live.length}</span>
                 <h3>AI reviews</h3>
                 <p>
-                  Real model calls on example documents. {documents} distinct
+                  Real model calls on workspace documents. {documents} distinct
                   document{documents === 1 ? "" : "s"};{" "}
                   {Math.max(0, live.length - documents)} additional attempt
                   {live.length - documents === 1 ? "" : "s"}.
@@ -314,7 +315,7 @@ export default function Evals({
                 <span className="evals-record-number">{simulated.length}</span>
                 <h3>Simulated reviews</h3>
                 <p>
-                  Offline tests using deterministic decisions and synthetic
+                  Offline tests using deterministic decisions and simulated
                   enterprise tools.
                 </p>
                 <small>
@@ -454,7 +455,7 @@ export default function Evals({
               <ShieldCheck size={17} />
               <p>
                 These tests exercise real application controls in an isolated
-                synthetic session. They make no AI calls and do not establish
+                simulation session. They make no AI calls and do not establish
                 how reliably a model recognises every risky document or
                 prompt-injection attempt.
               </p>
@@ -593,19 +594,21 @@ export default function Evals({
                       <dl>
                         <div>
                           <dt>Rule</dt>
-                          <dd>{rule.rule}</dd>
+                          <dd>{suppressProvenanceProse(rule.rule)}</dd>
                         </div>
                         <div>
                           <dt>Check</dt>
-                          <dd>{rule.check}</dd>
+                          <dd>{suppressProvenanceProse(rule.check)}</dd>
                         </div>
                         <div>
                           <dt>Response</dt>
-                          <dd>{rule.response}</dd>
+                          <dd>{suppressProvenanceProse(rule.response)}</dd>
                         </div>
                         <div>
                           <dt>Approval or exception</dt>
-                          <dd>{rule.exception_policy}</dd>
+                          <dd>
+                            {suppressProvenanceProse(rule.exception_policy)}
+                          </dd>
                         </div>
                       </dl>
                       <details>
@@ -761,15 +764,15 @@ export default function Evals({
                         <small>{change.source}</small>
                       </div>
                       <h3>{change.title}</h3>
-                      <p>{change.description}</p>
+                      <p>{suppressProvenanceProse(change.description)}</p>
                       <div className="evals-change-comparison">
                         <div>
                           <span>Before</span>
-                          <p>{change.before}</p>
+                          <p>{suppressProvenanceProse(change.before)}</p>
                         </div>
                         <div>
                           <span>Change</span>
-                          <p>{change.after}</p>
+                          <p>{suppressProvenanceProse(change.after)}</p>
                         </div>
                       </div>
                       <div className="evals-verification">
@@ -910,11 +913,13 @@ function QualityComparison() {
           <p className="evals-quality-mode">
             {detail.data.mode === "simulation"
               ? "Simulation: these scores exercise deterministic behaviour and do not measure an AI model."
-              : "Live API: measured against hidden expected answers on synthetic documents."}{" "}
+              : "Live API: measured against hidden expected answers."}{" "}
             Missing fields in older evaluations are shown as not recorded.
           </p>
           {detail.data.warning && (
-            <p className="evals-notice">{detail.data.warning}</p>
+            <p className="evals-notice">
+              {suppressProvenanceProse(detail.data.warning)}
+            </p>
           )}
           <div className="evals-quality-table-wrap">
             <table className="evals-quality-table">

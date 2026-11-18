@@ -33,7 +33,11 @@ test("UserProfile SSR renders accessible menu trigger and collapsed menu items",
     html,
     /role="menuitem"[^>]*>.*Responsibilities &amp; permissions/s,
   );
-  assert.match(html, /Demo profile/);
+  assert.match(html, /Operations · Case review/);
+  assert.doesNotMatch(
+    html,
+    /Demo profile|Sample workspace profile|Sample \/ demo user|for display/i,
+  );
   assert.match(html, /Name, team and role/);
   assert.match(html, /Approval requirements and restrictions/);
 });

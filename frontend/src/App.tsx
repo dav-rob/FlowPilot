@@ -7,6 +7,7 @@ import {
   FileText,
   FlaskConical,
   Inbox,
+  Info,
   LayoutDashboard,
   Menu,
   Radio,
@@ -23,7 +24,12 @@ import TraceView from "./TraceView";
 import RunView from "./RunView";
 import UserProfile from "./UserProfile";
 
-import { BusinessCasesView, DocumentInbox, FinanceOverview } from "./Workspace";
+import {
+  AboutPage,
+  BusinessCasesView,
+  DocumentInbox,
+  FinanceOverview,
+} from "./Workspace";
 import { workspaceRoute, type CaseView } from "./business";
 
 const businessNav: { id: Page; label: string; icon: typeof Activity }[] = [
@@ -89,7 +95,7 @@ export default function App() {
       const failures = results.filter((r) => r.status === "rejected");
       setCaseError(
         failures.length
-          ? "Some example documents could not be loaded. Please try again."
+          ? "Some documents could not be loaded. Please try again."
           : "",
       );
       setCasesLoading(false);
@@ -136,7 +142,9 @@ export default function App() {
     ? "Execution trace"
     : starting || location.runId
       ? "Case findings"
-      : (nav.find((n) => n.id === location.page)?.label ?? "Overview");
+      : location.page === "about"
+        ? "About FlowPilot"
+        : (nav.find((n) => n.id === location.page)?.label ?? "Overview");
   useEffect(() => {
     document.title = activeTitle + " · FlowPilot";
   }, [activeTitle]);
@@ -355,6 +363,7 @@ export default function App() {
                   initialTab={location.evalTab}
                 />
               )}
+              {location.page === "about" && <AboutPage />}
             </>
           )}
           <footer className="page-footer">
@@ -363,10 +372,14 @@ export default function App() {
               FlowPilot <span className="footer-separator">/</span> Harbourline
               Mutual Operations
             </span>
-            <span>
-              <ShieldCheck size={13} />
-              Fictional records · Simulated business changes
-            </span>
+            <a
+              href="#about"
+              className="footer-about-link"
+              aria-current={location.page === "about" ? "page" : undefined}
+            >
+              <Info size={13} />
+              About FlowPilot
+            </a>
           </footer>
         </main>
       </div>

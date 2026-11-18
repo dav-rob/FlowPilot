@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   CheckCircle2,
@@ -8,9 +9,11 @@ import {
   FileCheck2,
   FileText,
   Fingerprint,
+  FlaskConical,
   Inbox,
   LoaderCircle,
   Mail,
+  Radio,
   RefreshCw,
   Scale,
   Search,
@@ -109,7 +112,7 @@ function CaseTable({
                   </span>
                   {run.mode === "replay" && (
                     <span className="saved-example">
-                      Saved example · read-only
+                      Recorded replay · read-only
                     </span>
                   )}
                 </td>
@@ -192,7 +195,7 @@ export function FinanceOverview({
     {
       label: "Ready to process",
       value: ready.length,
-      detail: "Available examples · review on demand",
+      detail: "Documents ready for review",
       icon: Inbox,
       tone: "teal",
       action: onInbox,
@@ -350,7 +353,7 @@ export function FinanceOverview({
           ) : (
             <Empty
               title="No case findings yet"
-              detail="Open an example document and process it to see its findings and recommended next steps."
+              detail="Open a document from the inbox and process it to see its findings and recommended next steps."
             />
           )}
         </div>
@@ -395,20 +398,6 @@ export function FinanceOverview({
           })}
         </div>
       </section>
-      <details className="workspace-demo-note">
-        <summary>
-          About this demonstration
-          <ChevronDown size={13} />
-        </summary>
-        <p>
-          This workspace uses fictional example documents and recorded reviews.
-          Inbox examples are reviewed on demand when you select Review document.
-          There is no automatic processing queue or connected mailbox.
-          Processing a document uses the AI Review service. Test runs and
-          duplicate replays are kept out of the business totals; a saved example
-          is shown only when its original review is unavailable.
-        </p>
-      </details>
     </div>
   );
 }
@@ -507,7 +496,7 @@ export function BusinessCasesView({
             detail={
               entries.length
                 ? "Choose another filter or search to find a case."
-                : "Process a document from the example inbox to create a case."
+                : "Process a document from the inbox to create a case."
             }
           />
         )}
@@ -595,7 +584,7 @@ export function DocumentInbox({
         </div>
         <span className="example-inbox-label">
           <Inbox size={15} />
-          Example inbox · {cases.length} documents
+          Inbox · {cases.length} documents
         </span>
       </div>
       {error && <ErrorNotice message={error} retry={retry} />}
@@ -623,7 +612,7 @@ export function DocumentInbox({
           </div>
           <div className="inbox-document-list">
             {loading ? (
-              <Loading text="Loading example documents…" />
+              <Loading text="Loading documents…" />
             ) : (
               filtered.slice(0, visible).map((item) => {
                 const entry = byDocument.get(documentKey(item));
@@ -639,7 +628,7 @@ export function DocumentInbox({
                   >
                     <span className="inbox-document-meta">
                       <Mail size={14} />
-                      {item.showcase && <span>Featured example</span>}
+                      {item.showcase && <span>Featured</span>}
                       <time>{dateTime(item.received_at)}</time>
                     </span>
                     <strong>{doc.subject}</strong>
@@ -788,17 +777,107 @@ export function DocumentInbox({
                   </button>
                 </div>
                 <small>
-                  Demonstration records · Proposed changes require your
-                  approval.
+                  Proposed changes require your approval before a simulated
+                  action can run.
                 </small>
               </div>
             </>
           ) : (
             <Empty
               title="No document selected"
-              detail="Choose an example document from the inbox."
+              detail="Choose a document from the inbox."
             />
           )}
+        </section>
+      </div>
+    </div>
+  );
+}
+
+export function AboutPage() {
+  return (
+    <div className="finance-workspace about-page">
+      <div className="workspace-heading">
+        <div>
+          <h1>About FlowPilot</h1>
+          <p>
+            How the simulation environment, execution modes, and case totals
+            work.
+          </p>
+        </div>
+        <a className="button secondary" href="#overview">
+          <ArrowLeft size={15} />
+          Back to overview
+        </a>
+      </div>
+      <div className="about-grid">
+        <section className="panel about-card" aria-labelledby="about-data-title">
+          <div className="about-card-head">
+            <ShieldCheck size={19} />
+            <h2 id="about-data-title">Simulation environment</h2>
+          </div>
+          <p>
+            FlowPilot is a simulation informed by 20 years of experience in
+            financial services and operations, using simulated business systems
+            and records.
+          </p>
+          <p>
+            All consequential business actions operate within the simulation and
+            require human approval before running.
+          </p>
+        </section>
+        <section className="panel about-card" aria-labelledby="about-modes-title">
+          <div className="about-card-head">
+            <Radio size={19} />
+            <h2 id="about-modes-title">Execution modes</h2>
+          </div>
+          <dl className="about-modes-list">
+            <div>
+              <dt>Live API</dt>
+              <dd>
+                Makes actual AI model calls through your configured local
+                subscriptions to review documents and check records. Provider,
+                model, timings, and usage are recorded in the trace.
+              </dd>
+            </div>
+            <div>
+              <dt>
+                <FlaskConical size={14} /> Simulation
+              </dt>
+              <dd>
+                Runs deterministic application rules with no AI model calls.
+                Useful for exercising controls and workflows; does not measure
+                model performance.
+              </dd>
+            </div>
+            <div>
+              <dt>
+                <RefreshCw size={14} /> Recorded replay
+              </dt>
+              <dd>
+                Read-only view of an earlier saved run. Replaying makes no new
+                AI model calls and performs no new actions or record changes.
+              </dd>
+            </div>
+          </dl>
+        </section>
+        <section
+          className="panel about-card"
+          aria-labelledby="about-workspace-title"
+        >
+          <div className="about-card-head">
+            <Inbox size={19} />
+            <h2 id="about-workspace-title">Inbox &amp; case totals</h2>
+          </div>
+          <p>
+            Inbox documents are checked on demand when you choose to process
+            them; there is no connected mailbox.
+          </p>
+          <p>
+            Test workbench and evaluation runs are excluded from the business
+            overview totals. Saved replays appear in business cases only when an
+            original live review is unavailable.
+          </p>
         </section>
       </div>
     </div>

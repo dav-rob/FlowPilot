@@ -247,7 +247,7 @@ export function outcomeTitle(run: Run): string {
     );
     if (applied.length === 1) {
       const titles: Record<string, string> = {
-        place_payment_hold: "Payment hold applied to the example records",
+        place_payment_hold: "Payment hold was simulated",
         isolate_asset: "Network isolation was simulated",
         execute_erasure: "Deletion was simulated",
         export_customer_data: "A records export was simulated",
@@ -611,12 +611,11 @@ export function describeFailure(
         : run.source_mode === "simulation"
           ? "Recorded replay of failed simulation"
           : "Recorded replay of failed source run";
-    provenanceDetail = `Read-only replay of an earlier failed ${sourceText} run. Replaying did not run AI or change any records.`;
+    provenanceDetail = "Recorded replay";
     historySummary = `Source ${sourceText} run failed (replay ran no AI): ${base.historyReason}`;
   } else if (run.mode === "simulation") {
     provenanceLabel = "Simulation failure";
-    provenanceDetail =
-      "Offline simulation against synthetic business records (no Live AI calls were made).";
+    provenanceDetail = "Simulation";
     historySummary =
       base.category === "missing"
         ? base.historyReason
@@ -625,8 +624,7 @@ export function describeFailure(
           : base.historyReason;
   } else {
     provenanceLabel = "Live API failure";
-    provenanceDetail =
-      "Ran against the Live API using synthetic business records (not a scripted simulation).";
+    provenanceDetail = "Live API";
     historySummary =
       base.category === "missing"
         ? base.historyReason
@@ -646,6 +644,32 @@ export function describeFailure(
 
 export function failureSummary(error?: string): string {
   return describeFailureMessage(error).explanation;
+}
+
+/** Suppress dataset-origin caveats in backend-returned rule or evaluation prose. */
+export function suppressProvenanceProse(value?: string): string {
+  if (!value) return "";
+  return value
+    .replace(
+      /\bapply this specific change to fictional records\b/gi,
+      "apply this specific simulated change",
+    )
+    .replace(/\bto fictional records\b/gi, "as a simulated change")
+    .replace(/\bin this demo\b/gi, "in this workspace")
+    .replace(/\bon synthetic cases\b/gi, "on evaluation cases")
+    .replace(/\bon synthetic state\b/gi, "in simulated state")
+    .replace(/\bsynthetic state\b/gi, "simulated state")
+    .replace(/\s*·\s*synthetic enterprise\b/gi, "")
+    .replace(/\bsynthetic enterprise\b/gi, "enterprise")
+    .replace(/\bEnterprise tools are synthetic;\s*/gi, "")
+    .replace(/\bsynthetic identity verification\b/gi, "identity verification")
+    .replace(/\blatest synthetic identity check\b/gi, "latest identity check")
+    .replace(/\bactive synthetic legal (holds?)\b/gi, "active legal $1")
+    .replace(/\bsynthetic retention (schedule|eligibility date)\b/gi, "retention $1")
+    .replace(/\s*\(\s*synthetic fixture rules\s*\)/gi, "")
+    .replace(/\s*\bsynthetic fixture content\.?\s*$/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 }
 export function eventTitle(event: TraceEvent): string {
   if (event.tool) return toolLabel(event.tool);

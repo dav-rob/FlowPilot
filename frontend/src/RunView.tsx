@@ -50,6 +50,7 @@ import {
   referenceNames,
   resultSummary,
   sanitizeErrorText,
+  suppressProvenanceProse,
   workflowDescription,
   type ReferenceNames,
 } from "./presentation";
@@ -178,7 +179,7 @@ export default function RunView({
     return (
       <>
         <button className="text-button back-link" onClick={onBack}>
-          <ArrowLeft size={16} /> Back to cases
+          <ArrowLeft size={16} /> Back to processed
         </button>
         {error && (
           <ErrorNotice message={error} retry={() => setVersion((v) => v + 1)} />
@@ -197,6 +198,8 @@ export default function RunView({
     );
   const names = referenceNames(run);
   const text = (value?: string) => businessText(value, names);
+  const businessProse = (value?: string) =>
+    suppressProvenanceProse(businessText(value, names));
   const outcome = run.outcome;
   const classification = run.classification;
   const finalStatus =
@@ -231,7 +234,7 @@ export default function RunView({
   return (
     <div className="run-page result-page">
       <button className="text-button back-link" onClick={onBack}>
-        <ArrowLeft size={15} /> Cases &amp; findings
+        <ArrowLeft size={15} /> Processed
       </button>
       <div className="page-heading run-heading">
         <div>
@@ -278,8 +281,8 @@ export default function RunView({
       {run.mode === "simulation" && (
         <div className="result-mode-note">
           <Sparkles size={16} />
-          Demonstration: these results follow simulated decisions, rather than a
-          AI Review. All business records are fictional.
+          Simulation: these results follow deterministic rules rather than a
+          Live API review. Actions are simulated.
         </div>
       )}
       {run.mode === "replay" && (
@@ -287,18 +290,12 @@ export default function RunView({
           <FileText size={16} />
           Saved review ·{" "}
           {run.source_mode === "live"
-            ? "Original AI Review."
+            ? "Originally a Live API review."
             : run.source_mode === "simulation"
-              ? "Originally a simulated demonstration."
+              ? "Originally a simulation."
               : "Original mode is recorded in the technical details."}{" "}
           Nothing is running or being changed.
         </div>
-      )}
-      {run.mode === "live" && (
-        <p className="result-environment">
-          AI Review of fictional business records. Any changes affect example
-          data only.
-        </p>
       )}
 
       {failure && (
@@ -410,12 +407,12 @@ export default function RunView({
                   </span>
                 </div>
                 <p className="result-lede">
-                  {text(outcome.conclusion || outcome.summary)}
+                  {businessProse(outcome.conclusion || outcome.summary)}
                 </p>
                 {outcome.summary && outcome.summary !== outcome.conclusion && (
                   <details className="result-summary-note">
                     <summary>More about this finding</summary>
-                    <p>{text(outcome.summary)}</p>
+                    <p>{businessProse(outcome.summary)}</p>
                   </details>
                 )}
                 {!!outcome.departments?.length && (
@@ -440,7 +437,7 @@ export default function RunView({
                           ? `${work.tasks} follow-up task${work.tasks === 1 ? "" : "s"} created`
                           : "",
                         work.applied > 0
-                          ? `${work.applied} approved change${work.applied === 1 ? "" : "s"} applied to example data`
+                          ? `${work.applied} approved simulated change${work.applied === 1 ? "" : "s"} applied`
                           : "",
                       ]
                         .filter(Boolean)
@@ -503,7 +500,7 @@ export default function RunView({
                       <span className="result-step-number" aria-hidden="true">
                         {i + 1}
                       </span>
-                      <p>{text(item)}</p>
+                      <p>{businessProse(item)}</p>
                     </li>
                   ))}
                 </ol>
@@ -519,7 +516,7 @@ export default function RunView({
                   </h3>
                   <ul>
                     {outcome.unresolved.map((item, i) => (
-                      <li key={i}>{text(item)}</li>
+                      <li key={i}>{businessProse(item)}</li>
                     ))}
                   </ul>
                 </div>

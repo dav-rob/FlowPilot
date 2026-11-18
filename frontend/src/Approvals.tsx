@@ -17,7 +17,11 @@ import {
 import type { Run } from "./types";
 import { api, dateTime, errorMessage, readable } from "./api";
 import { Empty, ErrorNotice, Json, Loading, Status } from "./shared";
-import { businessText, toolLabel } from "./presentation";
+import {
+  businessText,
+  suppressProvenanceProse,
+  toolLabel,
+} from "./presentation";
 import "./approvals.css";
 
 export interface ManualWorkItem {
@@ -270,11 +274,6 @@ export default function Approvals({
         </div>
       </div>
 
-      <p className="approval-demo-note">
-        Demonstration workflow · All records and changes are fictional.
-        Decisions are recorded as the local demo reviewer; no bank identity or
-        authority is verified.
-      </p>
       {error && (
         <ErrorNotice message={error} retry={() => setVersion((v) => v + 1)} />
       )}
@@ -424,7 +423,7 @@ export default function Approvals({
                   </div>
                   <div className="full">
                     <dt>Why a decision is needed</dt>
-                    <dd>{businessText(item.reason)}</dd>
+                    <dd>{suppressProvenanceProse(businessText(item.reason))}</dd>
                   </div>
                 </dl>
                 <div className="approval-held-step">
@@ -435,12 +434,12 @@ export default function Approvals({
                         ? "What is held"
                         : "Scope of this decision"}
                     </strong>
-                    <p>{businessText(item.hold_scope)}</p>
+                    <p>{suppressProvenanceProse(businessText(item.hold_scope))}</p>
                   </div>
                 </div>
                 <div className="approval-next-step">
                   <strong>What happens next</strong>
-                  <p>{businessText(item.next_step)}</p>
+                  <p>{suppressProvenanceProse(businessText(item.next_step))}</p>
                   <p className="approval-effect">
                     {isDepartment
                       ? "Approval records the team’s decision. It does not apply a business change or override another rule."
@@ -465,11 +464,13 @@ export default function Approvals({
                   <div className="approval-restriction">
                     <ShieldAlert size={17} />
                     <p>
-                      {businessText(
-                        item.blocked_reason ||
-                          (item.status === "failed"
-                            ? "The approved action could not be applied. Open the case to inspect the recorded result before taking another step."
-                            : "This request cannot be approved while the case is incomplete or a rule prevents the action."),
+                      {suppressProvenanceProse(
+                        businessText(
+                          item.blocked_reason ||
+                            (item.status === "failed"
+                              ? "The approved action could not be applied. Open the case to inspect the recorded result before taking another step."
+                              : "This request cannot be approved while the case is incomplete or a rule prevents the action."),
+                        ),
                       )}
                     </p>
                   </div>
@@ -479,7 +480,7 @@ export default function Approvals({
                     <strong>Decision note</strong>
                     <p>{item.decision_note}</p>
                     <small>
-                      Local demo reviewer
+                      Local reviewer
                       {item.decided_at ? " · " + dateTime(item.decided_at) : ""}
                     </small>
                   </div>

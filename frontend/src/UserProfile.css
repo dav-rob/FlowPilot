@@ -135,21 +135,6 @@
   line-height: 1.35;
 }
 
-.up-sample-badge {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  margin-top: 4px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: #f3eefc;
-  border: 1px solid #e4dbf4;
-  color: #5542bd;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
 .up-menu-divider {
   border: 0;
   border-top: 1px solid #eceaf2;

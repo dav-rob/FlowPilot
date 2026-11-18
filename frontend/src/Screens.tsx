@@ -40,7 +40,7 @@ import {
   Status,
   useResource,
 } from "./shared";
-import { describeFailure } from "./presentation";
+import { describeFailure, suppressProvenanceProse } from "./presentation";
 export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
   const resource = useResource<{ runs: Run[] }>("/runs", (data) =>
     data.runs.some(
@@ -402,7 +402,7 @@ export function Registry() {
                       </span>
                     </div>
                     <h3>{tool.name}</h3>
-                    <p>{tool.description}</p>
+                    <p>{suppressProvenanceProse(tool.description)}</p>
                     <div className="tool-meta">
                       <span className="tag">{readable(tool.domain)}</span>
                       <span>{tool.system || "Unknown system"}</span>
@@ -559,7 +559,7 @@ export function Evaluations({
               <p>
                 {mode === "simulation"
                   ? "Simulation scores measure deterministic policy behavior. They do not measure live model performance."
-                  : "Live evaluations use real configured models on synthetic enterprise cases. Ground truth is isolated from the agent."}
+                  : "Live evaluations use real configured models with ground truth isolated from the agent."}
               </p>
             </div>
             <button
@@ -672,10 +672,11 @@ export function Evaluations({
                   )}
                   <div className={`mode-explainer ${evaluation.mode}`}>
                     <p>
-                      {evaluation.warning ||
-                        (evaluation.mode === "simulation"
+                      {evaluation.warning
+                        ? suppressProvenanceProse(evaluation.warning)
+                        : evaluation.mode === "simulation"
                           ? "Deterministic simulation results. These metrics do not establish live AI performance."
-                          : "Live model evaluation on synthetic cases. Metrics below are returned by the evaluator.")}
+                          : "Live model evaluation. Metrics below are returned by the evaluator."}
                     </p>
                   </div>
                   <h4 className="report-subheading">Reported metrics</h4>
