@@ -21,6 +21,7 @@ import Evals from "./Evals";
 import Approvals from "./Approvals";
 import TraceView from "./TraceView";
 import RunView from "./RunView";
+import UserProfile from "./UserProfile";
 
 import { BusinessCasesView, DocumentInbox, FinanceOverview } from "./Workspace";
 import { workspaceRoute, type CaseView } from "./business";
@@ -233,15 +234,7 @@ export default function App() {
                 ? "Connecting…"
                 : "Connection unavailable"}
           </div>
-          <div className="profile">
-            <span className="profile-avatar">
-              <ShieldCheck size={18} />
-            </span>
-            <span>
-              <strong>Demonstration workspace</strong>
-              <small>Fictional business records</small>
-            </span>
-          </div>
+
         </div>
       </aside>
       <div className="main-shell">
@@ -267,11 +260,10 @@ export default function App() {
             ) : (
               <span className="local-pill">
                 <Radio size={12} />
-                Interview demonstration
+                {connected ? "Connected" : "Local workspace"}
               </span>
             )}
-            <div className="topbar-divider" />
-            <span className="topbar-avatar">HM</span>
+            <UserProfile />
           </div>
         </header>
         <main id="main-content" tabIndex={-1}>
