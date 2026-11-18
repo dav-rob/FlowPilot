@@ -368,8 +368,8 @@ export default function App() {
           <footer className="page-footer">
             <span>
               <Workflow size={13} />
-              FlowPilot <span className="footer-separator">/</span>Intelligent
-              Enterprise Automation
+              FlowPilot <span className="footer-separator">/</span> Harbourline
+              Mutual Operations
             </span>
             <span>
               <ShieldCheck size={13} />

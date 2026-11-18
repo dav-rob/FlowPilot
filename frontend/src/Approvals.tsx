@@ -203,10 +203,9 @@ export default function Approvals({
     <div className="approvals-page">
       <div className="approvals-heading">
         <div>
-          <div className="eyebrow">HUMAN DECISIONS</div>
           <h1>Approvals</h1>
           <p>
-            Cases that need a person’s decision before the next step can
+            Cases requiring an authorised decision before the next step can
             proceed.
           </p>
         </div>
@@ -224,11 +223,11 @@ export default function Approvals({
           <Users size={24} />
         </div>
         <div>
-          <h2>AI checks. People decide.</h2>
+          <h2>Review and authorisation</h2>
           <p>
-            When a review needs approval, FlowPilot pauses the proposed step and
-            sends the findings to the relevant team. The request and the human
-            decision stay linked to the case.
+            When a review requires approval, the proposed step is held and
+            routed to the relevant team. Each request and recorded decision
+            remains linked to the case.
           </p>
         </div>
         <div
@@ -255,7 +254,7 @@ export default function Approvals({
           <strong>
             {pending.filter((item) => item.status === "pending").length}
           </strong>
-          <span>Awaiting a decision</span>
+          <span>Pending decision</span>
         </div>
         <div className="panel">
           <ShieldAlert size={19} />
@@ -488,7 +487,7 @@ export default function Approvals({
                 {item.status === "pending" && item.can_decide && (
                   <div className="approval-decision-form">
                     <label htmlFor={"decision-note-" + item.id}>
-                      Your decision note <span>Required</span>
+                      Decision note <span>Required</span>
                     </label>
                     <textarea
                       id={"decision-note-" + item.id}

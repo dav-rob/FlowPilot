@@ -241,13 +241,10 @@ export default function Evals({
     <div className="evals-page">
       <header className="evals-heading">
         <div>
-          <div className="eyebrow">
-            QUALITY, CONTROLS & CONTINUOUS IMPROVEMENT
-          </div>
+          <div className="eyebrow">QUALITY &amp; CONTROLS</div>
           <h1>Evals</h1>
           <p>
-            How well documents are handled, whether the rules hold, and what
-            improves over time.
+            Review accuracy, control compliance, and verified rule changes.
           </p>
         </div>
         <span className="evals-environment">
@@ -276,7 +273,7 @@ export default function Evals({
           >
             <div className="evals-section-heading">
               <div>
-                <div className="eyebrow">WHAT IS IN THE RECORD</div>
+                <div className="eyebrow">EXECUTION RECORDS</div>
                 <h2 id="evals-records-title">Reviews, recordings and tests</h2>
               </div>
               <Layers size={21} />
@@ -345,7 +342,7 @@ export default function Evals({
           <div className="evals-purpose-grid">
             <button onClick={() => selectTab("quality")}>
               <FlaskConical size={23} />
-              <h3>Did it reach the right result?</h3>
+              <h3>Outcome accuracy</h3>
               <p>
                 Classification, findings, evidence, tool choices and efficiency
                 against expected answers.
@@ -356,7 +353,7 @@ export default function Evals({
             </button>
             <button onClick={() => selectTab("guardrails")}>
               <ShieldCheck size={23} />
-              <h3>Did it stay within the rules?</h3>
+              <h3>Control compliance</h3>
               <p>
                 Approval requirements, prohibited actions, evidence restrictions
                 and boundary cases.
@@ -367,7 +364,7 @@ export default function Evals({
             </button>
             <button onClick={() => selectTab("evolution")}>
               <GitBranch size={23} />
-              <h3>What changed as we learned?</h3>
+              <h3>Control revisions</h3>
               <p>
                 The edge case, the change to a control, and the evidence that
                 supports it.
@@ -644,7 +641,7 @@ export default function Evals({
                 <div className="eyebrow">
                   EDGE CASE → CHANGE → REGRESSION CHECK
                 </div>
-                <h2>How the controls evolve</h2>
+                <h2>Change history</h2>
               </div>
               <GitBranch size={24} />
             </div>

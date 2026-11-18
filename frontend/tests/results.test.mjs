@@ -391,7 +391,8 @@ test("the home page presents findings and decisions without launch or JSON contr
       onInbox: () => {},
     }),
   );
-  assert.match(html, /Finance overview/);
+  assert.match(html, /HARBOURLINE MUTUAL \/ OPERATIONS/);
+  assert.match(html, /<h1>Overview<\/h1>/);
   assert.match(html, /Waiting for your decision/);
   assert.match(html, /Latest case findings/);
   assert.match(html, /Review decision/);

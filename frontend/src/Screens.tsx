@@ -65,7 +65,7 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
     <div>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">THE RECORD OF EVERY DECISION</div>
+          <div className="eyebrow">AUDIT TRAIL</div>
           <h1>Execution history</h1>
           <p>
             Revisit outcomes, inspect evidence, and replay recorded execution.
@@ -176,7 +176,7 @@ export function RunHistory({ onOpen }: { onOpen: (run: Run) => void }) {
             title={
               runs.length
                 ? "No matching reviews"
-                : "Your review history starts here"
+                : "No recorded reviews yet"
             }
             detail={
               runs.length
@@ -288,10 +288,10 @@ export function Registry() {
     <div>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">CAPABILITIES WITH GUARDRAILS</div>
+          <div className="eyebrow">PERMISSIONS &amp; SCHEMAS</div>
           <h1>Tool registry</h1>
           <p>
-            The enterprise tools available to agents, with explicit permissions
+            Registered tools available during reviews, with explicit permissions
             and validated schemas.
           </p>
         </div>
@@ -496,7 +496,7 @@ export function Evaluations({
     <div>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">MEASURE WHAT ACTUALLY HAPPENED</div>
+          <div className="eyebrow">SCORED BENCHMARKS</div>
           <h1>Evaluation lab</h1>
           <p>
             Run a bounded evaluation against a selected partition and inspect
@@ -504,7 +504,7 @@ export function Evaluations({
           </p>
         </div>
         <span className="heading-chip">
-          <FlaskConical size={16} /> Measured, never estimated
+          <FlaskConical size={16} /> Bounded dataset run
         </span>
       </div>
       {(startError || resource.error) && (
@@ -694,7 +694,7 @@ export function Evaluations({
               </>
             ) : (
               <Empty
-                title="A clear view of performance"
+                title="No evaluation selected"
                 detail="Start an evaluation or select a previous one. Results and reported metrics will appear here as cases complete."
               />
             )}

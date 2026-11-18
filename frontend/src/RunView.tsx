@@ -165,11 +165,11 @@ export default function RunView({
         <div className="starting-orb">
           <Sparkles size={31} />
         </div>
-        <div className="eyebrow">AI REVIEW</div>
-        <h1>Opening your review</h1>
+        <div className="eyebrow">CASE REVIEW</div>
+        <h1>Starting review</h1>
         <ModeBadge mode={startingMode} />
         <p>
-          Your document is being saved. The review will appear here shortly.
+          Submitting document for review. Progress will appear here shortly.
         </p>
         <Loading text="Starting your review…" />
       </section>
@@ -271,8 +271,8 @@ export default function RunView({
       {(run.purpose === "test" || run.purpose === "evaluation") && (
         <div className="result-mode-note">
           <Code2 size={16} />
-          {run.purpose === "test" ? "Developer test" : "Evaluation run"} ·
-          Excluded from the business dashboard.
+          {run.purpose === "test" ? "Workbench test" : "Evaluation run"} ·
+          Excluded from operational totals.
         </div>
       )}
       {run.mode === "simulation" && (
@@ -628,7 +628,7 @@ export default function RunView({
             ["tools", "Record checks"],
             ["models", "AI decisions"],
             ["orchestration", "Automatic steps"],
-            ["issues", "Problems"],
+            ["issues", "Issues"],
           ].map(([value, label]) => (
             <button
               key={value}

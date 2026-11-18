@@ -110,11 +110,11 @@ export default function Investigation({
     <div className="landing-page">
       <section className="hero">
         <div className="hero-copy">
-          <div className="eyebrow">DEVELOPER TOOLS / MANUAL TESTING</div>
+          <div className="eyebrow">EVALS / MANUAL TESTING</div>
           <h1>Test workbench</h1>
           <p>
             Test an example or paste a document to inspect routing and tool
-            calls. Test activity is kept out of the business dashboard.
+            calls. Test runs are excluded from operational totals.
           </p>
           <div className="hero-tags">
             <span>
@@ -143,13 +143,13 @@ export default function Investigation({
             <span>Informed decision</span>
             <Check size={14} />
           </div>
-          <span className="art-caption">CONNECTED INTELLIGENCE</span>
+          <span className="art-caption">ROUTING &amp; CONTROLS</span>
         </div>
       </section>
       <WorkflowPath />
       <section className="showcase-section">
         <SectionHeading
-          eyebrow="A STARTING POINT FOR EVERY TEAM"
+          eyebrow="OPERATIONAL AREAS"
           title="Choose a review"
         >
           <button
@@ -459,8 +459,8 @@ export default function Investigation({
           </div>
           <div className="launch-content">
             <p className="launch-description">
-              A single input. The right specialists.
-              <br />A traceable path to resolution.
+              Run a single document through classification, record checks, and
+              findings.
             </p>
             <ModePicker value={mode} onChange={setMode} />
             <div className={`mode-explainer ${mode}`}>
@@ -489,10 +489,8 @@ export default function Investigation({
         <span className="tiny-icon">
           <Layers size={17} />
         </span>
-        <span>One workspace. Multiple perspectives.</span>
-        <p>
-          Finance, compliance, privacy, IT, and legal — connected by evidence.
-        </p>
+        <span>Supported operational areas</span>
+        <p>Finance, compliance, privacy, IT, and legal reviews.</p>
       </div>
     </div>
   );

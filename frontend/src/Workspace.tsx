@@ -80,7 +80,7 @@ function CaseTable({
         <thead>
           <tr>
             <th scope="col">Document / case</th>
-            <th scope="col">What FlowPilot found</th>
+            <th scope="col">Findings</th>
             <th scope="col">Next step</th>
             <th scope="col">Last checked</th>
           </tr>
@@ -182,7 +182,7 @@ export function FinanceOverview({
       action: () => onViewCases("followup"),
     },
     {
-      label: "Being checked",
+      label: "In review",
       value: active.length,
       detail: "Documents currently in progress",
       icon: Clock3,
@@ -202,11 +202,9 @@ export function FinanceOverview({
     <div className="finance-workspace">
       <div className="workspace-heading">
         <div>
-          <div className="workspace-eyebrow">
-            HARBOURLINE MUTUAL / FINANCE OPERATIONS
-          </div>
-          <h1>Finance overview</h1>
-          <p>The decisions, findings and documents that need your attention.</p>
+          <div className="workspace-eyebrow">HARBOURLINE MUTUAL / OPERATIONS</div>
+          <h1>Overview</h1>
+          <p>Pending decisions, case findings, and documents awaiting review.</p>
         </div>
         <button className="button primary" onClick={onInbox}>
           <Inbox size={16} />
@@ -351,7 +349,7 @@ export function FinanceOverview({
             />
           ) : (
             <Empty
-              title="Your case findings will appear here"
+              title="No case findings yet"
               detail="Open an example document and process it to see its findings and recommended next steps."
             />
           )}
@@ -360,7 +358,7 @@ export function FinanceOverview({
       <section className="workspace-section">
         <div className="workspace-section-heading">
           <div>
-            <h2>Work across the business</h2>
+            <h2>Cases by operational area</h2>
             <p>Open an area to see its cases and findings.</p>
           </div>
         </div>
@@ -454,7 +452,7 @@ export function BusinessCasesView({
         {(
           [
             ["all", "All cases"],
-            ["decisions", "Your decisions"],
+            ["decisions", "Pending decisions"],
             ["followup", "Follow-up"],
             ["active", "In progress"],
             ["complete", "Checks complete"],
@@ -762,7 +760,7 @@ export function DocumentInbox({
                   <div>
                     <strong>
                       {active
-                        ? "FlowPilot is checking this document"
+                        ? "Review in progress"
                         : existing
                           ? "Need to check this document again?"
                           : "Ready for FlowPilot to check"}

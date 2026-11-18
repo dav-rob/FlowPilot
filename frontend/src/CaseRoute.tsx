@@ -83,7 +83,7 @@ export function ProcessingRoutes({
     >
       <div className="workspace-section-heading">
         <div>
-          <h2>From document to decision</h2>
+          <h2>Processing routes</h2>
           <p>
             Routine reviews finish with findings. Exceptions take a separate
             human review route.
